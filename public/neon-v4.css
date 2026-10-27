@@ -80,3 +80,18 @@ body{background:#010b26;color:#f7fbff;overflow-x:hidden}
 .center-content #bonusTextRow{font-size:clamp(16px,1.35vw,23px)!important;margin-top:10px!important}
 .center-content .bonus-area .choice{font-size:clamp(15px,1.3vw,22px)!important}
 @media(max-width:850px){.center-content{padding:24px 12px 0!important}.center-content .stage-label{font-size:18px!important}.center-content .bonus-area{padding:14px!important}.center-content .bonus-area h3{font-size:21px!important}.center-content #bonusPrompt{font-size:19px!important}}
+
+/* Hint mirrored under the central instruction panel */
+.center-content .center-hint{
+  display:block;
+  width:max-content;
+  max-width:90%;
+  margin-top:4px;
+  font-size:clamp(20px,2.2vw,34px)!important;
+  font-weight:900!important;
+  letter-spacing:.12em;
+  color:#ecfaff;
+  overflow-wrap:anywhere;
+  text-align:center;
+}
+.center-content .center-hint.hidden{display:none!important}
