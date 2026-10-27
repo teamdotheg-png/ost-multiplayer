@@ -37,3 +37,46 @@ body{background:#010b26;color:#f7fbff;overflow-x:hidden}
 .chatlog{font-size:clamp(11px,1vw,17px)!important}.chatlog div.system{color:#14f59e!important}.chat-tabs button{min-width:30%}.chat-send input{font-size:clamp(10px,.9vw,16px)}
 @media(max-width:850px){#roomArea{display:grid;grid-template-columns:1fr 1fr;gap:12px;padding:15px;aspect-ratio:auto;min-height:100vh}#roomArea:after{display:none}.top-left,.top-round,.top-actions,.left-question,.left-hint,.left-next,.left-now,.right-score,.right-chat,.center-scene,.controls{position:relative!important;top:auto!important;left:auto!important;width:100%!important;height:auto!important;clip-path:none!important}.top-left,.top-round,.top-actions,.center-scene,.controls{grid-column:span 2}.top-left{min-height:100px}.top-round{min-height:55px}.top-actions{min-height:70px}.left-question,.left-hint{min-height:175px}.left-next{min-height:120px}.left-now{min-height:210px}.center-scene{height:520px!important;order:2}.left-question,.left-hint{order:1}.left-next,.left-now{order:3}.right-score,.right-chat{order:4;min-height:290px}.right-chat{height:420px!important}.controls{order:5;min-height:78px}.top-left:before{display:none!important}.logo{font-size:clamp(17px,4vw,30px)!important}.big-timer{font-size:43px!important}.hint-box{font-size:20px!important}.music-card{grid-template-columns:60px 1fr}.scoreline{min-height:45px}.center-scene:has(.center-lobby:not(.hidden)){height:640px!important}}
 @media(max-width:520px){#roomArea{grid-template-columns:1fr}.top-left,.top-round,.top-actions,.left-question,.left-hint,.left-next,.left-now,.right-score,.right-chat,.center-scene,.controls{grid-column:span 1}.center-scene{height:390px!important}.right-score{min-height:180px}.right-chat{height:350px!important}.controls{gap:4px}.controls button{font-size:11px!important}.controls .vote{font-size:10px}.top-actions button{font-size:10px!important}}
+
+/* v4.1: Central question cards moved up and enlarged */
+.center-content{
+  justify-content:flex-start!important;
+  padding:clamp(24px,5%,70px) 20px 0!important;
+  gap:clamp(14px,2vw,26px)!important;
+}
+.center-content .stage-label{
+  font-size:clamp(19px,1.8vw,30px)!important;
+  line-height:1.5!important;
+  padding:16px 24px!important;
+  max-width:96%!important;
+}
+.center-content #firstDone,.center-content #bonusDone{
+  font-size:clamp(17px,1.5vw,25px)!important;
+  font-weight:800!important;
+  padding:11px 22px!important;
+  border:1px solid #77d7ff!important;
+  border-radius:10px!important;
+  background:#041e4be8!important;
+  box-shadow:0 0 18px #378dffbb!important;
+}
+.center-content .bonus-area{
+  width:min(94%,760px)!important;
+  max-width:94%!important;
+  padding:20px 24px!important;
+  background:linear-gradient(145deg,#041435ef,#092c62ef)!important;
+  border:2px solid #77d6ff!important;
+  border-radius:16px!important;
+  box-shadow:0 0 24px #398cffbb,inset 0 0 18px #1a62bb88!important;
+  font-size:clamp(18px,1.65vw,27px)!important;
+  line-height:1.55!important;
+}
+.center-content .bonus-area h3{
+  font-size:clamp(21px,2vw,32px)!important;
+  color:#a5f5ff!important;
+  text-shadow:0 0 13px #38aaff!important;
+  margin:0 0 14px!important;
+}
+.center-content #bonusPrompt{font-size:clamp(19px,1.8vw,30px)!important;font-weight:750!important}
+.center-content #bonusTextRow{font-size:clamp(16px,1.35vw,23px)!important;margin-top:10px!important}
+.center-content .bonus-area .choice{font-size:clamp(15px,1.3vw,22px)!important}
+@media(max-width:850px){.center-content{padding:24px 12px 0!important}.center-content .stage-label{font-size:18px!important}.center-content .bonus-area{padding:14px!important}.center-content .bonus-area h3{font-size:21px!important}.center-content #bonusPrompt{font-size:19px!important}}
