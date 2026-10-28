@@ -448,3 +448,7 @@ input,select{background:#05132e;border:1px solid #4b8fc5;color:white}
 #roomArea .center-lobby{top:2%!important;height:94vh!important;max-height:94vh!important;box-sizing:border-box!important;}
 #roomArea .right-chat .chat-head .online-indicator{display:inline-flex!important;align-items:center!important;gap:5px!important;white-space:nowrap!important;font-size:clamp(10px,.75vw,12px)!important;}
 #roomArea .right-chat .chat-head #onlineCount{font-size:inherit!important;color:#55ffca!important;white-space:nowrap!important;}
+
+/* v4.64 — prevent bottom-left game menu from covering the question editor.
+   Only hide it while the lobby/editor overlay is open; restore automatically during play. */
+#roomArea:has(#lobby:not(.hidden)) > .top-actions{visibility:hidden!important;pointer-events:none!important;}
