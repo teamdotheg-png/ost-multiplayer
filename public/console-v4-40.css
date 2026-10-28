@@ -404,3 +404,19 @@ input,select{background:#05132e;border:1px solid #4b8fc5;color:white}
 /* v4.56: hide redundant player info, retain round badge */
 #roomArea .left-now .music-progress,#roomArea .left-now .music-status,#roomArea .left-now .room-code{display:none!important}
 #roomArea .stage-eyebrow{justify-content:flex-end!important}
+
+/* v4.58 — compact music text backing, 3-digit round, raised menu, gold answer. */
+@media (min-width:901px){
+ #roomArea .left-now .music-card{width:50%!important;max-width:50%!important;min-width:218px!important;}
+ #roomArea .top-actions{top:87.9%!important;}
+}
+#roomArea #answerMain:not(:empty){color:#ffe4a5!important;text-shadow:0 0 12px rgba(255,198,111,.75)!important;font-weight:700!important;}
+
+/* v4.59: vertically balance the main question within its panel; round badge stays top-right. */
+@media (min-width:901px){
+ #roomArea .stage-copy .stage-eyebrow{margin-bottom:0!important;}
+ #roomArea .stage-copy .stage-question{margin-top:-8px!important;}
+}
+
+/* v4.60: answer text matches the violet-white glow of the 정 답 tab, replacing gold. */
+#roomArea #answerMain:not(:empty){color:#f9ecff!important;text-shadow:0 0 5px rgba(220,151,255,.95),0 0 14px rgba(155,68,255,.75)!important;font-weight:700!important;}
