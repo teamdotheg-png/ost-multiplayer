@@ -202,3 +202,10 @@ input,select{background:#05132e;border:1px solid #4b8fc5;color:white}
 .stage-label .stage-copy{position:relative;z-index:1}
 .controls #skip::before{display:none!important}
 @media(max-width:900px){.right-score,.right-chat{padding:24px 14px 18px!important}}
+
+/* v4.39: reference-style thin frame pass; layout intentionally unchanged */
+#roomArea .pane::before,.stage-label::before,#firstDone::before,#bonusArea::before,.left-question::before,.right-score::before,.right-chat::before{filter:drop-shadow(0 0 3px rgba(79,179,255,.40))!important;}
+.center-content>.stage-label:not(.center-hint),#firstDone,#bonusArea{background:linear-gradient(120deg,rgba(2,11,33,.89),rgba(16,10,41,.88))!important;}
+#roomArea .pane{background:linear-gradient(130deg,rgba(2,12,34,.89),rgba(10,11,34,.88))!important;}
+#firstDone .panel-tab{border-color:#c46dff!important;background:linear-gradient(180deg,#301449,#0b0a27 85%)!important;}
+#bonusArea h3{border-color:#e6b35c!important;background:linear-gradient(180deg,#4b2b16,#0b0a27 85%)!important;color:#ffe19a!important;}
