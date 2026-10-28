@@ -400,3 +400,7 @@ input,select{background:#05132e;border:1px solid #4b8fc5;color:white}
 #roomArea .top-actions{background:transparent!important}
 #roomArea .top-actions button{background-color:rgba(3,13,39,.9)!important}
 @media(max-width:900px){#roomArea .stage-copy{padding:7px 9px!important}}
+
+/* v4.56: hide redundant player info, retain round badge */
+#roomArea .left-now .music-progress,#roomArea .left-now .music-status,#roomArea .left-now .room-code{display:none!important}
+#roomArea .stage-eyebrow{justify-content:flex-end!important}
