@@ -267,3 +267,38 @@ input,select{background:#05132e;border:1px solid #4b8fc5;color:white}
  #roomArea .right-chat{left:77.4%!important;top:45.2%!important;width:21.4%!important;height:53%!important;bottom:auto!important}
  #roomArea .right-chat .chatlog{flex:1!important;min-height:0!important;overflow-y:auto!important}
 }
+
+/* v4.47 — animated playback indicators (not audio-frequency analysis) */
+#roomArea .left-now .equalizer{display:inline-flex!important;align-items:flex-end!important;gap:3px!important;height:19px!important;vertical-align:middle!important;letter-spacing:normal!important}
+#roomArea .left-now .equalizer i{display:block;width:7px;height:48%;background:#64e8ff;box-shadow:0 0 8px #46dfff;transform-origin:bottom;animation:eq-top 850ms ease-in-out infinite alternate;animation-play-state:paused}
+#roomArea .left-now .equalizer i:nth-child(2n){height:82%;animation-duration:630ms;animation-delay:-210ms}
+#roomArea .left-now .equalizer i:nth-child(3n){height:62%;animation-duration:1050ms;animation-delay:-450ms}
+#roomArea .left-now .equalizer.is-playing i{animation-play-state:running}
+#roomArea .left-now .waveform{display:flex!important;align-items:center!important;gap:3px!important;height:18px!important;background:none!important;mask-image:none!important;opacity:1!important;overflow:hidden!important}
+#roomArea .left-now .waveform i{display:block!important;flex:0 0 3px!important;height:65%;background:#67e6ff;box-shadow:0 0 5px #38d8ff;transform-origin:center;animation:eq-wave 690ms ease-in-out infinite alternate;animation-play-state:paused}
+#roomArea .left-now .waveform i:nth-child(3n){height:95%;animation-duration:940ms;animation-delay:-340ms}
+#roomArea .left-now .waveform i:nth-child(4n){height:45%;animation-duration:530ms;animation-delay:-170ms}
+#roomArea .left-now .waveform i:nth-child(5n){height:78%;animation-duration:800ms;animation-delay:-470ms}
+#roomArea .left-now .waveform.is-playing i{animation-play-state:running}
+@keyframes eq-top{from{transform:scaleY(.35)}to{transform:scaleY(1)}}
+@keyframes eq-wave{from{transform:scaleY(.24)}to{transform:scaleY(1)}}
+@media(prefers-reduced-motion:reduce){#roomArea .left-now .equalizer i,#roomArea .left-now .waveform i{animation:none!important}}
+
+/* v4.49: one unified music and timer panel, width aligned with question stack */
+@media (min-width:901px){
+ #roomArea .left-now{left:1.5%!important;top:1.5%!important;width:46.3%!important;height:17.2%!important;display:grid!important;grid-template-columns:minmax(0,1fr) 34%!important;align-items:stretch!important;gap:0!important;padding:12px 15px!important;overflow:hidden!important}
+ #roomArea .left-now .player-merged-left{min-width:0!important;display:flex!important;flex-direction:column!important;justify-content:center!important;padding-right:14px!important}
+ #roomArea .left-now .left-question{position:relative!important;left:auto!important;top:auto!important;width:auto!important;height:auto!important;min-height:0!important;border:0!important;border-left:1px solid rgba(94,212,255,.45)!important;background:none!important;box-shadow:none!important;clip-path:none!important;padding:5px 8px 5px 14px!important;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important}
+ #roomArea .left-now .left-question::before,#roomArea .left-now .left-question::after{display:none!important}
+ #roomArea .left-now .left-question .big-timer{font-size:clamp(27px,2.8vw,45px)!important}
+ #roomArea .left-now .left-question .timer{width:100%!important}
+ #roomArea .left-now .music-cover{flex-basis:clamp(42px,4.5vw,66px)!important;width:clamp(42px,4.5vw,66px)!important}
+ #roomArea .left-now .music-card{gap:8px!important}
+ #roomArea .left-now .panel-title{font-size:clamp(12px,1.15vw,18px)!important}
+ #roomArea .left-now .music-status,#roomArea .left-now .room-code{font-size:clamp(8px,.7vw,11px)!important}
+}
+@media (max-width:900px){
+ #roomArea .left-now{display:grid!important;grid-template-columns:minmax(0,1fr) minmax(135px,35%)!important;gap:8px!important}
+ #roomArea .left-now .player-merged-left{min-width:0!important}
+ #roomArea .left-now .left-question{position:relative!important;left:auto!important;top:auto!important;width:auto!important;height:auto!important;min-height:0!important;grid-column:auto!important;padding:8px!important}
+}
