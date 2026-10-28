@@ -302,3 +302,12 @@ input,select{background:#05132e;border:1px solid #4b8fc5;color:white}
  #roomArea .left-now .player-merged-left{min-width:0!important}
  #roomArea .left-now .left-question{position:relative!important;left:auto!important;top:auto!important;width:auto!important;height:auto!important;min-height:0!important;grid-column:auto!important;padding:8px!important}
 }
+
+/* v4.50: shift the lower-left menu slightly up/right; reserve the hidden-question panel from round start. */
+@media (min-width:901px){
+ #roomArea .top-actions{left:1.8%!important;top:88.8%!important}
+}
+#roomArea #bonusArea.bonus-locked #bonusPrompt,
+#roomArea #bonusArea.bonus-locked #bonusAnswerInline,
+#roomArea #bonusArea.bonus-locked #bonusChoices,
+#roomArea #bonusArea.bonus-locked #bonusTextRow{display:none!important}
