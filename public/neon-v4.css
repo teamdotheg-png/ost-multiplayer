@@ -166,3 +166,55 @@ body{background:#010b26;color:#f7fbff;overflow-x:hidden}
 @media(max-width:850px){
   .center-content #firstDone,.center-content #bonusDone{min-width:0!important;max-width:92%!important;padding:12px 20px!important;font-size:clamp(15px,3vw,21px)!important}
 }
+
+/* v4.20 — Glass Garden illustrated frame, all four central panels */
+.center-content .stage-label:not(.center-hint),
+.center-content #firstDone,
+.center-content #bonusDone,
+.center-content .bonus-area {
+  position:relative!important;
+  isolation:isolate;
+  overflow:visible!important;
+  border:2px solid #9beaff!important;
+  border-radius:13px!important;
+  background:linear-gradient(130deg,#102f65e9,#071936ee 50%,#143b75e6)!important;
+  box-shadow:0 0 0 2px #7dd8ff55,0 0 19px #56bfffaa,inset 0 0 26px #7dbbff5c!important;
+  backdrop-filter:blur(9px);
+  text-shadow:0 0 9px #7dbbff,0 1px 2px #00122f;
+}
+.center-content .stage-label:not(.center-hint)::after,
+.center-content #firstDone::after,
+.center-content #bonusDone::after,
+.center-content .bonus-area::after {
+  content:''!important;
+  position:absolute!important;
+  inset:-24px -27px!important;
+  width:auto!important;height:auto!important;
+  display:block!important;
+  transform:none!important;
+  border:0!important;border-radius:0!important;
+  background: url('/glass-garden-frame.svg') center / 100% 100% no-repeat!important;
+  box-shadow:none!important;
+  filter:drop-shadow(0 0 6px #73ceff)!important;
+  pointer-events:none!important;
+  z-index:2;
+}
+.center-content #firstDone::before,.center-content #bonusDone::before {content:none!important}
+.center-content .stage-label:not(.center-hint) {
+  width:fit-content!important;max-width:94%!important;
+  margin:0 auto!important;
+  padding:17px 31px!important;
+  text-align:center;
+}
+.center-content #firstDone,.center-content #bonusDone {
+  width:fit-content!important;min-width:0!important;max-width:84%!important;
+  padding:13px clamp(22px,2.4vw,32px)!important;
+  font-size:clamp(16px,1.4vw,23px)!important;
+}
+.center-content .bonus-area {width:min(88%,720px)!important;max-width:88%!important;padding:21px 28px!important}
+.center-content .bonus-area h3::before,.center-content .bonus-area h3::after {content:'✧ ❀ ✧'!important;color:#c6f6ff!important}
+@media(max-width:850px){
+ .center-content .stage-label:not(.center-hint){padding:13px 20px!important}
+ .center-content .bonus-area{width:91%!important;max-width:91%!important;padding:15px 18px!important}
+ .center-content .stage-label:not(.center-hint)::after,.center-content #firstDone::after,.center-content #bonusDone::after,.center-content .bonus-area::after{inset:-15px -17px!important}
+}
