@@ -18,19 +18,22 @@ const sanitize = (s,n=100) => String(s??'').trim().slice(0,n);
 const getRoom = socket => rooms.get(socket.data.room);
 const memberList = r => [...r.players.values()].map(p=>({id:p.id,name:p.name,score:p.score,host:p.id===r.host}));
 const safeQuestion = q => ({videoId:q.videoId,start:q.start,end:q.end,hasBonus:q.bonus.type!=='none',bonusType:q.bonus.type});
-const emitRoom = r => io.to(r.code).emit('room',{
+const emitRoom = r => {
+  const current = r.index>=0 && r.index<r.questions.length ? r.questions[r.index] : null;
+  io.to(r.code).emit('room',{
   code:r.code,phase:r.phase,host:r.host,players:memberList(r),total:r.questions.length,
   index:r.index,skipVotes:r.votes.size,skipNeeded:Math.floor(r.players.size/2)+1,
   firstWinner:r.firstWinner,bonusWinner:r.bonusWinner,
-  firstAnswer:r.firstWinner?r.questions[r.index].title:null,
-  bonusAnswer:r.bonusWinner?(r.questions[r.index].bonus.type==='multiple'?r.questions[r.index].bonus.choices[r.questions[r.index].bonus.correct]:r.questions[r.index].bonus.answer):null,
+  firstAnswer:current&&r.firstWinner?current.title:null,
+  bonusAnswer:current&&r.bonusWinner?(current.bonus.type==='multiple'?current.bonus.choices[current.bonus.correct]:current.bonus.answer):null,
   deadline:r.deadline,hintAt:r.hintAt,revealUntil:r.revealUntil||0,paused:!!r.paused,pauseRemaining:r.pauseRemaining||0,pauseHintRemaining:r.pauseHintRemaining||0,pauseRevealRemaining:r.pauseRevealRemaining||0,
-  question:r.phase==='playing'?safeQuestion(r.questions[r.index]):null,
-  bonus:r.phase==='playing'&&r.firstWinner&&r.questions[r.index].bonus.type!=='none'?
-    publicBonus(r.questions[r.index].bonus):null,
-  hint:r.phase==='playing'&&(r.paused?r.pauseHintRemaining<=0:Date.now()>=r.hintAt)?r.questions[r.index].hint:null,
-  reveal:r.phase==='reveal'?revealData(r):null
-});
+  question:r.phase==='playing'&&current?safeQuestion(current):null,
+  bonus:r.phase==='playing'&&current&&r.firstWinner&&current.bonus.type!=='none'?
+    publicBonus(current.bonus):null,
+  hint:r.phase==='playing'&&current&&(r.paused?r.pauseHintRemaining<=0:Date.now()>=r.hintAt)?current.hint:null,
+  reveal:r.phase==='reveal'&&current?revealData(r):null
+  });
+};
 function publicBonus(b){return {type:b.type,prompt:b.prompt,choices:b.type==='multiple'?b.choices:undefined};}
 function revealData(r){const q=r.questions[r.index];return {videoId:q.videoId,start:q.start,end:q.end,title:q.title,song:q.song,bonusPrompt:q.bonus.prompt,bonusAnswer:q.bonus.type==='multiple'?q.bonus.choices[q.bonus.correct]:q.bonus.answer,firstWinner:r.firstWinner,bonusWinner:r.bonusWinner,
   firstAnswer:r.firstWinner?r.questions[r.index].title:null,
@@ -43,7 +46,7 @@ function advanceRound(r){
   cleanupTimer(r);
   r.index++;
   if(r.index>=r.questions.length){
-    r.phase='finished';r.paused=false;emitRoom(r);
+    r.phase='finished';r.paused=false;r.revealUntil=0;r.firstWinner=null;r.bonusWinner=null;r.votes.clear();emitRoom(r);
     system(r,'모든 문제가 종료되었습니다!');
   }else beginRound(r);
 }
@@ -89,7 +92,7 @@ io.on('connection',socket=>{
  socket.on('answer',({stage,answer}={},cb)=>{const r=getRoom(socket);if(!r||r.phase!=='playing'||r.paused||Date.now()>=r.deadline)return respond(cb,{error:'답안 제출 시간이 아닙니다.'});const q=r.questions[r.index],p=r.players.get(socket.id);if(!p)return;const a=sanitize(answer,200);if(stage===1){if(r.firstWinner)return respond(cb,{error:'1단계 정답자가 이미 나왔습니다.'});if(match(a,q.title,q.aliases)){r.firstWinner=p.name;p.score++;respond(cb,{ok:true,correct:true});io.to(r.code).emit('game-sfx',{type:'correct'});system(r,`${p.name}님 정답 +1점`);io.to(r.code).emit('answer-revealed',{stage:1,answer:q.title,index:r.index});emitRoom(r);/* 제한 시간 또는 스킵 시까지 문제 유지 */}else respond(cb,{ok:true,correct:false});}else if(stage===2){if(!r.firstWinner||q.bonus.type==='none')return respond(cb,{error:'보너스 문제가 아직 공개되지 않았습니다.'});if(r.bonusWinner)return respond(cb,{error:'보너스 정답자가 이미 나왔습니다.'});const correct=q.bonus.type==='multiple'?Number.isInteger(answer)&&answer===q.bonus.correct:match(a,q.bonus.answer,q.bonus.aliases);if(correct){r.bonusWinner=p.name;p.score++;respond(cb,{ok:true,correct:true});io.to(r.code).emit('game-sfx',{type:'correct'});system(r,`${p.name}님 히든 정답 +1점`);io.to(r.code).emit('answer-revealed',{stage:2,answer:q.bonus.type==='multiple'?q.bonus.choices[q.bonus.correct]:q.bonus.answer,index:r.index});emitRoom(r);/* 히든 정답 후에도 음악과 타이머는 계속 진행; 제한 시간 또는 스킵 시 공개 */}else respond(cb,{ok:true,correct:false});}else respond(cb,{error:'잘못된 단계입니다.'});});
  socket.on('skip',(_,cb)=>{const r=getRoom(socket);if(!r||r.phase!=='playing'||r.paused)return respond(cb,{error:'일시정지 중에는 스킵할 수 없습니다.'});if(r.votes.has(socket.id))return respond(cb,{error:'이미 투표했습니다.'});r.votes.add(socket.id);respond(cb,{ok:true});emitRoom(r);system(r,`${r.players.get(socket.id)?.name||'플레이어'}님 스킵 투표 (${r.votes.size}/${Math.floor(r.players.size/2)+1})`);if(r.votes.size>r.players.size/2)reveal(r,'skip');});
  socket.on('hostSkip',(_,cb)=>{const r=getRoom(socket);if(!r||r.host!==socket.id)return respond(cb,{error:'방장만 즉시 스킵할 수 있습니다.'});if(r.phase!=='playing'||r.paused)return respond(cb,{error:'진행 중인 문제에서만 스킵할 수 있습니다.'});respond(cb,{ok:true});reveal(r,'skip');});
- socket.on('togglePause',(_,cb)=>{const r=getRoom(socket);if(!r||!['playing','reveal'].includes(r.phase))return respond(cb,{error:'진행 중인 게임이 없습니다.'});if(r.host!==socket.id)return respond(cb,{error:'방장만 전체 게임을 일시정지할 수 있습니다.'});const now=Date.now();if(!r.paused){r.pauseRemaining=r.phase==='playing'?Math.max(0,r.deadline-now):0;r.pauseHintRemaining=r.phase==='playing'?Math.max(0,r.hintAt-now):0;r.pauseRevealRemaining=r.phase==='reveal'?Math.max(0,r.revealUntil-now):0;cleanupTimer(r);r.paused=true;}else{r.paused=false;if(r.phase==='playing'){r.deadline=now+r.pauseRemaining;r.hintAt=now+r.pauseHintRemaining;r.timer=setTimeout(()=>reveal(r,'time'),r.pauseRemaining);if(r.pauseHintRemaining>0&&r.pauseHintRemaining<r.pauseRemaining){r.hintTimer=setTimeout(()=>{if(r.phase==='playing'&&!r.paused)io.to(r.code).emit('hint',r.questions[r.index].hint);},r.pauseHintRemaining);}}else if(r.phase==='reveal'){r.revealUntil=now+r.pauseRevealRemaining;r.advanceTimer=setTimeout(()=>{if(r.phase!=='reveal'||r.paused)return;r.index++;if(r.index>=r.questions.length){r.phase='finished';cleanupTimer(r);emitRoom(r);}else beginRound(r);},r.pauseRevealRemaining);}}emitRoom(r);respond(cb,{ok:true,paused:r.paused});});
+ socket.on('togglePause',(_,cb)=>{const r=getRoom(socket);if(!r||!['playing','reveal'].includes(r.phase))return respond(cb,{error:'진행 중인 게임이 없습니다.'});if(r.host!==socket.id)return respond(cb,{error:'방장만 전체 게임을 일시정지할 수 있습니다.'});const now=Date.now();if(!r.paused){r.pauseRemaining=r.phase==='playing'?Math.max(0,r.deadline-now):0;r.pauseHintRemaining=r.phase==='playing'?Math.max(0,r.hintAt-now):0;r.pauseRevealRemaining=r.phase==='reveal'?Math.max(0,r.revealUntil-now):0;cleanupTimer(r);r.paused=true;}else{r.paused=false;if(r.phase==='playing'){r.deadline=now+r.pauseRemaining;r.hintAt=now+r.pauseHintRemaining;r.timer=setTimeout(()=>reveal(r,'time'),r.pauseRemaining);if(r.pauseHintRemaining>0&&r.pauseHintRemaining<r.pauseRemaining){r.hintTimer=setTimeout(()=>{if(r.phase==='playing'&&!r.paused)io.to(r.code).emit('hint',r.questions[r.index].hint);},r.pauseHintRemaining);}}else if(r.phase==='reveal'){r.revealUntil=now+r.pauseRevealRemaining;r.advanceTimer=setTimeout(()=>{if(r.phase!=='reveal'||r.paused)return;advanceRound(r);},r.pauseRevealRemaining);}}emitRoom(r);respond(cb,{ok:true,paused:r.paused});});
  socket.on('next',(_,cb)=>{const r=getRoom(socket);if(!r||r.host!==socket.id)return respond(cb,{error:'방장만 다음 문제로 진행할 수 있습니다.'});if(r.phase!=='reveal')return respond(cb,{error:'정답 공개 중에만 가능합니다.'});return respond(cb,{error:'5초 후 자동으로 다음 문제로 넘어갑니다.'});});
   socket.on('chat',(msg,cb)=>{const r=getRoom(socket);if(!r)return respond(cb,{error:'방을 찾을 수 없습니다.'});const p=r.players.get(socket.id);if(!p)return;const now=Date.now();if(now-(socket.data.lastChat||0)<550)return respond(cb,{error:'채팅은 잠시 기다렸다 보내세요.'});socket.data.lastChat=now;const text=sanitize(msg,200);if(!text)return respond(cb,{error:'메시지를 입력하세요.'});
     let correctChat=false;
