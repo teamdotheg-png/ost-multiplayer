@@ -443,3 +443,8 @@ input,select{background:#05132e;border:1px solid #4b8fc5;color:white}
 }
 #roomArea .right-chat .chatlog .chat-bubble{font-size:clamp(13px,calc(.85vw + 2px),16px)!important;}
 #roomArea .right-chat .chatlog{font-size:clamp(13px,calc(.94vw + 2px),17px)!important;}
+
+/* v4.63 — move host question editor to the top; show room population beside LIVE CHAT ONLINE */
+#roomArea .center-lobby{top:2%!important;height:94vh!important;max-height:94vh!important;box-sizing:border-box!important;}
+#roomArea .right-chat .chat-head .online-indicator{display:inline-flex!important;align-items:center!important;gap:5px!important;white-space:nowrap!important;font-size:clamp(10px,.75vw,12px)!important;}
+#roomArea .right-chat .chat-head #onlineCount{font-size:inherit!important;color:#55ffca!important;white-space:nowrap!important;}
