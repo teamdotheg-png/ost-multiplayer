@@ -433,3 +433,13 @@ input,select{background:#05132e;border:1px solid #4b8fc5;color:white}
   #roomArea .stage-copy .stage-instruction{padding-top:11px!important;}
 }
 #roomArea .left-now .left-question .big-timer{font-variant-numeric:tabular-nums!important;white-space:nowrap!important;}
+
+/* v4.62 — limit dark music backing to the left of marked line, remove chat tabs, enlarge messages. */
+@media(min-width:901px){
+ #roomArea .left-now .music-card{width:32%!important;max-width:32%!important;min-width:218px!important;}
+ #roomArea .left-now .music-sub{font-size:clamp(9px,.69vw,12px)!important;white-space:nowrap!important;}
+ #roomArea .left-now .music-card{gap:5px!important;padding:5px!important;}
+ #roomArea .left-now .music-cover{flex-shrink:0!important;}
+}
+#roomArea .right-chat .chatlog .chat-bubble{font-size:clamp(13px,calc(.85vw + 2px),16px)!important;}
+#roomArea .right-chat .chatlog{font-size:clamp(13px,calc(.94vw + 2px),17px)!important;}
