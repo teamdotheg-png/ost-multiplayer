@@ -250,3 +250,10 @@ input,select{background:#05132e;border:1px solid #4b8fc5;color:white}
   #roomArea .right-score{left:77.4%!important;top:12.8%!important;width:21.4%!important;height:37.6%!important;bottom:auto!important}
   #roomArea .right-chat{left:77.4%!important;top:52%!important;width:21.4%!important;height:45.8%!important;bottom:auto!important}
 }
+
+/* v4.45: move the entire question stack upper-left; align all panel left edges */
+@media (min-width:901px){
+  #roomArea .center-scene{left:3.5%!important;top:26.5%!important;width:46.3%!important;height:49.4%!important;right:auto!important;transform:none!important}
+  #roomArea .center-content{grid-template-rows:33% 25% 32%!important;row-gap:5%!important}
+  #roomArea #firstDone,#roomArea #bonusArea{width:100%!important;justify-self:start!important;margin-left:0!important;margin-right:0!important}
+}
