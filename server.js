@@ -34,7 +34,7 @@ const emitRoom = r => io.to(r.code).emit('room',{
 function publicBonus(b){return {type:b.type,prompt:b.prompt,choices:b.type==='multiple'?b.choices:undefined};}
 function revealData(r){const q=r.questions[r.index];return {videoId:q.videoId,start:q.start,end:q.end,title:q.title,song:q.song,bonusPrompt:q.bonus.prompt,bonusAnswer:q.bonus.type==='multiple'?q.bonus.choices[q.bonus.correct]:q.bonus.answer,firstWinner:r.firstWinner,bonusWinner:r.bonusWinner,
   firstAnswer:r.firstWinner?r.questions[r.index].title:null,
-  reason:r.reason};}
+  reason:r.reason,hint:r.deadline>r.hintAt?q.hint:null};}
 function system(r,message){if(!/님 (?:히든 )?정답 \+1점$/.test(message))return;io.to(r.code).emit('chat',{system:true,text:message,at:Date.now()});}
 function cleanupTimer(r){if(r.timer){clearTimeout(r.timer);r.timer=null;}if(r.hintTimer){clearTimeout(r.hintTimer);r.hintTimer=null;}if(r.advanceTimer){clearTimeout(r.advanceTimer);r.advanceTimer=null;}}
 function reveal(r,reason){if(r.phase!=='playing')return;cleanupTimer(r);r.phase='reveal';r.reason=reason;r.revealUntil=Date.now()+REVEAL_DELAY;emitRoom(r);system(r,reason==='skip'?'스킵 투표로 정답을 공개합니다.':'영상 재생 구간 시간이 지나 정답을 공개합니다.');r.advanceTimer=setTimeout(()=>{if(r.phase!=='reveal')return;r.advanceTimer=null;r.index++;if(r.index>=r.questions.length){r.phase='finished';cleanupTimer(r);emitRoom(r);system(r,'모든 문제가 종료되었습니다!');}else beginRound(r);},REVEAL_DELAY);}
