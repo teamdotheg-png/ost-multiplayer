@@ -311,3 +311,37 @@ input,select{background:#05132e;border:1px solid #4b8fc5;color:white}
 #roomArea #bonusArea.bonus-locked #bonusAnswerInline,
 #roomArea #bonusArea.bonus-locked #bonusChoices,
 #roomArea #bonusArea.bonus-locked #bonusTextRow{display:none!important}
+
+/* v4.51 Supernova X: one matched outline for both neon frame and translucent glass.
+   Keep all original layout, controls, timers, chat and gameplay untouched. */
+#roomArea .pane.left-now,#roomArea .pane.right-score,#roomArea .pane.right-chat,#roomArea .pane.top-actions,
+#roomArea .center-content>.stage-label:not(.center-hint),#roomArea #firstDone,#roomArea #bonusArea{
+  isolation:isolate!important;
+  background:transparent!important;
+  border:0!important;
+  box-shadow:none!important;
+  clip-path:none!important;
+  overflow:visible!important;
+}
+#roomArea .pane.left-now::after,#roomArea .pane.right-score::after,#roomArea .pane.right-chat::after,#roomArea .pane.top-actions::after,
+#roomArea .center-content>.stage-label:not(.center-hint)::after,#roomArea #firstDone::after,#roomArea #bonusArea::after{
+  content:""!important;position:absolute!important;inset:0!important;height:auto!important;
+  background:linear-gradient(110deg,rgba(3,15,37,.87),rgba(8,16,44,.79) 55%,rgba(24,9,41,.84))!important;
+  clip-path:polygon(2.8% 2.5%,97.2% 2.5%,99.5% 13%,99.5% 87%,97.2% 97.5%,2.8% 97.5%,.5% 87%,.5% 13%)!important;
+  border:0!important;box-shadow:none!important;pointer-events:none!important;z-index:-1!important;
+}
+#roomArea .pane.left-now::before,#roomArea .pane.right-score::before,#roomArea .pane.right-chat::before,#roomArea .pane.top-actions::before,
+#roomArea .center-content>.stage-label:not(.center-hint)::before,#roomArea #firstDone::before,#roomArea #bonusArea::before{
+  content:""!important;position:absolute!important;inset:0!important;
+  background:url('/supernova-x-frame.svg') center/100% 100% no-repeat!important;
+  border:0!important;filter:none!important;pointer-events:none!important;z-index:1!important;
+}
+#roomArea .pane.left-now>*,#roomArea .pane.right-score>*,#roomArea .pane.right-chat>*,#roomArea .pane.top-actions>*,
+#roomArea .center-content>.stage-label:not(.center-hint)>*,#roomArea #firstDone>*,#roomArea #bonusArea>*{
+  position:relative;z-index:2;
+}
+/* Floating headings must remain positioned above their panels. */
+#roomArea #firstDone .panel-tab,#roomArea #bonusArea h3{position:absolute!important;z-index:4!important}
+/* The timer is a subpanel of the merged player, not an independent frame. */
+#roomArea .left-now .left-question{background:transparent!important;box-shadow:none!important}
+#roomArea .left-now .left-question::before,#roomArea .left-now .left-question::after{display:none!important}

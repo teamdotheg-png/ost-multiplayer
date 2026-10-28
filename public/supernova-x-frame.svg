@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 200" preserveAspectRatio="none">
+<defs><linearGradient id="n" x1="0" x2="1" y1="0" y2="0"><stop stop-color="#48eaff"/><stop offset=".45" stop-color="#80e5ff"/><stop offset=".72" stop-color="#d680ff"/><stop offset="1" stop-color="#ff8ccf"/></linearGradient><filter id="g" x="-20%" y="-100%" width="140%" height="300%"><feGaussianBlur stdDeviation="3"/></filter></defs>
+<path d="M 28 5 H 972 L 995 26 V 174 L 972 195 H 28 L 5 174 V 26 Z" fill="none" stroke="url(#n)" stroke-width="10" opacity=".65" filter="url(#g)"/>
+<path d="M 28 5 H 972 L 995 26 V 174 L 972 195 H 28 L 5 174 V 26 Z" fill="none" stroke="url(#n)" stroke-width="3"/>
+<path d="M 32 12 H 968 L 987 30 V 170 L 968 188 H 32 L 13 170 V 30 Z" fill="none" stroke="#b2ecff" stroke-opacity=".42" stroke-width="1.3"/>
+<g fill="none" stroke-width="1.6" opacity=".7"><path d="M 24 35 L 52 17 H 165 M 24 165 L 52 183 H 165" stroke="#55eaff"/><path d="M 976 35 L 948 17 H 835 M 976 165 L 948 183 H 835" stroke="#f38ce9"/></g>
+<g stroke="url(#n)" stroke-width="2" opacity=".65"><path d="M 170 5 H 210 L 220 13 H 305 M 695 187 H 775 L 785 195 H 830" fill="none"/><path d="M 700 5 H 750 M 250 195 H 300"/></g>
+</svg>
