@@ -1,0 +1,56 @@
+@import url('https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&display=swap');
+:root{--cyan:#60d9ff;--violet:#b679ff}
+html,body,button,input,select,textarea{font-family:'Gowun Batang','Batang',serif!important}
+body{background:#020b24;color:#f5f8ff}
+#roomArea{position:relative;isolation:isolate;min-height:100vh;max-width:1920px;aspect-ratio:1536/1024;background:url('/moonlit-background.jpg') center/cover no-repeat}
+#roomArea .pane{position:absolute;overflow:hidden;background:linear-gradient(120deg,#06142ce9,#10102ee9);border:1.5px solid #5cafff;border-radius:9px;box-shadow:0 0 12px #227cf777,inset 0 0 15px #143c7466;padding:12px}
+#roomArea .pane:before,#roomArea .pane:after,.controls:before,.controls:after{display:none!important;content:none!important}
+.top-left{left:1%;top:2%;width:36%;height:9%;display:flex;align-items:center;padding:12px 22px!important;clip-path:none!important}
+.logo{font-size:clamp(17px,2.3vw,36px);font-weight:700;font-style:italic;text-shadow:0 0 11px #5b9dff}
+.subtitle{font-size:clamp(11px,1.1vw,16px)}
+.top-round{left:39%;top:2%;width:18%;height:9%;display:grid;place-items:center;font-size:clamp(13px,1.4vw,22px)}
+.top-actions{left:59%;top:2%;width:40%;height:9%;display:flex;align-items:center;gap:6px;padding:8px!important}
+.top-actions button{flex:1;min-width:0;padding:7px 3px}
+#onlineCount{white-space:nowrap;color:#5fffd5;font-size:clamp(9px,.85vw,14px)}
+.left-question{left:13%;top:49%;width:19%;height:16%;text-align:center;display:flex;flex-direction:column;justify-content:center}
+.left-question .q-title{display:none}
+.big-timer{font-size:clamp(34px,4.2vw,67px);line-height:1.15;color:#ffdeef;text-shadow:0 0 12px #fa4baa}
+.timer{margin-top:10px}
+.left-hint,.left-next{display:none!important}
+.left-now{left:1%;top:78%;width:32%;height:20%}
+.right-score{left:77%;top:20%;width:22%;height:36%}
+.right-chat{left:77%;top:58%;width:22%;height:40%;display:flex;flex-direction:column}
+.right-chat .chatlog{flex:1;min-height:0;overflow:auto;background:#05132bd0;border:1px solid #214e83;border-radius:7px;padding:8px}
+.right-chat .chat-send{display:flex;gap:4px;min-width:0}
+.right-chat .chat-send input{min-width:0;flex:1;width:20px}
+.right-chat .chat-send button{flex:none}
+.center-scene{position:absolute;left:30%;top:19%;width:46%;height:58%;border:0;background:transparent;box-shadow:none;overflow:visible}
+.scene-mask{display:none!important}
+.center-content{position:absolute;inset:0;display:grid;grid-template-rows:30% 23% 25% 13%;row-gap:3%;align-content:start;text-align:center;pointer-events:none;padding:0}
+.center-content>*{min-width:0}
+.center-content>.stage-label:not(.center-hint){grid-row:1;position:relative;display:flex;align-items:center;justify-content:center;gap:18px;padding:38px 18px 12px;background:linear-gradient(120deg,#07172df2,#161032ef);border:2px solid #62b8ff;border-radius:12px 5px 12px 5px;box-shadow:0 0 15px #297dfba0,inset 0 0 15px #1758a344;font-size:clamp(14px,1.35vw,21px);font-weight:700;line-height:1.45}
+.center-content>.stage-label:not(.center-hint):before{content:'Q. 이 OST가 나오는 게임은?';position:absolute;left:25%;top:10%;width:70%;text-align:left;border-bottom:1px solid #5ccfff;padding-bottom:5px;font-size:clamp(12px,1.1vw,18px)}
+.bubble-icon{display:block;flex:0 0 auto;width:clamp(55px,7vw,110px);aspect-ratio:1;border-radius:50%;border:2px solid #d5ecff;background:radial-gradient(circle,#15437f 0 11%,#d9efff 12% 20%,#3062b0 21% 26%,transparent 27%),conic-gradient(#c8eaff,#6578c5,#f8fbff,#526aa8,#b3e6ff,#c8eaff);box-shadow:0 0 15px #55b8ff}
+#firstArea,#centerHint{display:none!important}
+#firstDone{grid-row:2;display:flex!important;flex-direction:column;justify-content:center;align-items:center;gap:8px;width:100%;min-height:0;margin:0;padding:10px 16px;border:2px solid #b47bff;border-radius:6px 12px 6px 12px;background:linear-gradient(120deg,#07152fee,#1b1035ed);box-shadow:0 0 13px #824aff88;overflow:hidden}
+#firstDone .answer-line{width:100%;font-size:clamp(15px,1.5vw,24px);font-weight:700;line-height:1.4;overflow-wrap:break-word;color:#f5f4ff}
+#firstDone .answer-line+.answer-line{border-top:1px solid #8c73c977;padding-top:7px}
+#bonusArea{grid-row:3;position:relative;display:flex!important;flex-direction:column;justify-content:center;align-items:center;width:100%;max-width:none;min-height:0;margin:0;padding:18px 12px 8px;border:2px solid #f1b35d;border-radius:6px 12px 6px 12px;background:linear-gradient(120deg,#0a172fed,#1b1531ec);box-shadow:0 0 12px #df984f80}
+#bonusArea h3{position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:#09152c;border:1px solid #ffc77c;border-radius:5px;padding:1px 24px;color:#ffd17d}
+#bonusArea.hidden>*{display:none!important}
+#bonusArea.hidden:after{content:'히든 문제 대기 중';color:#c5cce3}
+#bonusPrompt{font-size:clamp(15px,1.55vw,24px);font-weight:700}
+#bonusTextRow{font-size:clamp(11px,.9vw,14px)}
+#bonusDone{grid-row:4;display:flex!important;align-items:center;justify-content:center;width:100%;min-height:0;margin:0;padding:8px 12px;border:2px solid #ac82ff;border-radius:6px 12px 6px 12px;background:linear-gradient(120deg,#07162ded,#1a1233ed);font-size:clamp(15px,1.5vw,24px);font-weight:700;box-shadow:0 0 12px #764bff77}
+#bonusDone.hidden{font-size:0}
+#bonusDone.hidden:after{content:'히든 정답 : 공개 전';font-size:clamp(15px,1.5vw,24px);color:#c4b9df}
+.controls{position:absolute;left:35%;top:85%;width:40%;height:9%;display:flex;align-items:center;gap:9px;background:transparent;border:0;box-shadow:none;padding:0}
+.controls button{flex:1;height:100%;max-width:none;font-size:clamp(13px,1.3vw,21px);border-radius:9px}
+button{background:linear-gradient(180deg,#124c93,#081d46);border:1px solid #5aaeff;border-radius:7px;box-shadow:inset 0 1px #b1dfff55}
+.controls #skip{background:linear-gradient(140deg,#243f87,#2b164f);border-color:#aa84ff}
+.panel-title{color:#86e1ff;font-weight:700}
+.scoreline{background:#0a1a38bb;border:0;border-bottom:1px solid #5276b3;border-radius:0}
+.center-lobby{position:fixed;z-index:30;left:50%;top:12%;transform:translateX(-50%);width:min(750px,92vw);height:min(80vh,850px);overflow:auto;background:#07152ff7;border:1px solid #6cbaff;border-radius:10px;padding:20px;box-shadow:0 0 0 100vmax #00102b7d}
+.center-reveal,.center-finished{position:absolute;inset:0;background:#07152fee;padding:18px;overflow:auto}
+.hidden{display:none!important}
+@media(max-width:850px){#roomArea{display:grid;grid-template-columns:1fr 1fr;gap:10px;aspect-ratio:auto;padding:12px}.top-left,.top-round,.top-actions,.left-question,.left-now,.right-score,.right-chat,.center-scene,.controls{position:relative;left:auto;top:auto;width:100%;height:auto;grid-column:span 2}.center-scene{min-height:570px}.center-content{grid-template-rows:160px 130px 145px 95px;gap:12px}.left-question{min-height:130px}.left-now{min-height:180px}.right-score{min-height:180px}.right-chat{height:350px}.controls{min-height:80px}.center-lobby .editor-grid{grid-template-columns:1fr}}
