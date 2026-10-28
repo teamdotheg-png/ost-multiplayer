@@ -95,3 +95,74 @@ body{background:#010b26;color:#f7fbff;overflow-x:hidden}
   text-align:center;
 }
 .center-content .center-hint.hidden{display:none!important}
+
+/* v4.19 — Glass Garden: proportional answer cards, crystalline floral trim */
+.center-content #firstDone,
+.center-content #bonusDone {
+  position:relative!important;
+  isolation:isolate;
+  box-sizing:border-box;
+  display:block;
+  width:fit-content!important;
+  min-width:min(52%,260px)!important;
+  max-width:88%!important;
+  margin:0 auto!important;
+  padding:13px clamp(22px,2.5vw,34px)!important;
+  font-size:clamp(16px,1.4vw,23px)!important;
+  line-height:1.45!important;
+  color:#f4fbff!important;
+  text-align:center;
+  overflow-wrap:anywhere;
+  border:2px solid #c3f5ff!important;
+  border-radius:13px 13px 20px 20px!important;
+  background:linear-gradient(145deg,#b2efff32 0%,#123970db 36%,#071c48ed 78%,#75caff35 100%)!important;
+  box-shadow:0 0 0 3px #0c3268a6,0 0 0 4px #90d9ff7c,0 0 20px #5cc9ff99,inset 0 1px 12px #b3f0ff50!important;
+  backdrop-filter:blur(9px);
+  text-shadow:0 1px 8px #76dfff,0 1px 2px #00102d;
+}
+.center-content #firstDone.hidden,
+.center-content #bonusDone.hidden {display:none!important}
+.center-content #firstDone::before,
+.center-content #bonusDone::before {
+  content:'✦ ❀ ✧';
+  position:absolute;
+  left:50%;top:-13px;
+  transform:translateX(-50%);
+  padding:0 12px;
+  color:#e0fbff;
+  background:linear-gradient(90deg,#092453,#1d5684,#092453);
+  border:1px solid #a8eaff;
+  border-radius:30px;
+  font-size:12px;
+  letter-spacing:4px;
+  white-space:nowrap;
+  text-shadow:0 0 9px #85e7ff;
+  box-shadow:0 0 10px #65d6ff88;
+}
+.center-content #firstDone::after,
+.center-content #bonusDone::after {
+  content:'❖';
+  position:absolute;
+  right:-10px;bottom:-11px;
+  width:21px;height:21px;
+  display:grid;place-items:center;
+  border:1px solid #bdf4ff;
+  border-radius:6px;
+  transform:rotate(45deg);
+  background:#143c79;
+  color:#e7ffff;
+  font-size:13px;
+  box-shadow:0 0 12px #78e8ff;
+}
+.center-content .bonus-area {
+  border:2px solid #a9eaff!important;
+  border-radius:18px!important;
+  background:linear-gradient(130deg,#c8f7ff26,#082452e8 28%,#0a2b5ae9 75%,#91dfff29)!important;
+  box-shadow:0 0 0 3px #0c316bb0,0 0 20px #75c9ff77,inset 0 0 22px #92e6ff36!important;
+  backdrop-filter:blur(8px);
+}
+.center-content .bonus-area h3::before {content:'✧ ❀ ';font-size:.7em;color:#c9f8ff}
+.center-content .bonus-area h3::after {content:' ❀ ✧';font-size:.7em;color:#c9f8ff}
+@media(max-width:850px){
+  .center-content #firstDone,.center-content #bonusDone{min-width:0!important;max-width:92%!important;padding:12px 20px!important;font-size:clamp(15px,3vw,21px)!important}
+}
