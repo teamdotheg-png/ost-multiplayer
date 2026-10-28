@@ -420,3 +420,16 @@ input,select{background:#05132e;border:1px solid #4b8fc5;color:white}
 
 /* v4.60: answer text matches the violet-white glow of the 정 답 tab, replacing gold. */
 #roomArea #answerMain:not(:empty){color:#f9ecff!important;text-shadow:0 0 5px rgba(220,151,255,.95),0 0 14px rgba(155,68,255,.75)!important;font-weight:700!important;}
+
+/* v4.61 — preserve one-line music subtitle, restore MM:SS clock, center question copy. */
+@media (min-width:901px){
+  /* Widen the dark navy text island, without darkening the remainder of the frame. */
+  #roomArea .left-now .music-card{width:64%!important;max-width:64%!important;min-width:0!important;}
+  #roomArea .left-now .music-card>div:last-child{min-width:0!important;flex:1 1 auto!important;}
+  #roomArea .left-now .music-sub{white-space:nowrap!important;font-size:clamp(10px,.76vw,13px)!important;}
+  #roomArea .left-now .music-name{white-space:nowrap!important;}
+  /* Move question and instruction together slightly upward; keep round badge fixed. */
+  #roomArea .stage-copy .stage-question{margin-top:-15px!important;}
+  #roomArea .stage-copy .stage-instruction{padding-top:11px!important;}
+}
+#roomArea .left-now .left-question .big-timer{font-variant-numeric:tabular-nums!important;white-space:nowrap!important;}
