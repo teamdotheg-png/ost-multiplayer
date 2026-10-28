@@ -1,6 +1,11 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 300" preserveAspectRatio="none"><defs><linearGradient id="rim" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#46d9ff"/><stop offset=".5" stop-color="#a14dff"/><stop offset="1" stop-color="#46d9ff"/></linearGradient></defs>
-    <path d="M27 7 H973 L994 28 V272 L973 293 H27 L6 272 V28 Z" fill="none" stroke="#46d9ff" stroke-opacity=".12" stroke-width="9"/>
-    <path d="M27 7 H973 L994 28 V272 L973 293 H27 L6 272 V28 Z" fill="none" stroke="url(#rim)" stroke-width="2.4"/>
-    <path d="M35 17 H965 L983 35 V265 L965 283 H35 L17 265 V35 Z" fill="none" stroke="#46d9ff" stroke-opacity=".42" stroke-width="1.2"/>
-    <path d="M6 76 V28 L27 7 H125 M875 7 H973 L994 28 V76 M6 224 V272 L27 293 H125 M875 293 H973 L994 272 V224" fill="none" stroke="#46d9ff" stroke-width="3.4"/>
-    <path d="M37 24 H95 M905 276 H963" fill="none" stroke="#a14dff" stroke-width="2.2"/><path d="M65 8 H175 l18 8 h105 M700 284 h120 l18 -8 h98" stroke="#a14dff" stroke-width="3" fill="none"/><path d="M830 16 h95 l22 19" stroke="#46d9ff" stroke-width="3" fill="none"/></svg>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 300" preserveAspectRatio="none">
+<defs><linearGradient id="edge" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#4fe9ff"/><stop offset=".48" stop-color="#4674ff"/><stop offset=".8" stop-color="#a852ff"/><stop offset="1" stop-color="#4fe9ff"/></linearGradient><filter id="glow" x="-30%" y="-50%" width="160%" height="200%"><feGaussianBlur stdDeviation="4"/></filter></defs>
+<path d="M32 9 H945 L992 48 V238 L959 289 H28 L7 264 V48 Z" fill="none" stroke="url(#edge)" stroke-width="7" opacity=".45" filter="url(#glow)"/>
+<path d="M32 9 H945 L992 48 V238 L959 289 H28 L7 264 V48 Z" fill="none" stroke="url(#edge)" stroke-width="2.2" opacity=".95"/>
+<path d="M43 19 H940 L979 53 V239 L947 279 H40 L21 254 V54 Z" fill="none" stroke="#a5d8ff" stroke-width="1" opacity=".30"/>
+<path d="M11 96 V46 L34 12 H160 M810 12 H955 L987 46 V92 M11 218 V258 L34 287 H174 M818 287 H957 L988 257 V211" fill="none" stroke="#4fe9ff" stroke-width="4" opacity=".88"/>
+<path d="M45 15 H134 M868 285 H946" stroke="#e9faff" stroke-width="3" opacity=".8"/>
+<path d="M153 11 H237 L252 20 H343 M669 11 H733 L746 19 H822" fill="none" stroke="#a852ff" stroke-width="3" opacity=".82"/>
+<path d="M37 271 H108 M890 27 H963" stroke="#a852ff" stroke-width="2.5" opacity=".9"/>
+<path d="M12 105 V190 M988 108 V193" stroke="#4fe9ff" stroke-width="1" opacity=".15"/>
+</svg>
