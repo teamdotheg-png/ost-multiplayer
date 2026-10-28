@@ -1,0 +1,71 @@
+@import url('https://fonts.googleapis.com/css2?family=Gowun+Batang:wght@400;700&display=swap');
+/* v4.23: independent console HUD; no legacy theme stylesheets loaded */
+:root{--hud-blue:#4aa9ff;--hud-violet:#b85bff;--hud-ink:#050d29}
+body,button,input,select,textarea{font-family:'Gowun Batang','Batang',serif!important}
+body{background:#010b26!important;color:#f5f6ff!important}
+#roomArea{width:100%!important;max-width:none!important;min-height:100vh!important;aspect-ratio:1470/1050!important;position:relative!important;isolation:isolate!important;background: url('/moonlit-background.jpg') center/cover no-repeat!important}
+#roomArea:before,#roomArea:after{display:none!important}
+#roomArea .pane{position:absolute!important;background:linear-gradient(115deg,#061631eb,#080c28e8 70%,#170d39e8)!important;border:1px solid #5baeff!important;border-radius:7px!important;box-shadow:0 0 0 1px #15367c,0 0 12px #217cff80,inset 0 0 15px #1955a844!important;overflow:hidden!important}
+#roomArea .pane:before,#roomArea .pane:after{display:none!important}
+.top-left{left:.8%!important;top:2%!important;width:37%!important;height:9.5%!important;display:flex!important;align-items:center!important;padding:12px 22px!important}
+.logo{font-size:clamp(19px,2.1vw,35px)!important;font-style:normal!important;letter-spacing:.6px!important;font-weight:700!important;white-space:nowrap!important;text-shadow:0 0 11px #4a7fff!important}
+.subtitle{font-size:clamp(10px,1vw,15px)!important;color:#bcdcff!important}
+.top-round{left:39.7%!important;top:3%!important;width:18%!important;height:7.5%!important;display:grid!important;place-items:center!important;font-size:clamp(13px,1.45vw,23px)!important}
+.top-actions{left:59.7%!important;top:2.5%!important;width:39.4%!important;height:8.5%!important;padding:8px!important;display:flex!important;gap:6px!important;align-items:center!important}
+.top-actions button{flex:1!important;min-width:0!important;padding:8px 3px!important;font-size:clamp(10px,1vw,15px)!important;white-space:nowrap!important}
+#onlineCount{white-space:nowrap!important;font-size:clamp(9px,.85vw,13px)!important;color:#58f5db!important}
+button{border:1px solid #428ce8!important;border-radius:6px!important;background:linear-gradient(180deg,#0b3973,#06152e)!important;box-shadow:inset 0 1px #75c8ff77!important;color:#f9f9ff!important}
+button:not(:disabled):hover{filter:brightness(1.2)!important}
+.left-question{left:13.5%!important;top:49.8%!important;width:18.5%!important;height:16.8%!important;z-index:4!important;text-align:center!important;padding:10px!important;display:flex!important;flex-direction:column!important;justify-content:center!important}
+.left-question .q-title{display:none!important}
+.left-question .big-timer{font-size:clamp(30px,4.1vw,65px)!important;line-height:1.1!important;font-weight:700!important;color:#fff4ff!important;text-shadow:0 0 7px #ff3e9c,0 0 19px #fd2e82!important}
+.left-question .timer{height:5px!important;margin:12px 0 6px!important;background:#071b3a!important}
+.left-question .hint-desc{font-size:clamp(10px,.95vw,15px)!important;color:#dceaff!important}
+.left-hint,.left-next{display:none!important}
+.left-now{left:1.2%!important;top:77%!important;width:32.5%!important;height:20.5%!important;z-index:3!important;padding:12px!important}
+.left-now .panel-title{font-size:clamp(14px,1.35vw,22px)!important;color:#6ddcff!important}
+.right-score{left:77.2%!important;top:20.5%!important;width:21.6%!important;height:36.4%!important;padding:13px!important}
+.right-chat{left:77.2%!important;top:59.2%!important;width:21.6%!important;height:38.3%!important;padding:12px!important;display:flex!important;flex-direction:column!important}
+.right-score .panel-title{font-size:clamp(13px,1.25vw,20px)!important;color:#85d9ff!important}
+.scoreline{background:#04132d7a!important;border:0!important;border-bottom:1px solid #5489d07a!important;border-radius:0!important;box-shadow:none!important;margin:0!important;padding:8px 3px!important;min-height:48px!important}
+.scoreline:first-child{background:#29204488!important}
+.chatlog{background:#03102a99!important;flex:1!important;min-height:0!important;overflow-y:auto!important;padding:7px!important;font-size:clamp(10px,1vw,16px)!important}
+.chat-tabs button{font-size:clamp(10px,.95vw,15px)!important;padding:5px 8px!important}.chat-tabs button.active{background:#37b6ff!important;color:#03132a!important}
+.chat-send{display:flex!important;gap:5px!important}.chat-send input{flex:1!important;min-width:0!important;padding:7px!important;font-size:clamp(10px,.9vw,14px)!important}.chat-send button{padding:6px!important}
+/* Stable center stack: every strip has a permanent slot; no collapse on reveal. */
+.center-scene{position:absolute!important;left:29.3%!important;top:19.5%!important;width:46.5%!important;height:59%!important;z-index:3!important;border:0!important;border-radius:0!important;box-shadow:none!important;background:transparent!important;overflow:visible!important}
+.center-scene:before,.center-scene:after,.center-scene .scene-mask{display:none!important}
+.center-content{position:absolute!important;inset:0!important;display:grid!important;grid-template-rows:34% 24% 25% auto!important;align-content:start!important;gap:3%!important;padding:0!important;pointer-events:none!important;text-align:center!important;overflow:visible!important}
+.center-content>.stage-label:not(.center-hint),.center-content #firstDone,.center-content .bonus-area{width:100%!important;max-width:none!important;min-width:0!important;min-height:0!important;height:100%!important;margin:0!important;align-self:stretch!important;position:relative!important;display:flex!important;align-items:center!important;justify-content:center!important;box-sizing:border-box!important;border-radius:7px!important;backdrop-filter:blur(6px)!important}
+.center-content>.stage-label:not(.center-hint){grid-row:1!important;gap:16px!important;padding:37px 16px 12px 17px!important;background:linear-gradient(115deg,#061631f0,#090c2eea 68%,#1a0c37ec)!important;border:2px solid #4c9bff!important;box-shadow:0 0 13px #267dff88,inset 0 0 13px #2c59c650!important;font-size:clamp(13px,1.35vw,22px)!important;line-height:1.35!important;font-weight:700!important}
+.center-content>.stage-label:not(.center-hint):before{content:'Q. 이 OST가 나오는 게임은?'!important;position:absolute!important;left:26%!important;top:12%!important;width:67%!important;border-bottom:1px solid #3cb8ff!important;padding-bottom:6px!important;text-align:left!important;font-size:clamp(12px,1.2vw,19px)!important;color:#f1f5ff!important}
+.center-content .bubble-icon{display:block!important;flex:none!important;width:clamp(55px,7vw,110px)!important;height:clamp(55px,7vw,110px)!important;margin:0!important;border:3px solid #c9e6ff!important;border-radius:50%!important;background:radial-gradient(circle at center,#173f80 0 10%,#e2f4ff 11% 19%,#4678d0 20% 22%,transparent 23%),conic-gradient(#dbeeff,#6877db,#fff,#5053bb,#c4eaff,#5c79e1,#dbeeff)!important;box-shadow:0 0 14px #77aaff!important;color:transparent!important}
+.center-content #firstDone{grid-row:2!important;padding:18px!important;border:2px solid #a060ed!important;background:linear-gradient(120deg,#09172ce9,#090c29ed 65%,#24103bed)!important;box-shadow:0 0 12px #a050ff77,inset 0 0 14px #5542c34a!important;font-size:clamp(17px,2vw,32px)!important;font-weight:700!important;white-space:normal!important;overflow-wrap:anywhere!important;letter-spacing:0!important;text-shadow:0 0 8px #6a8aff!important}
+/* Hidden winner remains a decorative slot, without revealing text. */
+.center-content #firstDone.hidden{display:flex!important}
+.center-content #firstDone.hidden:after{content:'정답 공개 전'!important;color:#b8c6e8!important;font-size:clamp(13px,1.2vw,18px)!important;opacity:.8!important}
+.center-content #firstDone:before{content:'정 답'!important;position:absolute!important;top:-16px!important;left:50%!important;transform:translateX(-50%)!important;background:#080e2c!important;border:1px solid #d35cff!important;border-radius:3px!important;padding:3px 30px!important;font-size:clamp(13px,1.15vw,18px)!important;color:#f9a2f5!important;white-space:nowrap!important}
+.center-content .bonus-area{grid-row:3!important;padding:16px 12px!important;border:2px solid #e9ac4d!important;background:linear-gradient(115deg,#10172cdd,#090f28ee 70%,#261636e9)!important;box-shadow:0 0 12px #e0a24a80,inset 0 0 15px #8b652c55!important;flex-direction:column!important;pointer-events:auto!important}
+.center-content .bonus-area.hidden{display:flex!important}
+.center-content .bonus-area.hidden:after{content:'히든 문제 대기 중'!important;color:#c6b9ac!important;font-size:clamp(13px,1.2vw,18px)!important}
+.center-content .bonus-area.hidden>*{display:none!important}
+.center-content .bonus-area h3{position:absolute!important;left:50%!important;top:-16px!important;transform:translateX(-50%)!important;margin:0!important;min-width:120px!important;background:#08122d!important;border:1px solid #eab054!important;border-radius:3px!important;padding:3px 28px!important;color:#ffd177!important;font-size:clamp(13px,1.2vw,19px)!important}
+.center-content .bonus-area.hidden:before{content:'히 든'!important;position:absolute!important;top:-16px!important;left:50%!important;transform:translateX(-50%)!important;padding:3px 30px!important;background:#08122d!important;border:1px solid #eab054!important;color:#ffd177!important;font-size:clamp(13px,1.2vw,19px)!important}
+.center-content #bonusPrompt{font-size:clamp(15px,1.55vw,25px)!important;line-height:1.35!important}
+.center-content #bonusTextRow{font-size:clamp(10px,.85vw,13px)!important;margin-top:4px!important}
+.center-content #bonusChoices{display:flex!important;flex-wrap:wrap!important;justify-content:center!important;gap:4px!important}
+.center-content #bonusDone:not(.hidden){grid-row:4!important;display:block!important;width:100%!important;max-width:none!important;margin:0!important;padding:6px!important;border:1px solid #f0bf6a!important;background:#061b35ed!important;font-size:clamp(12px,1vw,17px)!important}
+.center-content #centerHint:not(.hidden){position:absolute!important;top:-30px!important;right:0!important;padding:3px 8px!important;border:1px solid #70baff!important;background:#06132bdc!important;font-size:clamp(11px,1vw,16px)!important}
+.center-content #firstArea{display:none!important}
+.center-content #answerOverlay{z-index:6!important}
+.controls{position:absolute!important;left:36.5%!important;top:83.5%!important;width:38.5%!important;height:9%!important;display:flex!important;align-items:center!important;gap:8px!important;padding:0!important;background:transparent!important;border:0!important;box-shadow:none!important}
+.controls:before,.controls:after{display:none!important}
+.controls button{flex:1!important;height:100%!important;font-size:clamp(11px,1.2vw,19px)!important;font-weight:700!important;border:1px solid #62b5ff!important;box-shadow:0 0 11px #227bff88!important}
+.controls #skip{border-color:#bb69ff!important;background:linear-gradient(140deg,#132d65,#27143f)!important}
+.controls .vote{font-size:clamp(9px,.75vw,12px)!important;padding:4px!important;white-space:nowrap!important}
+.center-lobby{position:fixed!important;left:50%!important;top:13%!important;transform:translateX(-50%)!important;width:min(740px,90vw)!important;height:min(78vh,820px)!important;overflow-y:auto!important;z-index:30!important;padding:20px!important;background:#07152cf6!important;border:1px solid #69baff!important;border-radius:10px!important;box-shadow:0 0 0 100vmax #00051c70,0 0 20px #368bff99!important}
+.center-lobby .editor-grid{grid-template-columns:1fr 1fr!important}
+.center-reveal,.center-finished{position:absolute!important;inset:5% 0!important;background:#06152ae8!important;border:1px solid #68b9ff!important;border-radius:9px!important;overflow:auto!important;padding:16px!important}
+@media(max-width:850px){#roomArea{aspect-ratio:auto!important;min-height:100vh!important;display:grid!important;grid-template-columns:1fr 1fr!important;gap:10px!important;padding:12px!important}.top-left,.top-round,.top-actions,.left-question,.left-now,.right-score,.right-chat,.center-scene,.controls{position:relative!important;left:auto!important;top:auto!important;width:100%!important;height:auto!important;grid-column:span 2!important}.top-left,.top-round,.top-actions{min-height:65px!important}.left-question{min-height:120px!important;order:1!important}.center-scene{min-height:440px!important;order:2!important}.center-content{position:relative!important;grid-template-rows:150px 105px 125px auto!important;gap:18px!important}.left-now{min-height:180px!important;order:3!important}.right-score{min-height:200px!important;order:4!important}.right-chat{height:340px!important;order:5!important}.controls{min-height:75px!important;order:6!important}.center-lobby{width:92vw!important;max-height:78vh!important}.center-lobby .editor-grid{grid-template-columns:1fr!important}}
+/* Respect phase visibility: playing HUD must disappear in lobby/reveal/end. */
+.center-content.hidden{display:none!important}
