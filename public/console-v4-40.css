@@ -214,3 +214,25 @@ input,select{background:#05132e;border:1px solid #4b8fc5;color:white}
 #roomArea .pane::before,.center-content>.stage-label:not(.center-hint)::before,#firstDone::before,#bonusArea::before,.controls #skip::before{opacity:1!important;filter:drop-shadow(0 0 3px rgba(60,174,255,.26))!important;pointer-events:none!important}
 #firstDone .panel-tab,#bonusArea h3{border-width:1px!important;box-shadow:0 0 10px rgba(146,67,255,.32)!important}
 #bonusArea h3{box-shadow:0 0 10px rgba(255,175,71,.28)!important}
+
+/* v4.41: user-requested upper-left music + adjacent timer layout */
+#roomArea .top-left{display:none!important}
+#roomArea .left-now{left:1%!important;top:1.5%!important;width:35%!important;height:16.8%!important;padding:14px 20px 12px!important;display:flex!important;flex-direction:column!important;justify-content:center!important;gap:2px!important}
+#roomArea .left-now .panel-title{font-size:clamp(13px,1.25vw,19px)!important;margin-bottom:3px!important}
+#roomArea .left-now .music-card{gap:10px!important;min-height:0!important}
+#roomArea .left-now .music-cover{flex-basis:clamp(48px,5.2vw,76px)!important;width:clamp(48px,5.2vw,76px)!important}
+#roomArea .left-now .waveform{height:15px!important}
+#roomArea .left-now .music-progress{margin-top:3px!important}
+#roomArea .left-now .music-status,#roomArea .left-now .room-code{line-height:1.05!important}
+#roomArea .left-question{left:38%!important;top:1.5%!important;width:18%!important;height:16.8%!important;padding:14px 12px!important;display:flex!important;flex-direction:column!important;justify-content:center!important;align-items:center!important}
+#roomArea .left-question .timer-heading{font-size:clamp(10px,.83vw,13px)!important}
+#roomArea .left-question .big-timer{font-size:clamp(27px,3vw,49px)!important;line-height:1.12!important;margin:5px 0!important}
+#roomArea .left-question .timer{margin:5px 0!important;width:95%!important}
+#roomArea .left-question .hint-desc{text-align:center!important}
+#roomArea .top-round{left:1%!important;top:19.2%!important;width:17%!important;height:5.5%!important;min-height:0!important;padding:4px 8px!important;font-size:clamp(12px,1vw,17px)!important}
+@media(max-width:900px){
+ #roomArea .left-now,#roomArea .left-question,#roomArea .top-round{position:relative!important;left:auto!important;top:auto!important;width:100%!important;height:auto!important;grid-column:span 2!important}
+ #roomArea .left-now{min-height:155px!important}
+ #roomArea .left-question{min-height:145px!important}
+ #roomArea .top-round{min-height:55px!important}
+}
