@@ -236,3 +236,10 @@ input,select{background:#05132e;border:1px solid #4b8fc5;color:white}
  #roomArea .left-question{min-height:145px!important}
  #roomArea .top-round{min-height:55px!important}
 }
+
+/* v4.42: round indicator inside main question panel, centered panels shifted left */
+#roomArea .top-round{display:none!important}
+#roomArea .center-scene{left:25.5%!important;top:30.2%!important;width:46.3%!important;height:49.4%!important}
+#roomArea .stage-eyebrow{display:flex!important;align-items:center!important;justify-content:space-between!important;gap:8px!important;letter-spacing:.07em!important}
+#roomArea .stage-round{display:inline-flex!important;align-items:center!important;justify-content:center!important;white-space:nowrap!important;flex-shrink:0!important;padding:4px 9px!important;border:1px solid rgba(105,218,255,.65)!important;border-radius:3px!important;background:linear-gradient(100deg,rgba(6,34,70,.9),rgba(26,16,69,.86))!important;color:#eafaff!important;text-shadow:0 0 6px #63cfff!important;font-size:clamp(10px,.88vw,15px)!important;letter-spacing:.04em!important}
+@media(max-width:900px){#roomArea .center-scene{position:relative!important;left:auto!important;top:auto!important;width:100%!important;height:auto!important}}
