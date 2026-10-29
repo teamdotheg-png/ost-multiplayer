@@ -208,6 +208,21 @@ app.patch('/api/submissions/admin/:id',asyncRoute(async(req,res)=>{
  const rows=await db('ost_questions','PATCH',`id=eq.${id}`,update);
  if(!rows.length)return res.status(404).json({error:'문제를 찾을 수 없습니다.'});res.json({ok:true});
 }));
+// Admin-only submission review and deletion; local playable questions are untouched.
+app.delete('/api/submissions/admin/:id',asyncRoute(async(req,res)=>{
+ if(!isAdmin(req))return res.status(403).json({error:'관리자 인증 실패'});
+ const id=Number(req.params.id);if(!Number.isSafeInteger(id)||id<1)return res.status(400).json({error:'ID 오류'});
+ const rows=await db('ost_questions','DELETE',`id=eq.${id}&select=id`);
+ if(!rows.length)return res.status(404).json({error:'이미 삭제됐거나 찾을 수 없습니다.'});
+ res.json({ok:true,deleted:rows[0].id});
+}));
+app.post('/api/submissions/admin/delete-batch',asyncRoute(async(req,res)=>{
+ if(!isAdmin(req))return res.status(403).json({error:'관리자 인증 실패'});
+ const ids=req.body?.ids;
+ if(!Array.isArray(ids)||ids.length<1||ids.length>1000||new Set(ids).size!==ids.length||ids.some(x=>!Number.isSafeInteger(x)||x<1))return res.status(400).json({error:'삭제할 문제 ID 오류'});
+ const rows=await db('ost_questions','DELETE',`id=in.(${ids.join(',')})&select=id`);
+ res.json({ok:true,deleted:rows.map(x=>x.id)});
+}));
 app.get('/api/submissions/admin/export',asyncRoute(async(req,res)=>{
  if(!isAdmin(req))return res.status(403).json({error:'관리자 인증 실패'});
  const rows=await db('ost_questions','GET','status=eq.approved&select=question&order=created_at.asc&limit=100');
