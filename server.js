@@ -223,6 +223,25 @@ app.post('/api/submissions/admin/delete-batch',asyncRoute(async(req,res)=>{
  const rows=await db('ost_questions','DELETE',`id=in.(${ids.join(',')})&select=id`);
  res.json({ok:true,deleted:rows.map(x=>x.id)});
 }));
+// v4.81: clear only friend-authored submission records; never touch administrator rows.
+app.post('/api/submissions/admin/clear-friends',asyncRoute(async(req,res)=>{
+ if(!isAdmin(req))return res.status(403).json({error:'관리자 인증 실패'});
+ if(req.body?.confirmation!=='DELETE FRIEND SUBMISSIONS')return res.status(400).json({error:'삭제 확인 문구 오류'});
+ // Refuse an incomplete UI backup rather than silently deleting records not in the backup.
+ const all=[];let cursor=0;
+ for(let page=0;page<100;page++){
+  const rows=await db('ost_questions','GET',`author_id=not.is.null&id=gt.${cursor}&select=id&order=id.asc&limit=1000`);
+  if(!rows.length)break;
+  all.push(...rows.map(r=>r.id));cursor=rows[rows.length-1].id;
+  if(rows.length<1000)break;
+  if(page===99)return res.status(409).json({error:'삭제할 기록이 너무 많아 중단했습니다.'});
+ }
+ const expected=req.body?.expectedIds;
+ if(!Array.isArray(expected)||expected.length!==all.length||expected.some((v,i)=>v!==all[i]))return res.status(409).json({error:'목록이 변경되었거나 백업이 불완전합니다. 목록을 새로고침하고 다시 백업하세요.'});
+ let count=0;
+ for(let i=0;i<all.length;i+=100){const ids=all.slice(i,i+100);const deleted=await db('ost_questions','DELETE',`author_id=not.is.null&id=in.(${ids.join(',')})&select=id`);count+=deleted.length;}
+ res.json({ok:true,deletedCount:count});
+}));
 app.get('/api/submissions/admin/export',asyncRoute(async(req,res)=>{
  if(!isAdmin(req))return res.status(403).json({error:'관리자 인증 실패'});
  const rows=await db('ost_questions','GET','status=eq.approved&select=question&order=created_at.asc&limit=100');
