@@ -137,6 +137,21 @@ function asyncRoute(fn){return (req,res)=>Promise.resolve(fn(req,res)).catch(e=>
 async function submitter(req){const token=owner(req);if(!/^[a-f0-9]{64}$/.test(token))return null;const rows=await db('ost_submitters','GET',`token_hash=eq.${tokenHash(token)}&select=id,nickname&limit=1`);return rows[0]||null;}
 function asItem(x){return {id:x.id,nickname:x.author_nickname,status:x.status,question:x.question,createdAt:x.created_at,aiRequested:!!x.ai_requested,aiStatus:x.ai_status||null,aiResult:x.ai_result||null};}
 function validQuestion(q){parseQuestions([q]);return q;}
+// AI-only requests are drafts, never playable questions until reviewed.
+function validAiDraft(input){
+ if(!input||typeof input!=='object'||Array.isArray(input))throw Error('문제 정보 오류');
+ const videoUrl=sanitize(input.videoUrl,1000);
+ if(!parseVideo(videoUrl))throw Error('올바른 유튜브 URL을 입력하세요.');
+ const q={...input,videoUrl,answer:sanitize(input.answer,150),aliases:sanitize(input.aliases,400),songName:sanitize(input.songName,150),hintText:sanitize(input.hintText,300)};
+ const start=Number(q.startTime??0),end=Number(q.endTime??45);
+ q.startTime=Number.isFinite(start)&&start>=0&&start<200000?start:0;
+ q.endTime=Number.isFinite(end)&&end>q.startTime&&end<=200000?end:q.startTime+45;
+ // Empty hidden questions should not be treated as completed hidden quizzes.
+ if(!q.bonusQuestion||!String(q.bonusQuestion).trim())q.bonusType='none';
+ return q;
+}
+function validateSubmission(input,aiRequested){return aiRequested?validAiDraft(input):validQuestion(input);}
+
 app.use('/api/submissions',express.json({limit:'150kb'}));
 app.use('/api/ai',express.json({limit:'150kb'}));
 app.post('/api/submissions/access',asyncRoute(async(req,res)=>{
@@ -155,16 +170,16 @@ app.get('/api/submissions/mine',asyncRoute(async(req,res)=>{
 app.post('/api/submissions',asyncRoute(async(req,res)=>{
  const admin=isAdmin(req);const u=admin?null:await submitter(req);
  if(!admin&&!u)return res.status(401).json({error:'초대코드로 입장하거나 관리자 비밀번호를 입력해 주세요.'});
- let q;try{q=validQuestion(req.body?.question);}catch(e){return res.status(400).json({error:e.message});}
- const row={author_id:admin?null:u.id,author_nickname:admin?'관리자':u.nickname,question:q,status:admin&& !req.body?.aiRequested?'approved':'pending',youtube_url:q.videoUrl,start_time:q.startTime,end_time:q.endTime,answer:q.answer,ai_requested:!!req.body?.aiRequested,ai_status:req.body?.aiRequested?'queued':null};
+ const aiRequested=req.body?.aiRequested===true;let q;try{q=validateSubmission(req.body?.question,aiRequested);}catch(e){return res.status(400).json({error:e.message});}
+ const row={author_id:admin?null:u.id,author_nickname:admin?'관리자':u.nickname,question:q,status:admin&&!aiRequested?'approved':'pending',youtube_url:q.videoUrl,start_time:q.startTime,end_time:q.endTime,answer:q.answer,ai_requested:aiRequested,ai_status:aiRequested?'queued':null};
  const rows=await db('ost_questions','POST','',row);
  res.json({ok:true,id:rows[0].id,status:row.status});
 }));
 app.put('/api/submissions/:id',asyncRoute(async(req,res)=>{
  const u=await submitter(req);if(!u)return res.status(401).json({error:'다시 입장해 주세요.'});
- let q;try{q=validQuestion(req.body?.question);}catch(e){return res.status(400).json({error:e.message});}
+ const aiRequested=req.body?.aiRequested===true;let q;try{q=validateSubmission(req.body?.question,aiRequested);}catch(e){return res.status(400).json({error:e.message});}
  const id=Number(req.params.id);if(!Number.isSafeInteger(id)||id<1)return res.status(404).json({error:'문제를 찾을 수 없습니다.'});
- const rows=await db('ost_questions','PATCH',`id=eq.${id}&author_id=eq.${u.id}&status=eq.pending`,{question:q,youtube_url:q.videoUrl,start_time:q.startTime,end_time:q.endTime,answer:q.answer,ai_requested:!!req.body?.aiRequested,ai_status:req.body?.aiRequested?'queued':null,ai_result:null,updated_at:new Date().toISOString()});
+ const rows=await db('ost_questions','PATCH',`id=eq.${id}&author_id=eq.${u.id}&status=eq.pending`,{question:q,youtube_url:q.videoUrl,start_time:q.startTime,end_time:q.endTime,answer:q.answer,ai_requested:aiRequested,ai_status:aiRequested?'queued':null,ai_result:null,updated_at:new Date().toISOString()});
  if(!rows.length)return res.status(404).json({error:'승인 대기 중인 내 문제만 수정할 수 있습니다.'});res.json({ok:true});
 }));
 app.get('/api/submissions/admin',asyncRoute(async(req,res)=>{
@@ -177,6 +192,12 @@ app.patch('/api/submissions/admin/:id',asyncRoute(async(req,res)=>{
  if(!['approved','rejected','pending'].includes(req.body?.status))return res.status(400).json({error:'상태 오류'});
  const id=Number(req.params.id);if(!Number.isSafeInteger(id)||id<1)return res.status(404).json({error:'문제를 찾을 수 없습니다.'});
  const update={status:req.body.status,updated_at:new Date().toISOString()};
+ if(req.body.status==='approved'&&!req.body.question){
+  const existing=await db('ost_questions','GET',`id=eq.${id}&select=question&limit=1`);
+  if(!existing.length)return res.status(404).json({error:'문제를 찾을 수 없습니다.'});
+  try{validQuestion(existing[0].question);}catch(e){return res.status(400).json({error:'정답과 히든 문제를 완성한 후 승인하세요: '+e.message});}
+ }
+
  if(req.body.question){let q;try{q=validQuestion(req.body.question);}catch(e){return res.status(400).json({error:e.message});}Object.assign(update,{question:q,youtube_url:q.videoUrl,start_time:q.startTime,end_time:q.endTime,answer:q.answer});}
  const rows=await db('ost_questions','PATCH',`id=eq.${id}`,update);
  if(!rows.length)return res.status(404).json({error:'문제를 찾을 수 없습니다.'});res.json({ok:true});
