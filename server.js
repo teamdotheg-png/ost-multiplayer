@@ -167,6 +167,12 @@ app.get('/api/submissions/mine',asyncRoute(async(req,res)=>{
  const rows=await db('ost_questions','GET',`author_id=eq.${u.id}&select=id,author_nickname,status,question,ai_requested,ai_status,ai_result,created_at&order=created_at.desc`);
  res.json(rows.map(asItem));
 }));
+// Public-to-invited-submitters metadata only: never expose answer, video URL or hidden quiz.
+app.get('/api/submissions/list',asyncRoute(async(req,res)=>{
+ const u=await submitter(req);if(!u)return res.status(401).json({error:'다시 입장해 주세요.'});
+ const rows=await db('ost_questions','GET','select=id,author_nickname,status,ai_requested,ai_status,created_at&order=created_at.desc&limit=200');
+ res.json({items:rows.map(x=>({id:x.id,nickname:x.author_nickname,status:x.status,aiRequested:!!x.ai_requested,aiStatus:x.ai_status||null,createdAt:x.created_at,isMine:false})),limited:rows.length===200});
+}));
 app.post('/api/submissions',asyncRoute(async(req,res)=>{
  const admin=isAdmin(req);const u=admin?null:await submitter(req);
  if(!admin&&!u)return res.status(401).json({error:'초대코드로 입장하거나 관리자 비밀번호를 입력해 주세요.'});
