@@ -172,7 +172,7 @@ app.get('/api/submissions/mine',asyncRoute(async(req,res)=>{
 app.put('/api/public-questions/admin',express.json({limit:'40kb'}),asyncRoute(async(req,res)=>{
  if(!isAdmin(req))return res.status(403).json({error:'관리자 인증 실패'});
  const items=req.body?.items;
- if(!Array.isArray(items)||items.length>100)return res.status(400).json({error:'문제 목록 형식 오류'});
+ if(!Array.isArray(items))return res.status(400).json({error:'문제 목록 형식 오류'});
  const clean=[];
  for(let i=0;i<items.length;i++){
   const x=items[i];
@@ -287,7 +287,7 @@ app.post('/api/ai/result/:id',asyncRoute(async(req,res)=>{
  const current=await db('ost_questions','GET',`id=eq.${id}&ai_requested=eq.true&status=eq.pending&select=id,question,ai_result&limit=1`);
  if(current.length!==1)return res.status(409).json({error:'대상 문제 없음 또는 이미 승인됨'});
  if(current[0].ai_result&&!r.replace)return res.status(409).json({error:'기존 분석 결과가 있어 덮어쓰지 않습니다.'});
- const result={start_seconds:start,end_seconds:end,candidates:Array.isArray(r.candidates)?r.candidates.slice(0,5):[],analyzed_at:new Date().toISOString()};
+ const result={start_seconds:start,end_seconds:end,candidates:Array.isArray(r.candidates)?r.candidates.slice(0,5):[],video_title:sanitize(r.video_title,500),video_description:sanitize(r.video_description,1500),analyzed_at:new Date().toISOString()};
  const rows=await db('ost_questions','PATCH',`id=eq.${id}&ai_requested=eq.true&status=eq.pending`,{ai_result:result,ai_status:'ready',updated_at:new Date().toISOString()});
  if(rows.length!==1)return res.status(409).json({error:'대상 변경됨'});
  res.json({ok:true,id});
