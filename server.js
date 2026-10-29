@@ -138,7 +138,7 @@ async function submitter(req){const token=owner(req);if(!/^[a-f0-9]{64}$/.test(t
 function asItem(x){return {id:x.id,nickname:x.author_nickname,status:x.status,question:x.question,createdAt:x.created_at,aiRequested:!!x.ai_requested,aiStatus:x.ai_status||null,aiResult:x.ai_result||null};}
 function validQuestion(q){parseQuestions([q]);return q;}
 app.use('/api/submissions',express.json({limit:'150kb'}));
-app.use('/api/ai', express.json({limit:'150kb'}));
+app.use('/api/ai',express.json({limit:'150kb'}));
 app.post('/api/submissions/access',asyncRoute(async(req,res)=>{
  if(!configured())return res.status(503).json({error:'서버 환경변수 설정이 필요합니다.'});
  if(!secureEqual(req.body?.inviteCode,INVITE_CODE))return res.status(403).json({error:'초대코드가 올바르지 않습니다.'});
