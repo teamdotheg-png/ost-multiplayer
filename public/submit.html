@@ -46,7 +46,9 @@ $('showList').onclick=async()=>{
  const button=$('showList');button.disabled=true;
  try{
   const data=await api('/api/submissions/list');const container=$('sharedItems');container.replaceChildren();
-  if(!data.items.length){const p=document.createElement('p');p.textContent='아직 제출된 문제가 없습니다.';container.append(p);}
+  const adminItems=Array.isArray(data.adminItems)?data.adminItems:[];
+  if(!adminItems.length&&!data.items.length){const p=document.createElement('p');p.textContent='아직 공개된 문제가 없습니다.';container.append(p);}
+  for(const x of adminItems){const d=document.createElement('div');d.className='item';const span=document.createElement('span');span.textContent=`관리자 · ${x.number}번 문제 · ${x.ready?'등록 완료':'작성 중'}`;d.append(span);container.append(d);}
   for(const x of data.items){const d=document.createElement('div');d.className='item';const t=document.createElement('span');
    const when=x.createdAt?new Date(x.createdAt).toLocaleString('ko-KR'):'날짜 미확인';
    const stage=x.aiRequested?(x.aiStatus==='ready'?'AI 분석 완료':x.aiStatus==='failed'?'AI 분석 재확인 필요':'AI 분석 대기'):'일반 제출';
