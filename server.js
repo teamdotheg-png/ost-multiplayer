@@ -168,10 +168,25 @@ app.get('/api/submissions/mine',asyncRoute(async(req,res)=>{
  res.json(rows.map(asItem));
 }));
 // Public-to-invited-submitters metadata only: never expose answer, video URL or hidden quiz.
+// v4.82: administrator publishes metadata ONLY. Never store quiz answers or URLs here.
+app.put('/api/public-questions/admin',express.json({limit:'40kb'}),asyncRoute(async(req,res)=>{
+ if(!isAdmin(req))return res.status(403).json({error:'관리자 인증 실패'});
+ const items=req.body?.items;
+ if(!Array.isArray(items)||items.length>100)return res.status(400).json({error:'문제 목록 형식 오류'});
+ const clean=[];
+ for(let i=0;i<items.length;i++){
+  const x=items[i];
+  if(!x||!Number.isInteger(x.number)||x.number!==i+1||typeof x.ready!=='boolean')return res.status(400).json({error:'목록 항목 오류'});
+  clean.push({number:x.number,ready:x.ready});
+ }
+ await db('ost_public_question_list','POST','on_conflict=id',{id:1,items:clean,updated_at:new Date().toISOString()});
+ res.json({ok:true,count:clean.length});
+}));
 app.get('/api/submissions/list',asyncRoute(async(req,res)=>{
  const u=await submitter(req);if(!u)return res.status(401).json({error:'다시 입장해 주세요.'});
  const rows=await db('ost_questions','GET','select=id,author_nickname,status,ai_requested,ai_status,created_at&order=created_at.desc&limit=200');
- res.json({items:rows.map(x=>({id:x.id,nickname:x.author_nickname,status:x.status,aiRequested:!!x.ai_requested,aiStatus:x.ai_status||null,createdAt:x.created_at,isMine:false})),limited:rows.length===200});
+ const published=await db('ost_public_question_list','GET','id=eq.1&select=items,updated_at&limit=1');
+ res.json({items:rows.map(x=>({id:x.id,nickname:x.author_nickname,status:x.status,aiRequested:!!x.ai_requested,aiStatus:x.ai_status||null,createdAt:x.created_at,isMine:false})),adminItems:published[0]?.items||[],adminUpdatedAt:published[0]?.updated_at||null,limited:rows.length===200});
 }));
 app.post('/api/submissions',asyncRoute(async(req,res)=>{
  const admin=isAdmin(req);const u=admin?null:await submitter(req);
