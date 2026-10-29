@@ -314,6 +314,16 @@ app.get('/api/ai/admin-result/:id',asyncRoute(async(req,res)=>{
  const x=rows[0];
  res.json({id:x.id,videoUrl:x.question?.videoUrl,answer:x.question?.answer,aiStatus:x.ai_status,aiResult:x.ai_result});
 }));
+// v4.83: administrator may read a friend's opted-in AI analysis result.
+// Keep the friend's submission pending; do not approve or alter it here.
+app.get('/api/ai/friend-result/:id',asyncRoute(async(req,res)=>{
+ if(!adminOnly(req,res))return;
+ const id=validId(req.params.id);if(!id)return res.status(400).json({error:'ID 오류'});
+ const rows=await db('ost_questions','GET',`id=eq.${id}&author_id=not.is.null&ai_requested=eq.true&status=eq.pending&select=id,question,ai_status,ai_result&limit=1`);
+ if(rows.length!==1)return res.status(404).json({error:'해당 친구 AI 요청을 찾을 수 없습니다. 삭제 또는 승인 여부를 확인하세요.'});
+ const x=rows[0];
+ res.json({id:x.id,videoUrl:x.question?.videoUrl,answer:x.question?.answer,aiStatus:x.ai_status,aiResult:x.ai_result});
+}));
 app.get('/api/ai/hidden-export',asyncRoute(async(req,res)=>{
  if(!adminOnly(req,res))return;
  const rows=await db('ost_questions','GET','ai_requested=eq.true&status=eq.pending&select=id,question&order=id.asc&limit=1000');
