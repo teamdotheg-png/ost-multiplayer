@@ -464,3 +464,15 @@ input,select{background:#05132e;border:1px solid #4b8fc5;color:white}
 }
 #roomArea #firstDone .answer-line{font-size:clamp(18px,1.65vw,27px)!important;line-height:1.4!important;overflow-wrap:anywhere!important;}
 #roomArea #answerMain:not(:empty){font-size:clamp(18px,1.65vw,27px)!important;}
+
+/* v4.88 — question alignment and persistent played/unplayed vault */
+#roomArea .stage-copy .stage-question{margin-top:-23px!important;}
+#roomArea .stage-copy .stage-instruction{padding-top:11px!important;}
+.played-vault{margin:14px 0;padding:14px;border:1px solid #4b9ed9;border-radius:10px;background:rgba(3,19,48,.72);color:#e8f7ff;}
+.played-vault h3{margin:0 0 12px;font-size:19px}.vault-stats{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:10px}.vault-stat{display:flex;flex-direction:column;gap:5px;padding:12px;border:1px solid #367ebc;border-radius:7px;background:#061b3a}.vault-stat b{font-size:24px;color:#9be9ff}.vault-stat small{color:#b8cde0}.vault-columns{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}.vault-columns section{min-width:0}.vault-columns h4{margin:12px 0 7px}.vault-list{max-height:290px;overflow:auto;border:1px solid #326aa4;border-radius:6px;padding:5px;background:#06182f}.vault-song{display:flex;gap:8px;align-items:center;overflow-wrap:anywhere;padding:8px 6px;border-bottom:1px solid #254f7a;font-size:13px;cursor:default}.vault-song:last-child{border-bottom:0}.vault-song:has(input){cursor:pointer}.vault-song input{flex:none}@media(max-width:650px){.vault-columns{grid-template-columns:1fr}}
+
+/* v4.89: visible, independent OST library */
+#playedVault{margin:16px 0 24px;padding:18px;border:2px solid #5ab7fa;background:rgba(3,21,53,.96)}
+#playedVault .vault-list{max-height:380px;min-height:70px}
+#playedVault .row{margin:12px 0}
+#questions{margin-top:18px}
