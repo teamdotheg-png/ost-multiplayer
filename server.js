@@ -135,7 +135,7 @@ async function db(table,method='GET',query='',body){
 }
 function asyncRoute(fn){return (req,res)=>Promise.resolve(fn(req,res)).catch(e=>{console.error('Submission API:',e);if(!res.headersSent)res.status(503).json({error:e.message||'저장소 연결 오류'});});}
 async function submitter(req){const token=owner(req);if(!/^[a-f0-9]{64}$/.test(token))return null;const rows=await db('ost_submitters','GET',`token_hash=eq.${tokenHash(token)}&select=id,nickname&limit=1`);return rows[0]||null;}
-function asItem(x){return {id:x.id,nickname:x.author_nickname,status:x.status,question:x.question,createdAt:x.created_at};}
+function asItem(x){return {id:x.id,nickname:x.author_nickname,status:x.status,question:x.question,createdAt:x.created_at,aiRequested:!!x.ai_requested,aiStatus:x.ai_status||null,aiResult:x.ai_result||null};}
 function validQuestion(q){parseQuestions([q]);return q;}
 app.use('/api/submissions',express.json({limit:'150kb'}));
 app.post('/api/submissions/access',asyncRoute(async(req,res)=>{
@@ -148,14 +148,14 @@ app.post('/api/submissions/access',asyncRoute(async(req,res)=>{
 }));
 app.get('/api/submissions/mine',asyncRoute(async(req,res)=>{
  const u=await submitter(req);if(!u)return res.status(401).json({error:'다시 입장해 주세요.'});
- const rows=await db('ost_questions','GET',`author_id=eq.${u.id}&select=id,author_nickname,status,question,created_at&order=created_at.desc`);
+ const rows=await db('ost_questions','GET',`author_id=eq.${u.id}&select=id,author_nickname,status,question,ai_requested,ai_status,ai_result,created_at&order=created_at.desc`);
  res.json(rows.map(asItem));
 }));
 app.post('/api/submissions',asyncRoute(async(req,res)=>{
  const admin=isAdmin(req);const u=admin?null:await submitter(req);
  if(!admin&&!u)return res.status(401).json({error:'초대코드로 입장하거나 관리자 비밀번호를 입력해 주세요.'});
  let q;try{q=validQuestion(req.body?.question);}catch(e){return res.status(400).json({error:e.message});}
- const row={author_id:admin?null:u.id,author_nickname:admin?'관리자':u.nickname,question:q,status:admin?'approved':'pending',youtube_url:q.videoUrl,start_time:q.startTime,end_time:q.endTime,answer:q.answer};
+ const row={author_id:admin?null:u.id,author_nickname:admin?'관리자':u.nickname,question:q,status:admin&& !req.body?.aiRequested?'approved':'pending',youtube_url:q.videoUrl,start_time:q.startTime,end_time:q.endTime,answer:q.answer,ai_requested:!!req.body?.aiRequested,ai_status:req.body?.aiRequested?'queued':null};
  const rows=await db('ost_questions','POST','',row);
  res.json({ok:true,id:rows[0].id,status:row.status});
 }));
@@ -163,12 +163,12 @@ app.put('/api/submissions/:id',asyncRoute(async(req,res)=>{
  const u=await submitter(req);if(!u)return res.status(401).json({error:'다시 입장해 주세요.'});
  let q;try{q=validQuestion(req.body?.question);}catch(e){return res.status(400).json({error:e.message});}
  const id=Number(req.params.id);if(!Number.isSafeInteger(id)||id<1)return res.status(404).json({error:'문제를 찾을 수 없습니다.'});
- const rows=await db('ost_questions','PATCH',`id=eq.${id}&author_id=eq.${u.id}&status=eq.pending`,{question:q,youtube_url:q.videoUrl,start_time:q.startTime,end_time:q.endTime,answer:q.answer,updated_at:new Date().toISOString()});
+ const rows=await db('ost_questions','PATCH',`id=eq.${id}&author_id=eq.${u.id}&status=eq.pending`,{question:q,youtube_url:q.videoUrl,start_time:q.startTime,end_time:q.endTime,answer:q.answer,ai_requested:!!req.body?.aiRequested,ai_status:req.body?.aiRequested?'queued':null,ai_result:null,updated_at:new Date().toISOString()});
  if(!rows.length)return res.status(404).json({error:'승인 대기 중인 내 문제만 수정할 수 있습니다.'});res.json({ok:true});
 }));
 app.get('/api/submissions/admin',asyncRoute(async(req,res)=>{
  if(!isAdmin(req))return res.status(403).json({error:'관리자 인증 실패'});
- const rows=await db('ost_questions','GET','select=id,author_nickname,status,question,created_at&order=created_at.desc&limit=1000');
+ const rows=await db('ost_questions','GET','select=id,author_nickname,status,question,ai_requested,ai_status,ai_result,created_at&order=created_at.desc&limit=1000');
  res.json({items:rows.map(asItem),approved:rows.filter(x=>x.status==='approved').length});
 }));
 app.patch('/api/submissions/admin/:id',asyncRoute(async(req,res)=>{
@@ -184,6 +184,102 @@ app.get('/api/submissions/admin/export',asyncRoute(async(req,res)=>{
  if(!isAdmin(req))return res.status(403).json({error:'관리자 인증 실패'});
  const rows=await db('ost_questions','GET','status=eq.approved&select=question&order=created_at.asc&limit=100');
  res.json(rows.map(x=>x.question));
+}));
+
+
+// v4.74 AI workflow: only explicitly opted-in, pending submissions are writable.
+function adminOnly(req,res){if(!isAdmin(req)){res.status(403).json({error:'관리자 인증 실패'});return false;}return true;}
+function validId(raw){const id=Number(raw);return Number.isSafeInteger(id)&&id>0?id:null;}
+function aiPayload(x){return {id:x.id,answer:x.question?.answer,videoUrl:x.question?.videoUrl,status:x.status,aiStatus:x.ai_status,aiResult:x.ai_result};}
+app.get('/api/ai/jobs',asyncRoute(async(req,res)=>{
+ if(!adminOnly(req,res))return;
+ const rows=await db('ost_questions','GET','ai_requested=eq.true&status=eq.pending&select=id,question,status,ai_status,ai_result&order=id.asc&limit=1000');
+ res.json({items:rows.map(aiPayload)});
+}));
+app.post('/api/ai/result/:id',asyncRoute(async(req,res)=>{
+ if(!adminOnly(req,res))return;
+ const id=validId(req.params.id),r=req.body||{};
+ if(!id)return res.status(400).json({error:'ID 오류'});
+ const start=Number(r.start_seconds),end=Number(r.end_seconds);
+ if(!Number.isFinite(start)||!Number.isFinite(end)||start<0||end<=start||end-start<40||end-start>65)return res.status(400).json({error:'분석 구간 오류'});
+ const current=await db('ost_questions','GET',`id=eq.${id}&ai_requested=eq.true&status=eq.pending&select=id,question,ai_result&limit=1`);
+ if(current.length!==1)return res.status(409).json({error:'대상 문제 없음 또는 이미 승인됨'});
+ if(current[0].ai_result&&!r.replace)return res.status(409).json({error:'기존 분석 결과가 있어 덮어쓰지 않습니다.'});
+ const result={start_seconds:start,end_seconds:end,candidates:Array.isArray(r.candidates)?r.candidates.slice(0,5):[],analyzed_at:new Date().toISOString()};
+ const rows=await db('ost_questions','PATCH',`id=eq.${id}&ai_requested=eq.true&status=eq.pending`,{ai_result:result,ai_status:'ready',updated_at:new Date().toISOString()});
+ if(rows.length!==1)return res.status(409).json({error:'대상 변경됨'});
+ res.json({ok:true,id});
+}));
+app.post('/api/ai/error/:id',asyncRoute(async(req,res)=>{
+ if(!adminOnly(req,res))return;
+ const id=validId(req.params.id);if(!id)return res.status(400).json({error:'ID 오류'});
+ await db('ost_questions','PATCH',`id=eq.${id}&ai_requested=eq.true&status=eq.pending&ai_status=eq.queued`,{ai_status:'failed'});
+ res.json({ok:true});
+}));
+app.post('/api/ai/apply/:id',asyncRoute(async(req,res)=>{
+ if(!adminOnly(req,res))return;
+ const id=validId(req.params.id);if(!id)return res.status(400).json({error:'ID 오류'});
+ const rows=await db('ost_questions','GET',`id=eq.${id}&ai_requested=eq.true&status=eq.pending&ai_status=eq.ready&select=id,question,ai_result&limit=1`);
+ if(rows.length!==1||!rows[0].ai_result)return res.status(409).json({error:'적용할 결과가 없습니다.'});
+ const old=rows[0],q={...old.question,startTime:old.ai_result.start_seconds,endTime:old.ai_result.end_seconds};
+ try{validQuestion(q);}catch(e){return res.status(400).json({error:e.message});}
+ const changed=await db('ost_questions','PATCH',`id=eq.${id}&ai_requested=eq.true&status=eq.pending&ai_status=eq.ready`,{question:q,start_time:q.startTime,end_time:q.endTime,ai_status:'applied',updated_at:new Date().toISOString()});
+ if(changed.length!==1)return res.status(409).json({error:'동시 변경 감지'});
+ res.json({ok:true});
+}));
+// v4.76: read-only result lookup for administrator-local questions.
+// Never writes to the game or the submission row.
+app.get('/api/ai/admin-result/:id',asyncRoute(async(req,res)=>{
+ if(!adminOnly(req,res))return;
+ const id=validId(req.params.id);if(!id)return res.status(400).json({error:'ID 오류'});
+ const rows=await db('ost_questions','GET',`id=eq.${id}&author_id=is.null&ai_requested=eq.true&status=eq.pending&select=id,question,ai_status,ai_result&limit=1`);
+ if(rows.length!==1)return res.status(404).json({error:'해당 관리자 AI 요청을 찾을 수 없습니다.'});
+ const x=rows[0];
+ res.json({id:x.id,videoUrl:x.question?.videoUrl,answer:x.question?.answer,aiStatus:x.ai_status,aiResult:x.ai_result});
+}));
+app.get('/api/ai/hidden-export',asyncRoute(async(req,res)=>{
+ if(!adminOnly(req,res))return;
+ const rows=await db('ost_questions','GET','ai_requested=eq.true&status=eq.pending&select=id,question&order=id.asc&limit=1000');
+ res.json({format:'ost-hidden-v1',items:rows.map(x=>({id:x.id,answer:x.question?.answer,videoUrl:x.question?.videoUrl,hiddenQuestion:'',hiddenAnswer:'',hiddenAliases:''}))});
+}));
+app.post('/api/ai/hidden-preview',asyncRoute(async(req,res)=>{
+ if(!adminOnly(req,res))return;
+ const items=req.body?.items;
+ if(!Array.isArray(items)||items.length>1000)return res.status(400).json({error:'items 배열 오류'});
+ const ids=new Set(),changes=[];
+ for(const x of items){const id=validId(x.id);if(!id||ids.has(id)||!sanitize(x.hiddenQuestion,300)||!sanitize(x.hiddenAnswer,150))return res.status(400).json({error:'ID 중복 또는 히든 문제 누락'});ids.add(id);}
+ const rows=await db('ost_questions','GET','ai_requested=eq.true&status=eq.pending&select=id,question&limit=1000');
+ const byId=new Map(rows.map(x=>[Number(x.id),x]));
+ for(const x of items){const row=byId.get(Number(x.id));if(!row||row.question?.answer!==x.answer||row.question?.videoUrl!==x.videoUrl)return res.status(409).json({error:`ID ${x.id}: 원본 불일치 또는 승인된 문제`});changes.push({id:x.id,answer:x.answer,hiddenQuestion:sanitize(x.hiddenQuestion,300),hiddenAnswer:sanitize(x.hiddenAnswer,150),hiddenAliases:sanitize(x.hiddenAliases,400)});}
+ res.json({count:changes.length,changes});
+}));
+app.post('/api/ai/hidden-import',asyncRoute(async(req,res)=>{
+ if(!adminOnly(req,res))return;
+ const items=req.body?.items;
+ if(!Array.isArray(items)||items.length>1000)return res.status(400).json({error:'items 배열 오류'});
+ const ids=new Set();for(const x of items){const id=validId(x.id);if(!id||ids.has(id)||!sanitize(x.hiddenQuestion,300)||!sanitize(x.hiddenAnswer,150))return res.status(400).json({error:'ID 중복 또는 빈 정답'});ids.add(id);}
+ const rows=await db('ost_questions','GET','ai_requested=eq.true&status=eq.pending&select=id,question&limit=1000');
+ const byId=new Map(rows.map(x=>[Number(x.id),x]));
+ for(const x of items){const row=byId.get(Number(x.id));if(!row||row.question?.answer!==x.answer||row.question?.videoUrl!==x.videoUrl)return res.status(409).json({error:`ID ${x.id}: 원본 불일치`});}
+ // Database-side backup of every original row before any update. Partial failures can be restored from these snapshots.
+ const batch=crypto.randomUUID();
+ await db('ost_ai_backups','POST','',items.map(x=>({batch_id:batch,question_id:Number(x.id),original_question:byId.get(Number(x.id)).question})));
+ let updated=0;
+ for(const x of items){const row=byId.get(Number(x.id));const q={...row.question,bonusType:'text',bonusQuestion:sanitize(x.hiddenQuestion,300),bonusAnswer:sanitize(x.hiddenAnswer,150),bonusAliases:sanitize(x.hiddenAliases,400)};
+  try{validQuestion(q);}catch(e){return res.status(400).json({error:e.message,batch,updated});}
+  const result=await db('ost_questions','PATCH',`id=eq.${Number(x.id)}&ai_requested=eq.true&status=eq.pending`,{question:q,updated_at:new Date().toISOString()});
+  if(result.length!==1)return res.status(409).json({error:'변경 중 충돌. 백업 ID로 복원 가능',batch,updated});updated++;
+ }
+ res.json({ok:true,updated,batch});
+}));
+app.post('/api/ai/restore/:batch',asyncRoute(async(req,res)=>{
+ if(!adminOnly(req,res))return;
+ const batch=String(req.params.batch||'');if(!/^[a-f0-9-]{36}$/.test(batch))return res.status(400).json({error:'백업 ID 오류'});
+ const backups=await db('ost_ai_backups','GET',`batch_id=eq.${batch}&select=question_id,original_question&limit=1000`);
+ if(!backups.length)return res.status(404).json({error:'백업 없음'});
+ let restored=0;
+ for(const b of backups){const q=b.original_question;const result=await db('ost_questions','PATCH',`id=eq.${b.question_id}&status=eq.pending`,{question:q,start_time:q.startTime,end_time:q.endTime,updated_at:new Date().toISOString()});restored+=result.length;}
+ res.json({ok:true,restored});
 }));
 
 const PORT=Number(process.env.PORT)||3000;
