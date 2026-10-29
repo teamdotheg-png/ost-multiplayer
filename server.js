@@ -179,7 +179,12 @@ app.put('/api/public-questions/admin',express.json({limit:'40kb'}),asyncRoute(as
   if(!x||!Number.isInteger(x.number)||x.number!==i+1||typeof x.ready!=='boolean')return res.status(400).json({error:'목록 항목 오류'});
   clean.push({number:x.number,ready:x.ready});
  }
- await db('ost_public_question_list','POST','on_conflict=id',{id:1,items:clean,updated_at:new Date().toISOString()});
+ // Upsert the singleton row instead of inserting a duplicate id=1.
+ const response=await fetch(`${SUPABASE_URL}/rest/v1/ost_public_question_list?on_conflict=id`,{
+  method:'POST',headers:{apikey:SUPABASE_SECRET_KEY,Authorization:`Bearer ${SUPABASE_SECRET_KEY}`,'Content-Type':'application/json',Prefer:'resolution=merge-duplicates,return=minimal'},
+  body:JSON.stringify({id:1,items:clean,updated_at:new Date().toISOString()}),signal:AbortSignal.timeout(12000)
+ });
+ if(!response.ok){const detail=await response.text();console.error('Public question list upsert failed',response.status,detail.slice(0,500));throw Error('관리자 문제 목록 저장에 실패했습니다. 서버 로그를 확인해 주세요.');}
  res.json({ok:true,count:clean.length});
 }));
 app.get('/api/submissions/list',asyncRoute(async(req,res)=>{
