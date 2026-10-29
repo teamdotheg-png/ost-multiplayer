@@ -457,3 +457,10 @@ input,select{background:#05132e;border:1px solid #4b8fc5;color:white}
 .controls #hostSkip{pointer-events:auto!important;cursor:pointer!important;padding:0!important;line-height:1!important;min-height:0!important;user-select:none!important}
 .controls #hostSkip:disabled{cursor:default!important;opacity:.58!important}
 .controls #hostSkip:not(:disabled):hover{filter:brightness(1.25);box-shadow:0 0 19px #9c7bffcc!important}
+
+/* v4.70: Match the answer panel's height and inner text to the hidden panel. */
+@media (min-width:901px){
+  #roomArea .center-content{grid-template-rows:33% 32% 32%!important;row-gap:1.5%!important;}
+}
+#roomArea #firstDone .answer-line{font-size:clamp(18px,1.65vw,27px)!important;line-height:1.4!important;overflow-wrap:anywhere!important;}
+#roomArea #answerMain:not(:empty){font-size:clamp(18px,1.65vw,27px)!important;}
