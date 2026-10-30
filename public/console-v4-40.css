@@ -451,7 +451,7 @@ input,select{background:#05132e;border:1px solid #4b8fc5;color:white}
 
 /* v4.64 — prevent bottom-left game menu from covering the question editor.
    Only hide it while the lobby/editor overlay is open; restore automatically during play. */
-#roomArea:has(#lobby:not(.hidden)) > .top-actions{visibility:hidden!important;pointer-events:none!important;}
+#roomArea:has(#lobby.settings-open) > .top-actions{visibility:hidden!important;pointer-events:none!important;}
 
 /* v4.67: the right transport orb is a host-only instant skip button. */
 .controls #hostSkip{pointer-events:auto!important;cursor:pointer!important;padding:0!important;line-height:1!important;min-height:0!important;user-select:none!important}
@@ -488,67 +488,51 @@ input,select{background:#05132e;border:1px solid #4b8fc5;color:white}
 #roomArea .stage-label .disc-wrap{display:none!important}
 #roomArea .stage-label .stage-copy{margin-left:0!important}
 
-/* v4.94: stable fixed scene geometry, no cross-column reparenting. */
-@media (min-width:901px){
- #roomArea>.left-now.pane{left:1.25%!important;top:1.5%!important;width:46.4%!important;height:55%!important;display:grid!important;grid-template-columns:minmax(0,1fr) minmax(150px,32%)!important;grid-template-rows:105px minmax(0,1fr)!important;gap:5px 10px!important;padding:15px 18px!important;overflow:hidden!important;z-index:5!important}
- #roomArea>.left-now>.player-merged-left{grid-column:1!important;grid-row:1!important}
- #roomArea>.left-now>.left-question{grid-column:2!important;grid-row:1!important}
- #roomArea>.left-now>#playing{grid-column:1/-1!important;grid-row:2!important}
- #roomArea>.right-score{left:77.2%!important;top:1.5%!important;width:21.5%!important;height:42%!important}
- #roomArea>.right-chat{left:77.2%!important;top:45.5%!important;width:21.5%!important;height:52%!important}
- #roomArea>.controls{left:33%!important;top:83%!important;width:43%!important;height:12%!important}
- #roomArea>.top-actions{left:2%!important;top:92.8%!important;width:33%!important;height:5.7%!important;z-index:20!important}
-}
-#roomArea>.left-now>.player-merged-left{position:relative!important;inset:auto!important;width:auto!important;height:auto!important;display:flex!important;align-items:center!important;gap:10px!important;min-width:0!important;padding:0!important}
-#roomArea>.left-now .panel-title{flex:none!important;white-space:nowrap!important}
-#roomArea>.left-now .music-card{display:flex!important;flex:1!important;width:auto!important;max-width:none!important;min-width:0!important;background:transparent!important;border:0!important;box-shadow:none!important;padding:0!important}
+
+/* v4.98: clean, isolated single HUD layout. Replaces conflicting v4.94-v4.97 overrides. */
+#roomArea>.center-scene{display:none!important}
+#roomArea>.left-hint,#roomArea>.left-next{display:none!important}
+#roomArea>.left-now.pane{position:absolute!important;left:1.2%!important;top:1.8%!important;width:46.5%!important;height:54%!important;padding:20px 20px 16px!important;display:grid!important;grid-template-columns:minmax(0,1fr) minmax(150px,32%)!important;grid-template-rows:105px minmax(0,1fr)!important;gap:8px 12px!important;overflow:hidden!important;z-index:5!important}
+#roomArea>.left-now>.player-merged-left{position:relative!important;inset:auto!important;grid-column:1!important;grid-row:1!important;width:auto!important;height:auto!important;display:flex!important;flex-direction:row!important;align-items:center!important;gap:10px!important;min-width:0!important;padding:0!important;background:none!important;border:0!important;box-shadow:none!important}
+#roomArea>.left-now .player-merged-left::before,#roomArea>.left-now .player-merged-left::after{display:none!important}
+#roomArea>.left-now .player-merged-left>.panel-title{position:relative!important;inset:auto!important;flex:none!important;white-space:nowrap!important;font-size:clamp(13px,1.1vw,18px)!important;margin:0!important}
+#roomArea>.left-now .music-card{position:relative!important;inset:auto!important;display:flex!important;flex:1!important;min-width:0!important;width:auto!important;height:auto!important;margin:0!important;padding:0!important;background:none!important;border:0!important;box-shadow:none!important}
 #roomArea>.left-now .music-cover,#roomArea>.left-now .music-sub,#roomArea>.left-now .waveform{display:none!important}
-#roomArea>.left-now .music-name{white-space:nowrap!important;font-size:clamp(12px,1.05vw,17px)!important}
-#roomArea>.left-now>.left-question{position:relative!important;left:auto!important;top:auto!important;width:auto!important;height:auto!important;display:flex!important;flex-direction:column!important;justify-content:center!important;align-items:center!important;padding:3px 6px!important;min-width:0!important;z-index:1!important;background:rgba(5,16,46,.55)!important}
-#roomArea>.left-now>.left-question::before{display:none!important}
+#roomArea>.left-now .music-name{font-size:clamp(12px,1.05vw,17px)!important;white-space:nowrap!important}
+#roomArea>.left-now>.left-question{position:relative!important;inset:auto!important;grid-column:2!important;grid-row:1!important;width:auto!important;height:auto!important;min-width:0!important;display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;gap:3px!important;padding:5px!important;overflow:visible!important;background:rgba(2,14,39,.48)!important}
+#roomArea>.left-now>.left-question::before,#roomArea>.left-now>.left-question::after{display:none!important}
 #roomArea>.left-now>.left-question .q-title{display:none!important}
-#roomArea>.left-now>.left-question .big-timer{font-size:clamp(29px,3vw,46px)!important;line-height:1.1!important}
+#roomArea>.left-now>.left-question .big-timer{font-size:clamp(28px,3vw,47px)!important;line-height:1.1!important;margin:0!important}
 #roomArea>.left-now>.left-question .timer-heading{font-size:clamp(10px,.85vw,14px)!important;white-space:nowrap!important}
 #roomArea>.left-now>.left-question .hint-desc{font-size:clamp(10px,.8vw,13px)!important}
-#roomArea>.left-now>#playing{position:relative!important;inset:auto!important;width:100%!important;height:100%!important;min-height:0!important;display:flex!important;flex-direction:column!important;gap:6px!important;overflow:hidden!important;align-content:initial!important;pointer-events:none!important;text-align:left!important}
-#roomArea>.left-now>#playing.hidden{display:none!important}
-#roomArea>.left-now>#playing>.stage-label:not(.center-hint),#roomArea>.left-now>#playing>#firstDone,#roomArea>.left-now>#playing>#bonusArea{position:relative!important;inset:auto!important;transform:none!important;width:100%!important;height:auto!important;min-height:0!important;margin:0!important;padding:8px 12px!important;flex:none!important;overflow:hidden!important;background:rgba(3,15,42,.52)!important;border:1px solid #4cafff55!important;clip-path:none!important;box-shadow:none!important}
+#roomArea>.left-now>#playing{position:relative!important;inset:auto!important;grid-column:1/-1!important;grid-row:2!important;width:100%!important;height:100%!important;min-height:0!important;display:flex!important;flex-direction:column!important;align-items:stretch!important;justify-content:flex-start!important;gap:8px!important;padding:0!important;margin:0!important;overflow-y:auto!important;overflow-x:hidden!important;pointer-events:auto!important;scrollbar-width:thin!important;background:transparent!important;border:0!important;box-shadow:none!important}
+#roomArea>.left-now>#playing .hud-ambient,#roomArea>.left-now>#playing .disc-wrap{display:none!important}
+#roomArea>.left-now>#playing>.stage-label:not(.center-hint),#roomArea>.left-now>#playing>#firstDone,#roomArea>.left-now>#playing>#bonusArea{position:relative!important;inset:auto!important;transform:none!important;display:flex!important;flex-direction:column!important;align-items:stretch!important;justify-content:center!important;flex:none!important;width:100%!important;height:auto!important;min-height:0!important;margin:0!important;padding:9px 13px!important;border:1px solid rgba(101,200,255,.42)!important;border-radius:5px!important;clip-path:none!important;background:rgba(2,15,42,.73)!important;box-shadow:inset 0 0 14px rgba(52,137,226,.14)!important;overflow:visible!important;isolation:auto!important;gap:4px!important}
 #roomArea>.left-now>#playing>.stage-label:not(.center-hint)::before,#roomArea>.left-now>#playing>#firstDone::before,#roomArea>.left-now>#playing>#bonusArea::before{display:none!important}
-#roomArea>.left-now>#playing>.stage-label:not(.center-hint){min-height:76px!important}
-#roomArea>.left-now>#playing .disc-wrap,#roomArea>.left-now>#playing .hud-ambient{display:none!important}
-#roomArea>.left-now>#playing .stage-copy{position:relative!important;inset:auto!important;transform:none!important;width:100%!important;display:flex!important;flex-direction:column!important;align-items:stretch!important;padding:0!important;margin:0!important}
+#roomArea>.left-now>#playing>.stage-label:not(.center-hint){min-height:88px!important}
+#roomArea>.left-now>#playing .stage-copy{position:relative!important;inset:auto!important;transform:none!important;width:100%!important;min-height:0!important;display:flex!important;flex-direction:column!important;align-items:stretch!important;padding:0!important;margin:0!important;gap:4px!important}
 #roomArea>.left-now>#playing .stage-eyebrow{position:absolute!important;right:0!important;top:0!important;margin:0!important}
-#roomArea>.left-now>#playing .stage-question{margin:8px 0 2px!important;font-size:clamp(16px,1.5vw,24px)!important;text-align:left!important}
-#roomArea>.left-now>#playing .stage-instruction{padding:3px 0 0!important;font-size:clamp(11px,.95vw,15px)!important;text-align:left!important}
-#roomArea>.left-now>#playing #firstDone{min-height:42px!important}
-#roomArea>.left-now>#playing #bonusArea{min-height:48px!important}
-#roomArea>.left-now>#playing .panel-tab,#roomArea>.left-now>#playing #bonusArea h3{position:relative!important;top:auto!important;left:auto!important;transform:none!important;display:inline-block!important;min-width:0!important;width:auto!important;margin:0 0 3px!important;padding:2px 9px!important;font-size:12px!important;letter-spacing:.04em!important}
-#roomArea>.left-now>#playing .answer-line,#roomArea>.left-now>#playing #bonusPrompt,#roomArea>.left-now>#playing #bonusAnswerInline{font-size:clamp(11px,1vw,16px)!important;line-height:1.25!important;min-height:0!important;text-align:left!important}
-#roomArea>.left-now>#playing>.center-hint.hidden,#roomArea>.left-now>#playing #firstArea.hidden{display:none!important}
-#roomArea>.center-scene{display:none!important}
-#roomArea>.controls #skip{width:clamp(95px,9vw,150px)!important;min-width:0!important;height:57%!important;font-size:clamp(10px,.85vw,14px)!important}
-#roomArea>.controls #editAnswer:not(.hidden),#roomArea>.controls #trashCurrent:not(.hidden){display:inline-block!important;flex:none!important;font-size:clamp(10px,.75vw,13px)!important;padding:7px 8px!important}
-#roomArea>.top-actions{display:flex!important;visibility:visible!important;opacity:1!important;pointer-events:auto!important}
-#roomArea:has(#lobby:not(.hidden))>.top-actions{visibility:hidden!important;pointer-events:none!important}
-@media(max-width:900px){
- #roomArea>.left-now.pane{left:1%!important;top:2%!important;width:74%!important;height:55%!important;display:grid!important;grid-template-columns:minmax(0,1fr) minmax(100px,32%)!important;grid-template-rows:95px minmax(0,1fr)!important;gap:4px!important;padding:10px!important;overflow:hidden!important}
- #roomArea>.left-now>.player-merged-left{grid-column:1!important;grid-row:1!important}
- #roomArea>.left-now>.left-question{grid-column:2!important;grid-row:1!important}
- #roomArea>.left-now>#playing{grid-column:1/-1!important;grid-row:2!important}
- #roomArea>.right-score{left:77%!important;top:2%!important;width:22%!important;height:40%!important}
- #roomArea>.right-chat{left:77%!important;top:44%!important;width:22%!important;height:52%!important}
- #roomArea>.controls{left:30%!important;top:81%!important;width:47%!important}
- #roomArea>.top-actions{left:2%!important;top:93%!important;width:33%!important}
-}
-
-/* v4.95: waiting-state preview and stable question panel */
-#roomArea>.left-now>#playing.waiting-preview{display:flex!important;visibility:visible!important;opacity:1!important}
-#roomArea>.left-now>#playing.waiting-preview #firstDone,
-#roomArea>.left-now>#playing.waiting-preview #bonusArea,
-#roomArea>.left-now>#playing.waiting-preview .center-hint{display:none!important}
-#roomArea>.left-now>#playing.waiting-preview>.stage-label:not(.center-hint){display:block!important;min-height:105px!important}
-#roomArea>.left-now>#playing .stage-question{display:block!important;visibility:visible!important}
-#roomArea>.top-actions{display:flex!important;z-index:80!important}
-#roomArea>.top-actions button{display:inline-flex!important;align-items:center;justify-content:center}
-#roomArea>.controls{z-index:30!important}
-#roomArea>.controls #editAnswer:not(.hidden){display:inline-flex!important}
+#roomArea>.left-now>#playing .stage-question{font-size:clamp(17px,1.45vw,24px)!important;text-align:left!important;margin:5px 0 0!important;padding:0!important}
+#roomArea>.left-now>#playing .stage-instruction{font-size:clamp(11px,.95vw,15px)!important;text-align:left!important;margin:0!important;padding:4px 0 0!important}
+#roomArea>.left-now>#playing #firstDone{min-height:64px!important}
+#roomArea>.left-now>#playing #bonusArea{min-height:72px!important}
+#roomArea>.left-now>#playing #firstDone .panel-tab,#roomArea>.left-now>#playing #bonusArea h3{position:relative!important;inset:auto!important;transform:none!important;display:inline-block!important;align-self:flex-start!important;width:auto!important;min-width:0!important;height:auto!important;margin:0!important;padding:2px 10px!important;letter-spacing:.06em!important;font-size:12px!important;clip-path:none!important}
+#roomArea>.left-now>#playing .answer-line,#roomArea>.left-now>#playing #bonusPrompt,#roomArea>.left-now>#playing #bonusAnswerInline{display:block!important;width:100%!important;min-height:0!important;text-align:left!important;line-height:1.4!important;font-size:clamp(12px,1vw,16px)!important;overflow-wrap:anywhere!important}
+#roomArea>.left-now>#playing #answerMain:empty::after{content:'정답 대기';color:#9baac8;font-size:12px;font-weight:400}
+#roomArea>.left-now>#playing #bonusPrompt:empty::after{content:'히든 문제 대기';color:#9baac8;font-size:12px;font-weight:400}
+#roomArea>.left-now>#playing #answerHint:empty{display:none!important}
+#roomArea>.left-now>#playing .center-hint.hidden,#roomArea>.left-now>#playing #firstArea.hidden{display:none!important}
+#roomArea>.left-now>#playing.waiting-preview #firstDone,#roomArea>.left-now>#playing.waiting-preview #bonusArea{display:flex!important;visibility:visible!important}
+#roomArea>.left-now>#playing.waiting-preview #answerMain,#roomArea>.left-now>#playing.waiting-preview #bonusPrompt,#roomArea>.left-now>#playing.waiting-preview #bonusAnswerInline{font-size:0!important}
+#roomArea>.left-now>#playing.waiting-preview #answerMain::after{content:'게임 시작 대기 중';font-size:12px;color:#9baac8;font-weight:400}
+#roomArea>.left-now>#playing.waiting-preview #bonusPrompt::after{content:'게임 시작 후 공개';font-size:12px;color:#9baac8;font-weight:400}
+#roomArea>.left-now>#playing.waiting-preview #bonusChoices{display:none!important}
+#roomArea>.right-score{left:77.2%!important;top:1.5%!important;width:21.5%!important;height:42%!important}
+#roomArea>.right-chat{left:77.2%!important;top:45.5%!important;width:21.5%!important;height:52%!important}
+#roomArea>.controls{left:34%!important;top:82%!important;width:43%!important;height:13%!important;z-index:30!important;overflow:visible!important;gap:8px!important}
+#roomArea>.controls #skip{width:auto!important;min-width:110px!important;padding:9px 12px!important;font-size:12px!important}
+#roomArea>.controls #editAnswer:not(.hidden),#roomArea>.controls #trashCurrent:not(.hidden){display:inline-flex!important;align-items:center!important;justify-content:center!important;flex:none!important;padding:8px!important;font-size:12px!important}
+#roomFixedActions{position:fixed!important;left:2vw!important;bottom:12px!important;top:auto!important;right:auto!important;width:min(33vw,510px)!important;height:46px!important;display:flex;gap:8px;align-items:center;z-index:2147480000!important;padding:2px!important;background:transparent!important;border:0!important;box-shadow:none!important;overflow:visible!important}
+#roomFixedActions::before,#roomFixedActions::after{display:none!important}
+#roomFixedActions button{display:block!important;flex:1;min-width:0;height:39px;padding:6px!important;font-size:clamp(12px,1vw,16px)!important}
+@media(max-width:900px){#roomArea>.left-now.pane{left:1%!important;top:2%!important;width:74%!important;height:56%!important;padding:10px!important;grid-template-columns:minmax(0,1fr) minmax(100px,32%)!important;grid-template-rows:90px minmax(0,1fr)!important}#roomArea>.right-score{left:77%!important;top:2%!important;width:22%!important;height:40%!important}#roomArea>.right-chat{left:77%!important;top:44%!important;width:22%!important;height:52%!important}#roomArea>.controls{left:30%!important;top:81%!important;width:47%!important}#roomFixedActions{width:70vw!important;bottom:6px!important;left:2vw!important}}
