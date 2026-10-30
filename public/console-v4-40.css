@@ -760,3 +760,14 @@ body>#lobby:not(.settings-open){display:none!important}
  #roomArea>.left-now.pane{min-height:190px!important}
  #roomArea>.left-now.pane>#playing .stage-eyebrow{right:-45%!important}
 }
+
+/* v5.07: Align HUD elements to the user's annotated target screenshot. */
+/* Shift NOW PLAYING and the question together, preserving frame artwork. */
+#roomArea>.left-now.pane>.player-merged-left{left:7%!important;top:20%!important;}
+#roomArea>.left-now.pane>#playing{left:8%!important;top:48%!important;}
+/* Shift round and timer toward upper-left inside the right HUD column. */
+#roomArea>.left-now.pane>#playing .stage-eyebrow{right:-41%!important;top:-126%!important;}
+#roomArea>.left-now.pane>.left-question{right:6%!important;top:36%!important;}
+/* Vertically center LIVE (dot and label) with TIME LEFT. */
+#roomArea>.left-now.pane>.left-question .timer-heading{display:flex!important;align-items:center!important;justify-content:center!important;gap:10px!important;white-space:nowrap!important;}
+#roomArea>.left-now.pane>.left-question .timer-led{display:inline-flex!important;align-items:center!important;margin-left:0!important;position:relative!important;top:-2px!important;line-height:1!important;}
