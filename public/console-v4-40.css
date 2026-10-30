@@ -905,3 +905,32 @@ body>#lobby:not(.settings-open){display:none!important}
   overflow-wrap:anywhere!important;
   white-space:normal!important;
 }
+
+/* v5.17: Solidly restore the dark navy translucent fill on the actual panels.
+   Avoid a pseudo-element fill, which could disappear behind the frame stacking context.
+   Overflow remains visible so the floating tabs are never clipped. */
+#roomArea > #firstDone,
+#roomArea > #bonusArea {
+  background: rgba(3, 13, 39, 0.88) !important;
+  background-image: none !important;
+  background-clip: padding-box !important;
+  border-radius: 16px !important;
+  overflow: visible !important;
+  clip-path: none !important;
+}
+#roomArea > #firstDone::after,
+#roomArea > #bonusArea::after {
+  content: none !important;
+  display: none !important;
+}
+#roomArea > #firstDone::before,
+#roomArea > #bonusArea::before {
+  display: block !important;
+  z-index: 1 !important;
+  pointer-events: none !important;
+}
+#roomArea > #firstDone .panel-tab,
+#roomArea > #bonusArea h3 {
+  z-index: 5 !important;
+  overflow: visible !important;
+}
