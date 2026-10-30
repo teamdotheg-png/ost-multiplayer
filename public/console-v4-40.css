@@ -634,3 +634,129 @@ body>#lobby:not(.settings-open){display:none!important}
 #playedVault .vault-browser-song strong{color:#e8f5ff}
 #playedVault .vault-browser-song span{color:#9abddd;font-size:13px}
 #playedVault .vault-columns{display:none!important}
+
+/* v5.02: restore the original independent neon frames and centered content.
+   Scoped to the two answer panels; leave gameplay/round controls untouched. */
+#roomArea>#firstDone,#roomArea>#bonusArea{
+  position:absolute!important;left:1.2%!important;width:48%!important;
+  display:flex!important;flex-direction:column!important;align-items:center!important;
+  justify-content:center!important;gap:6px!important;overflow:visible!important;
+  padding:24px 24px 12px!important;clip-path:none!important;
+  border:0!important;border-radius:0!important;box-shadow:none!important;
+  background:transparent!important;isolation:isolate!important;
+}
+#roomArea>#firstDone{top:29%!important;height:15%!important}
+#roomArea>#bonusArea{top:47%!important;height:19%!important}
+#roomArea>#firstDone::before,#roomArea>#bonusArea::before{
+  content:""!important;display:block!important;position:absolute!important;inset:-6px!important;
+  border:0!important;border-image:none!important;pointer-events:none!important;
+  background-position:center!important;background-size:100% 100%!important;background-repeat:no-repeat!important;
+  opacity:1!important;z-index:-1!important;
+}
+#roomArea>#firstDone::before{background-image:url('/console-frame-answer.svg')!important;filter:drop-shadow(0 0 7px #b45cffaa)!important}
+#roomArea>#bonusArea::before{background-image:url('/console-frame-hidden.svg')!important;filter:drop-shadow(0 0 7px #ffbf67aa)!important}
+#roomArea>#firstDone::after,#roomArea>#bonusArea::after{display:none!important}
+#roomArea>#firstDone .panel-tab,#roomArea>#bonusArea h3{
+  position:absolute!important;left:50%!important;top:-13px!important;right:auto!important;bottom:auto!important;
+  transform:translateX(-50%)!important;align-self:auto!important;
+  display:flex!important;align-items:center!important;justify-content:center!important;
+  width:170px!important;max-width:65%!important;height:36px!important;min-width:0!important;
+  padding:5px 16px!important;margin:0!important;
+  clip-path:polygon(10% 0,90% 0,100% 50%,90% 100%,10% 100%,0 50%)!important;
+  border:0!important;border-radius:0!important;
+  background:linear-gradient(180deg,#47205f,#120b31)!important;
+  color:#ffe9ff!important;font-size:clamp(13px,1.15vw,19px)!important;
+  font-weight:700!important;letter-spacing:.18em!important;text-align:center!important;
+  text-shadow:0 0 9px #e18cff!important;z-index:5!important;
+}
+#roomArea>#bonusArea h3{background:linear-gradient(180deg,#5c361b,#160d2c)!important;color:#ffe6a7!important;text-shadow:0 0 9px #ffc35e!important}
+#roomArea>#firstDone .answer-line{
+  position:relative!important;display:block!important;align-self:center!important;
+  width:fit-content!important;max-width:96%!important;min-width:0!important;
+  padding:6px 13px!important;margin:1px auto!important;
+  text-align:center!important;line-height:1.35!important;overflow-wrap:anywhere!important;
+  font-size:clamp(14px,1.25vw,21px)!important;
+  background:rgba(4,13,38,.88)!important;border:1px solid #8999db55!important;
+  border-radius:7px!important;box-shadow:0 0 8px #162b6655!important;
+}
+#roomArea>#firstDone .answer-line:empty{display:none!important}
+#roomArea>#firstDone #answerMain:empty::after{content:none!important}
+#roomArea>#bonusArea #bonusPrompt,#roomArea>#bonusArea #bonusAnswerInline{
+  position:relative!important;display:block!important;align-self:center!important;
+  width:fit-content!important;max-width:96%!important;min-width:0!important;
+  margin:2px auto!important;padding:5px 12px!important;
+  font-size:clamp(13px,1.25vw,21px)!important;line-height:1.4!important;
+  text-align:center!important;overflow-wrap:anywhere!important;
+  background:rgba(4,13,38,.85)!important;border:1px solid #8999db55!important;
+  border-radius:7px!important;box-shadow:none!important;
+}
+#roomArea>#bonusArea #bonusPrompt:empty,#roomArea>#bonusArea #bonusAnswerInline:empty{display:none!important}
+#roomArea>#bonusArea #bonusPrompt:empty::after{content:none!important}
+#roomArea>#bonusArea #bonusChoices{align-self:center!important;max-width:96%!important;text-align:center!important}
+#roomArea>#bonusArea #bonusTextRow{align-self:center!important;text-align:center!important}
+#roomArea>#bonusArea #bonusAnswerInline:not(:empty){color:#ffe6a7!important;font-weight:700!important;text-shadow:0 0 8px #e4a94b99!important}
+@media(max-width:900px){#roomArea>#firstDone,#roomArea>#bonusArea{width:72%!important}}
+
+/* v5.03 integration: consistent buttons, compact existing footer, no position changes */
+#roomArea>.controls #skip,
+#roomArea>.controls #editAnswer:not(.hidden),
+#roomArea>.controls #trashCurrent:not(.hidden){
+ display:inline-flex!important;align-items:center!important;justify-content:center!important;
+ flex:0 0 auto!important;width:auto!important;min-width:100px!important;max-width:145px!important;
+ height:42px!important;min-height:42px!important;padding:6px 12px!important;
+ border:1px solid #62caff!important;border-radius:5px!important;
+ clip-path:none!important;background:linear-gradient(180deg,#2167a6,#0b244f 75%,#061735)!important;
+ color:#eafaff!important;box-shadow:inset 0 1px 0 #9eeeff88,0 0 11px #2caeff66!important;
+ font-size:12px!important;line-height:1.1!important;font-weight:600!important;
+ white-space:nowrap!important;text-shadow:0 0 4px #56caff!important;
+}
+#roomArea>.controls #skip::before,#roomArea>.controls #editAnswer::before,#roomArea>.controls #trashCurrent::before{display:none!important}
+#roomArea>#roomFixedActions{width:clamp(270px,28vw,410px)!important;height:43px!important;padding:3px!important;gap:5px!important}
+#roomArea>#roomFixedActions button{height:100%!important;font-size:12px!important;padding:4px 6px!important}
+/* Keep footer's existing left/bottom coordinates exactly as they were. */
+/* Put NOW PLAYING at the upper-left edge without affecting the round/time stack. */
+#roomArea>.left-now .now-playing-label,#roomArea>.left-now .now-playing,
+#roomArea>.left-now .music-title{margin-left:0!important}
+
+/* v5.04: final top HUD layout. Scoped overrides supersede earlier experimental rules. */
+#roomArea>.left-now.pane{
+ top:1.6%!important;height:21.5%!important;min-height:205px!important;
+ padding:0!important;overflow:visible!important;
+ background:linear-gradient(115deg,#05183e9c,#07133670)!important;
+ border:0!important;border-radius:0!important;box-shadow:none!important;
+ isolation:isolate!important;
+}
+#roomArea>.left-now.pane::before{
+ content:""!important;display:block!important;position:absolute!important;
+ inset:-5px!important;z-index:-1!important;pointer-events:none!important;
+ background:url('/console-frame-main.svg') center/100% 100% no-repeat!important;
+ filter:drop-shadow(0 0 7px #22caff9c)!important;
+}
+#roomArea>.left-now.pane::after{display:none!important}
+#roomArea>.left-now.pane>.player-merged-left{
+ left:3%!important;top:8%!important;width:65%!important;
+ justify-content:flex-start!important;align-items:center!important;
+}
+#roomArea>.left-now.pane>.player-merged-left .panel-title{margin:0!important}
+#roomArea>.left-now.pane>#playing{
+ left:4%!important;top:44%!important;width:64%!important;height:44%!important;
+}
+#roomArea>.left-now.pane>#playing .stage-question{margin-bottom:5px!important}
+#roomArea>.left-now.pane>#playing .stage-eyebrow{
+ position:absolute!important;left:auto!important;right:-46%!important;
+ top:-82%!important;transform:none!important;white-space:nowrap!important;
+}
+#roomArea>.left-now.pane>#playing .stage-round{
+ display:inline-block!important;font-size:clamp(15px,1.25vw,20px)!important;
+ padding:7px 12px!important;
+}
+#roomArea>.left-now.pane>.left-question{
+ top:44%!important;right:4%!important;width:26%!important;height:49%!important;
+ justify-content:flex-start!important;padding:0!important;
+}
+#roomArea>.left-now.pane>.left-question .timer-heading{margin:0 0 2px!important}
+#roomArea>.left-now.pane>.left-question .big-timer{font-size:clamp(32px,3.1vw,49px)!important}
+@media(max-width:900px){
+ #roomArea>.left-now.pane{min-height:190px!important}
+ #roomArea>.left-now.pane>#playing .stage-eyebrow{right:-45%!important}
+}
