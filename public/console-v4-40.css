@@ -934,3 +934,55 @@ body>#lobby:not(.settings-open){display:none!important}
   z-index: 5 !important;
   overflow: visible !important;
 }
+
+/* v5.18 - keep navy fill strictly INSIDE the SVG frame; floating titles stay unclipped. */
+#roomArea > #firstDone,
+#roomArea > #bonusArea {
+  background: transparent !important;
+  background-image: none !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  overflow: visible !important;
+  clip-path: none !important;
+  isolation: isolate !important;
+}
+/* The inset layer, not the panel box, owns the dark fill. */
+#roomArea > #firstDone::after,
+#roomArea > #bonusArea::after {
+  content: "" !important;
+  display: block !important;
+  visibility: visible !important;
+  position: absolute !important;
+  inset: 5px 7px !important;
+  width: auto !important;
+  height: auto !important;
+  opacity: 1 !important;
+  background: rgba(3, 13, 39, .88) !important;
+  background-image: none !important;
+  border: 0 !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  clip-path: polygon(3.5% 0,96.5% 0,100% 12%,100% 88%,96.5% 100%,3.5% 100%,0 88%,0 12%) !important;
+  pointer-events: none !important;
+  z-index: 0 !important;
+}
+/* Neon frame stays above fill, but below titles and answer text. */
+#roomArea > #firstDone::before,
+#roomArea > #bonusArea::before {
+  content: "" !important;
+  display: block !important;
+  position: absolute !important;
+  inset: -6px !important;
+  z-index: 1 !important;
+  pointer-events: none !important;
+}
+#roomArea > #firstDone > *,
+#roomArea > #bonusArea > * {
+  z-index: 2 !important;
+}
+#roomArea > #firstDone .panel-tab,
+#roomArea > #bonusArea h3 {
+  z-index: 5 !important;
+  overflow: visible !important;
+}
