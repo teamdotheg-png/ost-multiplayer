@@ -3,7 +3,7 @@ body{margin:0;background:#06142d url('/moonlit-background.jpg') center center/co
 #friendFormFields>*:not(:first-child){display:none!important}#friendFormFields{display:block!important}#friendFormFields>label:first-child{display:block!important}#sharedList{display:block!important}#editor>div:first-child h2{font-size:18px}#aiQuick{font-size:17px}</style></head><body><main><h1>🌙 OST AI 등록 요청</h1><p class="muted">유튜브 주소만 입력하고 AI 등록을 요청하세요. 제출 상태는 아래 목록에서 확인할 수 있습니다.</p>
 <section id="gate"><h2>처음 입장</h2><label>고정 초대코드<input id="invite" autocomplete="off"></label><label>닉네임<input id="nick" maxlength="20"></label><button id="enter">입장</button></section>
 <section id="editor" class="hide"><div style="display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:12px"><h2 style="margin:0">유튜브 AI 등록</h2><button id="aiQuick" type="button" class="purple">✨ AI 등록 요청 (URL만)</button></div><p id="identity"></p><div class="editor-grid" id="friendFormFields">
-<label>유튜브 URL<input id="videoUrl" placeholder="https://www.youtube.com/watch?v=..."></label><label>작품명 정답<input id="answer"></label>
+<label>유튜브 영상 또는 플레이리스트 URL<input id="videoUrl" placeholder="https://www.youtube.com/watch?v=... 또는 playlist?list=..."></label><label>작품명 정답<input id="answer"></label>
 <div class="time-editor"><b>OST 재생 구간 설정 (시:분:초)</b><div id="preview" class="preview"><div class="preview-placeholder">영상 미리보기를 누르면 여기서 재생됩니다.</div></div><button id="previewButton" type="button">▶ 유튜브 영상 미리보기</button><div class="two"><label>시작 시간<input id="startTime" value="00:00:00" inputmode="numeric" placeholder="00:00:15"></label><label>종료 시간<input id="endTime" value="00:00:45" inputmode="numeric" placeholder="00:00:45"></label></div><div class="two"><button class="purple" id="markStart" type="button">현위치에서 시작</button><button class="purple" id="markEnd" type="button">현위치에서 종료</button></div></div>
 <label>정답 별칭(쉼표 구분)<input id="aliases"></label><label style="grid-column:1/-1"><input type="checkbox" id="aiRequested" style="display:inline;width:auto"> AI 등록 요청 (관리자가 일괄 분석하며 자동 승인되지 않음)</label><label>OST 제목<input id="songName"></label><label>15초 힌트<input id="hintText"></label><label>히든 유형<select id="bonusType"><option value="text">주관식</option><option value="multiple">4지선다</option><option value="none">없음</option></select></label>
 <div id="bonusFields" class="span2 editor-grid"><label>히든 질문<input id="bonusQuestion"></label><div id="bonusTextFields" class="editor-grid span2"><label>히든 정답<input id="bonusAnswer"></label><label>히든 인정 별칭<input id="bonusAliases"></label></div><div id="multi" class="hide span2 editor-grid"><label>선택지 1<input id="choice0"></label><label>선택지 2<input id="choice1"></label><label>선택지 3<input id="choice2"></label><label>선택지 4<input id="choice3"></label><label>정답 번호<select id="correctChoice"><option value="0">1번</option><option value="1">2번</option><option value="2">3번</option><option value="3">4번</option></select></label></div></div>
@@ -59,18 +59,19 @@ $('showList').onclick=async()=>{
  }catch(e){notice('문제 목록 조회 실패: '+e.message);}finally{button.disabled=false;}
 };
 $('refreshShared').onclick=()=>$('showList').onclick();
+function isPlaylistUrl(raw){try{const u=new URL(raw);return ['youtube.com','www.youtube.com','m.youtube.com','music.youtube.com'].includes(u.hostname)&&!!u.searchParams.get('list');}catch{return false;}}
 $('aiQuick').onclick=async()=>{
  const url=$('videoUrl').value.trim();
- if(!videoId(url))return notice('올바른 유튜브 URL만 입력해 주세요.');
+ if(!videoId(url)&&!isPlaylistUrl(url))return notice('올바른 유튜브 영상 또는 플레이리스트 URL을 입력해 주세요.');
  if(editing!==null)return notice('수정 중인 문제입니다. 새 문제 작성을 누른 뒤 AI 요청해 주세요.');
  const adminMode=!token&&!!$('adminPassword').value.trim();
  if(!token&&!adminMode)return notice('먼저 초대코드로 입장하거나 관리자 비밀번호를 입력하세요.');
- if(!confirm('이 유튜브 URL을 AI 분석 대기 목록에 제출할까요? 정답과 히든 문제는 필요 없습니다.'))return;
+ if(!confirm(isPlaylistUrl(url)?'플레이리스트의 모든 영상을 개별 AI 분석 요청으로 서버에 제출할까요?':'이 유튜브 URL을 AI 분석 대기 목록에 제출할까요? 정답과 히든 문제는 필요 없습니다.'))return;
  const button=$('aiQuick');button.disabled=true;aiNotice('AI 요청 저장 중...');
  try{
   const question={videoUrl:url,startTime:0,endTime:45,answer:'',aliases:'',songName:'',hintText:'',bonusType:'none',bonusQuestion:'',bonusAnswer:'',bonusAliases:'',choices:[],correctChoice:0};
-  const result=await api('/api/submissions','POST',{question,aiRequested:true},adminMode);
-  aiNotice('✅ AI 등록 요청 #'+result.id+' 접수 완료! 관리자 검토 및 분석 대기 목록에 저장됐습니다.');notice('AI 등록 요청 저장 완료');
+  const result=isPlaylistUrl(url)?await api('/api/youtube/playlist/submit','POST',{url},adminMode):await api('/api/submissions','POST',{question,aiRequested:true},adminMode);
+  aiNotice(result.playlistId?`✅ 플레이리스트 ${result.total}개 중 ${result.inserted}개 서버 등록, 영상 ID 중복 ${result.skippedId}개 제외. 음악 중복은 Windows 분석기에서 확인합니다.`:'✅ AI 등록 요청 #'+result.id+' 접수 완료! 관리자 검토 및 분석 대기 목록에 저장됐습니다.');notice('AI 등록 요청 저장 완료');
   reset();if(token)await $('showList').onclick();
  }catch(e){aiNotice('❌ AI 요청 실패: '+e.message);notice('AI 요청 실패: '+e.message);}finally{button.disabled=false;}
 };
