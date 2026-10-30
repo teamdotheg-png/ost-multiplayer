@@ -5,6 +5,7 @@ const {Server} = require('socket.io');
 const path = require('path');
 const crypto = require('crypto');
 const fs = require('fs');
+const {safeHint} = require('./public/hint-reading.js');
 const app = express();
 const server = http.createServer(app);
 const io = new Server(server,{maxHttpBufferSize:1e6});
@@ -31,6 +32,8 @@ const shortTitleAliases = (title) => {
 };
 const matchTitle = (input, q) => {
   if(match(input,q.title,q.aliases))return true;
+  const mainTitle=String(q.title||'').split(/[~～]/,1)[0].trim();
+  if(mainTitle!==q.title && norm(mainTitle).length>=3 && norm(input)===norm(mainTitle))return true;
   const a=norm(input);
   if(a.length<5)return false;
   return shortTitleAliases(q.title).some(short=>norm(short)===a);
@@ -98,7 +101,7 @@ function parseVideo(s){s=sanitize(s,500);if(/^[\w-]{11}$/.test(s))return s;try{c
 function parseQuestions(input){if(!Array.isArray(input)||input.length<1||input.length>100)throw Error('문제는 1~100개 등록하세요.');return input.map((x,i)=>{
  const videoId=parseVideo(x.videoUrl);const start=Number(x.startTime??0),end=Number(x.endTime??40);
  if(!videoId||!Number.isFinite(start)||!Number.isFinite(end)||start<0||end<=start||end>200000)throw Error(`${i+1}번 영상 주소 또는 구간 오류`);
- const title=sanitize(x.answer,150),song=sanitize(x.songName,150),hint=sanitize(x.hintText,300),aliases=sanitize(x.aliases,400);
+ const title=sanitize(x.answer,150),song=sanitize(x.songName,150),hint=safeHint(title,sanitize(x.hintReading,300),sanitize(x.hintText,300)),aliases=sanitize(x.aliases,400);
  if(!title)throw Error(`${i+1}번 작품명 정답 누락`);
  const type=['none','text','multiple'].includes(x.bonusType)?x.bonusType:'none';
  const b={type,prompt:sanitize(x.bonusQuestion,300),answer:sanitize(x.bonusAnswer,150),aliases:sanitize(x.bonusAliases,400),choices:Array.isArray(x.choices)?x.choices.slice(0,4).map(s=>sanitize(s,150)):[],correct:Number(x.correctChoice??0)};
