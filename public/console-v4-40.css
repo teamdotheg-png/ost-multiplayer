@@ -771,3 +771,22 @@ body>#lobby:not(.settings-open){display:none!important}
 /* Vertically center LIVE (dot and label) with TIME LEFT. */
 #roomArea>.left-now.pane>.left-question .timer-heading{display:flex!important;align-items:center!important;justify-content:center!important;gap:10px!important;white-space:nowrap!important;}
 #roomArea>.left-now.pane>.left-question .timer-led{display:inline-flex!important;align-items:center!important;margin-left:0!important;position:relative!important;top:-2px!important;line-height:1!important;}
+
+/* v5.09 - stable HUD layout: ROUND lives inside the timer column. */
+#roomArea>.left-now.pane>.left-question>.hud-round-row{
+ position:relative!important;top:auto!important;right:auto!important;left:auto!important;bottom:auto!important;
+ transform:none!important;display:flex!important;align-items:center!important;justify-content:center!important;
+ float:none!important;width:100%!important;max-width:100%!important;margin:0 0 4px!important;
+ padding:0!important;z-index:3!important;box-sizing:border-box!important;
+}
+#roomArea>.left-now.pane>.left-question>.hud-round-row .stage-round{
+ font-size:clamp(12px,1.18vw,19px)!important;padding:5px 10px!important;
+}
+#roomArea>.left-now.pane>.left-question>.timer-heading{
+ display:flex!important;align-items:center!important;justify-content:center!important;gap:9px!important;
+ margin:0 0 2px!important;line-height:1.3!important;width:100%!important;
+}
+#roomArea>.left-now.pane>.left-question>.timer-heading .timer-led{
+ display:inline-flex!important;align-items:center!important;justify-content:center!important;
+ top:0!important;vertical-align:middle!important;margin:0!important;line-height:1.3!important;
+}
