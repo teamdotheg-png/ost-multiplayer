@@ -540,3 +540,15 @@ input,select{background:#05132e;border:1px solid #4b8fc5;color:white}
  #roomArea>.controls{left:30%!important;top:81%!important;width:47%!important}
  #roomArea>.top-actions{left:2%!important;top:93%!important;width:33%!important}
 }
+
+/* v4.95: waiting-state preview and stable question panel */
+#roomArea>.left-now>#playing.waiting-preview{display:flex!important;visibility:visible!important;opacity:1!important}
+#roomArea>.left-now>#playing.waiting-preview #firstDone,
+#roomArea>.left-now>#playing.waiting-preview #bonusArea,
+#roomArea>.left-now>#playing.waiting-preview .center-hint{display:none!important}
+#roomArea>.left-now>#playing.waiting-preview>.stage-label:not(.center-hint){display:block!important;min-height:105px!important}
+#roomArea>.left-now>#playing .stage-question{display:block!important;visibility:visible!important}
+#roomArea>.top-actions{display:flex!important;z-index:80!important}
+#roomArea>.top-actions button{display:inline-flex!important;align-items:center;justify-content:center}
+#roomArea>.controls{z-index:30!important}
+#roomArea>.controls #editAnswer:not(.hidden){display:inline-flex!important}
