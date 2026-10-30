@@ -799,3 +799,36 @@ body>#lobby:not(.settings-open){display:none!important}
  font-size:clamp(11px,1.06vw,17px)!important;
  padding:4px 8px!important;
 }
+
+/* v5.11: fixed, independent HUD slots inside the cyan frame. */
+#roomArea>.left-now.pane>.left-question{
+ top:18%!important;right:5.5%!important;width:27%!important;height:72%!important;
+ display:flex!important;flex-direction:column!important;align-items:center!important;
+ justify-content:flex-start!important;gap:2px!important;padding:0!important;
+ overflow:visible!important;
+}
+#roomArea>.left-now.pane>.left-question>.hud-round-row{
+ position:relative!important;inset:auto!important;transform:none!important;
+ display:flex!important;justify-content:flex-start!important;align-items:center!important;
+ width:100%!important;max-width:none!important;margin:0 0 5px!important;
+ padding-left:12%!important;flex:0 0 auto!important;
+}
+#roomArea>.left-now.pane>.left-question>.hud-round-row .stage-round{
+ font-size:clamp(11px,1.06vw,17px)!important;padding:4px 8px!important;
+ white-space:nowrap!important;
+}
+#roomArea>.left-now.pane>.left-question>.timer-heading{
+ display:inline-flex!important;flex:0 0 auto!important;width:max-content!important;
+ max-width:100%!important;align-items:center!important;justify-content:center!important;
+ gap:8px!important;padding:3px 10px!important;margin:0 0 2px!important;
+ line-height:1.3!important;white-space:nowrap!important;
+}
+#roomArea>.left-now.pane>.left-question>.timer-heading .timer-led{
+ position:static!important;top:auto!important;margin:0!important;line-height:1.3!important;
+}
+#roomArea>.left-now.pane>.left-question>.big-timer{flex:0 0 auto!important;margin:0!important;}
+#roomArea>.left-now.pane>.left-question>.timer{flex:0 0 auto!important;margin:2px 0!important;}
+#roomArea>.left-now.pane>.left-question>.hint-desc{
+ position:static!important;transform:none!important;flex:0 0 auto!important;
+ margin:1px 0 0!important;
+}
