@@ -487,3 +487,49 @@ input,select{background:#05132e;border:1px solid #4b8fc5;color:white}
 #roomArea .vault-list summary{cursor:pointer;color:#8fe0ff;font-weight:bold}
 #roomArea .stage-label .disc-wrap{display:none!important}
 #roomArea .stage-label .stage-copy{margin-left:0!important}
+
+/* v4.93 — corrected single HUD and visible bottom-left room controls */
+#roomArea .top-actions{display:flex!important;visibility:visible!important;opacity:1!important;pointer-events:auto!important;z-index:25!important}
+#roomArea .top-actions button{display:inline-block!important;visibility:visible!important;opacity:1!important;pointer-events:auto!important}
+#roomArea .top-actions button:disabled{opacity:.55!important}
+#roomArea .left-now .player-merged-left{display:flex!important;flex-direction:row!important;align-items:center!important;justify-content:flex-start!important;gap:12px!important;padding:0!important;min-width:0!important}
+#roomArea .left-now .panel-title{white-space:nowrap!important;margin:0!important}
+#roomArea .left-now .music-card{width:auto!important;min-width:0!important;max-width:none!important;flex:1!important;display:flex!important;gap:7px!important;background:transparent!important;box-shadow:none!important;border:0!important;padding:0!important}
+#roomArea .left-now .music-cover,#roomArea .left-now .music-sub,#roomArea .left-now .waveform{display:none!important}
+#roomArea .left-now .music-name{font-size:clamp(11px,1.05vw,16px)!important;white-space:nowrap!important}
+#roomArea .left-now .left-question{grid-column:auto!important;display:flex!important;position:relative!important;width:auto!important;height:auto!important;min-height:0!important;left:auto!important;top:auto!important;padding:0 0 0 12px!important;justify-content:center!important;border-left:1px solid #6ce7ff88!important}
+#roomArea .left-now .left-question .q-title{display:none!important}
+#roomArea .left-now .left-question .timer-heading{white-space:nowrap!important;font-size:clamp(10px,.8vw,13px)!important}
+#roomArea .left-now .left-question .big-timer{font-size:clamp(26px,3vw,45px)!important}
+#roomArea .left-now .left-question .hint-desc{font-size:clamp(10px,.8vw,13px)!important}
+#roomArea .left-now .unified-question-body{grid-column:1 / -1;min-width:0;min-height:0;display:flex;flex-direction:column;gap:10px;overflow-y:auto;padding:10px 5px 6px;align-items:stretch}
+#roomArea .unified-question-body>.stage-label:not(.center-hint),#roomArea .unified-question-body>#firstDone,#roomArea .unified-question-body>#bonusArea{position:relative!important;display:block!important;grid-row:auto!important;flex:none!important;width:100%!important;height:auto!important;min-height:0!important;margin:0!important;padding:10px 14px!important;clip-path:none!important;box-shadow:none!important;background:rgba(3,15,42,.64)!important;border:1px solid #4da8eb55!important;border-radius:7px!important;overflow:visible!important;justify-self:auto!important}
+#roomArea .unified-question-body>.stage-label:not(.center-hint)::before,#roomArea .unified-question-body>#firstDone::before,#roomArea .unified-question-body>#bonusArea::before,#roomArea .unified-question-body>.stage-label:not(.center-hint)::after,#roomArea .unified-question-body>#firstDone::after,#roomArea .unified-question-body>#bonusArea::after{display:none!important}
+#roomArea .unified-question-body .stage-copy{display:flex!important;flex-direction:column!important;width:100%!important;padding:0!important;margin:0!important;background:none!important;border:0!important;box-shadow:none!important}
+#roomArea .unified-question-body .stage-eyebrow{display:flex!important;justify-content:flex-end!important;margin:0 0 2px!important}
+#roomArea .unified-question-body .stage-round{font-size:clamp(10px,.85vw,13px)!important}
+#roomArea .unified-question-body .stage-question{margin:0!important;font-size:clamp(17px,1.6vw,25px)!important}
+#roomArea .unified-question-body .stage-instruction{padding-top:7px!important;font-size:clamp(12px,1vw,16px)!important}
+#roomArea .unified-question-body #firstDone .panel-tab,#roomArea .unified-question-body #bonusArea h3{position:static!important;display:inline-block!important;transform:none!important;min-width:0!important;width:fit-content!important;padding:2px 12px!important;margin:0 0 5px!important;font-size:13px!important;letter-spacing:.06em!important}
+#roomArea .unified-question-body #firstDone .answer-line{font-size:clamp(12px,1vw,16px)!important;min-height:18px!important;line-height:1.35!important;text-align:left!important;justify-content:flex-start!important}
+#roomArea .unified-question-body #bonusArea #bonusPrompt{font-size:clamp(12px,1.05vw,17px)!important}
+#roomArea .unified-question-body #bonusArea #bonusAnswerInline{font-size:clamp(12px,1.1vw,18px)!important}
+#roomArea .controls #editAnswer:not(.hidden),#roomArea .controls #trashCurrent:not(.hidden){display:inline-block!important;font-size:clamp(10px,.8vw,13px)!important;padding:7px 9px!important;flex:none!important}
+#roomArea .controls #skip{width:auto!important;min-width:90px!important;height:auto!important;padding:10px!important}
+#roomArea .controls{width:59%!important;left:18%!important;gap:8px!important}
+@media(min-width:901px){
+ #roomArea .pane.left-now{left:1.5%!important;top:1.5%!important;width:46.3%!important;height:70%!important;display:grid!important;grid-template-columns:minmax(0,1fr) minmax(135px,31%)!important;grid-template-rows:minmax(82px,20%) minmax(0,1fr)!important;align-items:stretch!important;gap:5px 8px!important;padding:14px 17px!important;overflow:hidden!important}
+ #roomArea .left-now .player-merged-left{grid-column:1!important;grid-row:1!important}
+ #roomArea .left-now .left-question{grid-column:2!important;grid-row:1!important}
+ #roomArea .left-now .unified-question-body{grid-row:2!important}
+ #roomArea .center-scene{pointer-events:none!important}
+ #roomArea .top-actions{left:1.8%!important;top:88.8%!important;width:33%!important;height:8%!important}
+}
+@media(max-width:900px){
+ #roomArea .pane.left-now{display:grid!important;grid-template-columns:minmax(0,1fr) minmax(125px,35%)!important;grid-template-rows:auto auto!important;min-height:370px!important;gap:8px!important;padding:12px!important}
+ #roomArea .left-now .player-merged-left{grid-column:1!important}
+ #roomArea .left-now .left-question{grid-column:2!important}
+ #roomArea .left-now .unified-question-body{grid-column:1/-1!important;max-height:360px!important}
+ #roomArea .top-actions{position:relative!important;left:auto!important;top:auto!important;width:100%!important;height:auto!important;grid-column:1/-1!important}
+ #roomArea .controls{left:auto!important;top:auto!important;width:100%!important;flex-wrap:wrap!important;height:auto!important}
+}
