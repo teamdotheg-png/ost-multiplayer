@@ -476,3 +476,14 @@ input,select{background:#05132e;border:1px solid #4b8fc5;color:white}
 #playedVault .vault-list{max-height:380px;min-height:70px}
 #playedVault .row{margin:12px 0}
 #questions{margin-top:18px}
+
+/* v4.92 settings overlay and compact controls */
+#roomArea #lobby.settings-open{position:fixed!important;z-index:1000!important;top:50%!important;left:50%!important;transform:translate(-50%,-50%)!important;width:min(96vw,1200px)!important;max-width:1200px!important;height:min(94vh,940px)!important;max-height:94vh!important;overflow:auto!important;background:#071932f5!important;border:2px solid #52bfff!important;border-radius:15px!important;padding:24px!important;box-shadow:0 0 0 100vmax #0009,0 0 35px #268ddc99!important;display:block!important;grid-area:auto!important}
+#roomArea #lobby:not(.settings-open){display:none!important}
+#roomArea #skip{font-size:12px!important;padding:6px 9px!important}
+#roomArea #playMusic{font-size:25px!important}
+#roomArea .vault-columns{grid-template-columns:repeat(auto-fit,minmax(210px,1fr))!important}
+#roomArea .vault-list details{padding:8px;border:1px solid #315d85;margin-bottom:6px}
+#roomArea .vault-list summary{cursor:pointer;color:#8fe0ff;font-weight:bold}
+#roomArea .stage-label .disc-wrap{display:none!important}
+#roomArea .stage-label .stage-copy{margin-left:0!important}
