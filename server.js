@@ -193,6 +193,70 @@ app.post('/api/played/admin/reset',express.json({limit:'2kb'}),asyncRoute(async(
  for(let i=0;i<rows.length;i+=100){await db('ost_played_songs','DELETE',`video_id=in.(${rows.slice(i,i+100).map(x=>x.video_id).join(',')})`);}
  res.json({reset:rows.length});
 }));
+// v4.91: playlist expansion, submission queue and conservative audio duplicate registry.
+function playlistIdFromUrl(raw){
+ try{const u=new URL(String(raw||''));if(!['youtube.com','www.youtube.com','m.youtube.com','music.youtube.com'].includes(u.hostname))return null;
+ const id=u.searchParams.get('list');return /^[A-Za-z0-9_-]{10,100}$/.test(id||'')?id:null;}catch{return null;}
+}
+async function getPlaylistItems(raw){
+ const key=process.env.YOUTUBE_API_KEY;if(!key)throw Error('서버에 YOUTUBE_API_KEY를 설정하세요.');
+ const playlistId=playlistIdFromUrl(raw);if(!playlistId)throw Error('올바른 YouTube 플레이리스트 URL을 입력하세요.');
+ const items=[];let pageToken='';const seen=new Set();
+ for(let page=0;page<10;page++){
+  const params=new URLSearchParams({part:'snippet,contentDetails',playlistId,maxResults:'50',key});if(pageToken)params.set('pageToken',pageToken);
+  const response=await fetch('https://www.googleapis.com/youtube/v3/playlistItems?'+params,{signal:AbortSignal.timeout(20000)});
+  const data=await response.json();if(!response.ok)throw Error(data.error?.message||'YouTube API 조회 실패');
+  for(const item of data.items||[]){const id=item.contentDetails?.videoId;if(!/^[\w-]{11}$/.test(id||'')||seen.has(id))continue;seen.add(id);
+   items.push({videoId:id,videoUrl:'https://www.youtube.com/watch?v='+id,youtubeTitle:sanitize(item.snippet?.title,500)});}
+  pageToken=data.nextPageToken||'';if(!pageToken)break;
+ }
+ return {playlistId,items,truncated:!!pageToken};
+}
+app.get('/api/youtube/playlist',asyncRoute(async(req,res)=>{
+ if(!isAdmin(req))return res.status(403).json({error:'관리자 인증이 필요합니다.'});
+ try{res.json(await getPlaylistItems(req.query.url));}catch(e){res.status(400).json({error:e.message});}
+}));
+app.post('/api/youtube/playlist/submit',express.json({limit:'10kb'}),asyncRoute(async(req,res)=>{
+ const admin=isAdmin(req),u=admin?null:await submitter(req);
+ if(!admin&&!u)return res.status(401).json({error:'먼저 초대코드로 입장하세요.'});
+ let playlist;try{playlist=await getPlaylistItems(req.body?.url);}catch(e){return res.status(400).json({error:e.message});}
+ if(playlist.truncated)return res.status(400).json({error:'500개를 초과하는 플레이리스트는 나누어 제출하세요.'});
+ // Existing pending/approved/rejected requests are retained; only active entries prevent a repeat.
+ const existing=await db('ost_questions','GET','select=youtube_url,status&limit=10000');
+ const seen=new Set(existing.filter(x=>x.status!=='rejected').map(x=>parseVideo(x.youtube_url)).filter(Boolean));
+ const fresh=playlist.items.filter(x=>!seen.has(x.videoId));
+ let inserted=0;
+ for(let i=0;i<fresh.length;i+=25){
+  const rows=fresh.slice(i,i+25).map(x=>({author_id:admin?null:u.id,author_nickname:admin?'관리자':u.nickname,
+   question:{videoUrl:x.videoUrl,youtubeTitle:x.youtubeTitle,startTime:0,endTime:45,answer:'',aliases:'',songName:'',hintText:'',bonusType:'none',bonusQuestion:'',bonusAnswer:'',bonusAliases:'',choices:[],correctChoice:0},
+   status:'pending',youtube_url:x.videoUrl,start_time:0,end_time:45,answer:'',ai_requested:true,ai_status:'queued'}));
+  const saved=await db('ost_questions','POST','',rows);inserted+=saved.length;
+ }
+ res.json({ok:true,playlistId:playlist.playlistId,total:playlist.items.length,inserted,skippedId:playlist.items.length-inserted,
+  note:'서버에 분석 대기 요청으로 저장했습니다. 음악 동일성 중복 검사는 Windows 분석기에서 별도로 진행합니다.'});
+}));
+// Fingerprints are derived from analyzed audio, never inferred from the title.
+app.get('/api/audio-fingerprints',asyncRoute(async(req,res)=>{
+ if(!isAdmin(req))return res.status(403).json({error:'관리자 인증 실패'});
+ const rows=await db('ost_audio_fingerprints','GET','select=video_id,signature,question_id&limit=10000');res.json({items:rows});
+}));
+app.post('/api/audio-fingerprints',express.json({limit:'30kb'}),asyncRoute(async(req,res)=>{
+ if(!isAdmin(req))return res.status(403).json({error:'관리자 인증 실패'});
+ const videoId=sanitize(req.body?.videoId,30),signature=req.body?.signature,id=Number(req.body?.questionId);
+ if(!/^[\w-]{11}$/.test(videoId)||!Number.isSafeInteger(id)||id<1||!Array.isArray(signature)||signature.length!==32||signature.some(x=>!Number.isInteger(x)||x<0||x>255))return res.status(400).json({error:'음원 지문 형식 오류'});
+ const existing=await db('ost_audio_fingerprints','GET',`video_id=eq.${videoId}&select=video_id&limit=1`);
+ if(existing.length)return res.json({ok:true,alreadyStored:true});
+ await db('ost_audio_fingerprints','POST','',{video_id:videoId,question_id:id,signature});res.json({ok:true});
+}));
+app.post('/api/ai/duplicate/:id',express.json({limit:'2kb'}),asyncRoute(async(req,res)=>{
+ if(!isAdmin(req))return res.status(403).json({error:'관리자 인증 실패'});
+ const id=Number(req.params.id),other=Number(req.body?.matchingQuestionId);
+ if(!Number.isSafeInteger(id)||id<1||!Number.isSafeInteger(other)||other<1||id===other)return res.status(400).json({error:'중복 대상 오류'});
+ const rows=await db('ost_questions','GET',`id=eq.${id}&status=eq.pending&ai_requested=eq.true&select=id,question&limit=1`);
+ if(!rows.length)return res.status(409).json({error:'분석 대기 문제가 아닙니다.'});
+ await db('ost_questions','PATCH',`id=eq.${id}&status=eq.pending`,{ai_status:'duplicate',ai_result:{duplicate_of:other,reason:'audio_fingerprint',checked_at:new Date().toISOString()},updated_at:new Date().toISOString()});
+ res.json({ok:true});
+}));
 app.use('/api/submissions',express.json({limit:'150kb'}));
 app.use('/api/ai',express.json({limit:'150kb'}));
 app.post('/api/submissions/access',asyncRoute(async(req,res)=>{
