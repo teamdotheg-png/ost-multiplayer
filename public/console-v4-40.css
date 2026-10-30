@@ -832,3 +832,23 @@ body>#lobby:not(.settings-open){display:none!important}
  position:static!important;transform:none!important;flex:0 0 auto!important;
  margin:1px 0 0!important;
 }
+
+/* v5.15: Match the deep navy opacity of the chat messages.
+   This overrides the earlier near-transparent (.13) panel fill while preserving the SVG neon frames. */
+#roomArea>#firstDone,
+#roomArea>#bonusArea {
+  background: rgba(3, 13, 39, 0.88) !important;
+  background-image: none !important;
+  border-radius: 12px !important;
+  overflow: hidden !important;
+}
+/* Keep the decorative frames visible above the darkened fill. */
+#roomArea>#firstDone::before,
+#roomArea>#bonusArea::before {
+  z-index: 0 !important;
+}
+#roomArea>#firstDone > *,
+#roomArea>#bonusArea > * {
+  position: relative;
+  z-index: 1;
+}
