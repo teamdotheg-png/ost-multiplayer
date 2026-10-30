@@ -609,3 +609,28 @@ body>#lobby:not(.settings-open){display:none!important}
 
 #roomArea>.left-now>.player-merged-left::after{content:"♫ OST 재생 중";color:#e1eeff;font-size:clamp(11px,1vw,17px);white-space:nowrap;align-self:center}
 #roomArea>.controls #playMusic{font-size:clamp(24px,2vw,38px)!important}
+/* v5.01: consolidated visual layout correction */
+#roomArea>.left-now.pane{height:24%!important;top:1.6%!important;border:2px solid #60e8ff!important;border-radius:8px!important;box-shadow:0 0 0 5px #0a6fc244,0 0 20px #17cfffaa,inset 0 0 16px #217cff77!important;background:linear-gradient(120deg,#031b4ab8,#08113d99)!important}
+#roomArea>.left-now.pane::after{content:""!important;position:absolute!important;inset:7px!important;pointer-events:none!important;border:1px solid #62d8ff88!important;clip-path:polygon(0 0,24% 0,28% 7px,70% 7px,74% 0,100% 0,100% 100%,0 100%)!important}
+#roomArea>.left-now.pane>.player-merged-left{top:7%!important;left:3%!important;gap:8px!important}
+#roomArea>.left-now>#playing{top:40%!important;left:3%!important;width:67%!important}
+#roomArea>.left-now>#playing .stage-eyebrow{top:-72%!important;right:-42%!important;font-size:clamp(13px,1.2vw,19px)!important}
+#roomArea>.left-now>#playing .stage-round{font-size:clamp(13px,1.2vw,19px)!important;padding:5px 10px!important}
+#roomArea>.left-now>.left-question{top:39%!important;right:2%!important;width:27%!important;height:55%!important}
+#roomArea>#firstDone{top:29%!important;height:15%!important;border:2px solid #bf83ff!important;box-shadow:0 0 0 4px #7133c044,0 0 18px #b269ffaa,inset 0 0 15px #7038ac77!important}
+#roomArea>#bonusArea{top:47%!important;height:19%!important;border:2px solid #ffd27e!important;box-shadow:0 0 0 4px #c98a3544,0 0 18px #ffc06799,inset 0 0 15px #ba852b66!important}
+#roomArea>#roomFixedActions{left:2.5%!important;bottom:8%!important;top:auto!important;width:36%!important;height:7%!important;border:2px solid #59d9ff!important;box-shadow:0 0 16px #21bfff88,inset 0 0 9px #2079db88!important;background:#041a42b8!important}
+#roomArea>#roomFixedActions button{font-size:clamp(12px,1vw,16px)!important}
+/* Vault is a single visible expandable list, not three columns hidden below statistics */
+#playedVault .vault-browser{margin:12px 0;border:1px solid #40b5ec;border-radius:10px;background:#061a38;overflow:hidden}
+#playedVault .vault-browser>summary{padding:14px 16px;cursor:pointer;color:#a4eaff;font-weight:700;background:linear-gradient(90deg,#10395f,#071c3b)}
+#playedVault .vault-browser>summary span{font-size:12px;font-weight:400;color:#9ebbd8;margin-left:12px}
+#playedVault .vault-browser-body{padding:14px}
+#playedVault .vault-search-label{display:block;color:#c3e9ff;margin-bottom:12px}
+#playedVault #vaultSearch{width:min(100%,550px);margin-left:10px}
+#playedVault .vault-year{border:1px solid #32699c;border-radius:7px;margin:9px 0;background:#081c38;overflow:hidden}
+#playedVault .vault-year>summary{cursor:pointer;padding:11px 14px;color:#8fe3ff;background:#102b4d;font-weight:700}
+#playedVault .vault-browser-song{display:flex;gap:14px;justify-content:space-between;align-items:center;padding:9px 14px;border-top:1px solid #214365;flex-wrap:wrap}
+#playedVault .vault-browser-song strong{color:#e8f5ff}
+#playedVault .vault-browser-song span{color:#9abddd;font-size:13px}
+#playedVault .vault-columns{display:none!important}
