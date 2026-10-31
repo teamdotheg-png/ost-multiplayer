@@ -17,3 +17,31 @@
 @keyframes disc-turn{to{transform:rotate(360deg)}}@keyframes ending-arrive{from{opacity:0;filter:blur(8px)}to{opacity:1;filter:blur(0)}}
 @media(max-width:900px){#videoFrame{width:25%;top:47%}.video-frame-label{font-size:10px!important}#songAnswerLine{font-size:12px!important}}
 @media(prefers-reduced-motion:reduce){.intro-disc,.ending-disc,#finished.ending-run,#finished.ending-run #endingRanks{animation:none}}
+
+/* v5.20: color the whole player message; system notices keep their own color. */
+#roomArea .right-chat .chatlog>.player-message .chat-bubble{color:inherit!important}
+#roomArea .right-chat .chatlog>.player-message .chat-bubble b{color:inherit!important}
+
+/* v5.21: enlarged playback window, using the same angular neon frame as the HUD. */
+#videoFrame{left:60%;top:48%;width:31%;padding:0;border:0;border-radius:0;background:rgba(1,8,25,.85);box-shadow:none;isolation:isolate}
+#videoFrame::before{content:'';position:absolute;inset:-11px;z-index:-1;background:url('/console-frame-main.svg') center/100% 100% no-repeat;filter:drop-shadow(0 0 5px #52daff) drop-shadow(0 0 9px #9a65dd80);pointer-events:none}
+#videoFrame .video-frame-label{left:50%;transform:translateX(-50%);bottom:calc(100% + 5px);border:1px solid #9ddaff70;border-radius:0;clip-path:polygon(10px 0,calc(100% - 10px) 0,100% 50%,calc(100% - 10px) 100%,10px 100%,0 50%);padding:5px 20px;background:linear-gradient(110deg,#09294af5,#26204bf5);white-space:nowrap;letter-spacing:.12em;font-size:11px}
+#youtubeHidden.video-visible{border-radius:0;clip-path:polygon(9px 0,calc(100% - 9px) 0,100% 9px,100% calc(100% - 9px),calc(100% - 9px) 100%,9px 100%,0 calc(100% - 9px),0 9px)}
+#roomArea.video-open>#firstDone,#roomArea.video-open>#bonusArea{width:42%!important}
+/* Live HTML/CSS countdown: digits stay dynamic, with the approved disc and neon rings. */
+#introOverlay{z-index:90;background:radial-gradient(ellipse at 50% 46%,#173d66 0%,#081c38 45%,#020b1c 100%);overflow:hidden}
+#introOverlay .intro-design{position:relative;z-index:2;display:flex;flex-direction:column;align-items:center;gap:clamp(12px,2.8vh,30px);padding:30px;max-width:95vw}
+#introLabel{margin:0;font-size:clamp(20px,3.2vw,42px);font-weight:400;letter-spacing:.08em;color:#e9f8ff;line-height:1.5;text-shadow:0 0 18px #91d9ff45}
+#introOverlay .intro-disc{width:clamp(80px,15vh,160px);height:auto;aspect-ratio:1;border:2px solid #a0f1ff;border-radius:50%;background:radial-gradient(circle,#0b2140 0 8%,#9be9ff 8.5% 9.5%,#09233d 10% 19%,#c2f1ff 19.5% 20.5%,transparent 21%),repeating-radial-gradient(circle,transparent 0 3px,#b9e1ff13 3.5px 4px),conic-gradient(from 15deg,#213776,#b7f6ff,#71bcfb,#7962cc,#d8e7ff,#3f67aa,#c0edff,#213776);box-shadow:0 0 0 9px #062241,0 0 0 10px #6fdcff80,0 0 0 20px #123a5c50,0 0 40px #79bcff35;animation:disc-turn 14s linear infinite;margin:18px 0}
+.intro-divider{display:flex;align-items:center;gap:16px;color:#98dcff;font-size:24px;width:min(400px,60vw);line-height:1}
+.intro-divider::before,.intro-divider::after{content:'';height:1px;flex:1;background:linear-gradient(90deg,transparent,#76dfff)}.intro-divider::after{transform:rotate(180deg)}
+.intro-count-wrap{width:clamp(180px,32vh,340px);aspect-ratio:1;position:relative;display:grid;place-items:center;margin:4px 0 15px;border-radius:50%;border:1px solid #4c9de850;box-shadow:0 0 0 13px #305a8830,0 0 50px #4585c71a}
+#introRing{position:absolute;inset:0;border-radius:50%;padding:3px;mask:linear-gradient(#fff 0 0) content-box exclude,linear-gradient(#fff 0 0);-webkit-mask:linear-gradient(#fff 0 0) content-box,linear-gradient(#fff 0 0);-webkit-mask-composite:xor;mask-composite:exclude;filter:drop-shadow(0 0 7px #85bfff)}
+.intro-count-wrap::before{content:'';position:absolute;inset:12px;border-radius:50%;border:1px dashed #9ce8ff35;pointer-events:none}
+#introCount{font-size:clamp(90px,20vh,210px);font-weight:400;font-variant-numeric:tabular-nums;line-height:1;color:#d4f6ff;text-shadow:0 0 22px #66d3ff66;letter-spacing:-.04em;padding-right:.04em}
+.intro-stars{position:absolute;inset:-10%;opacity:.65;background-image:radial-gradient(circle,#9edbff 1px,transparent 1.6px),radial-gradient(circle,#5f8bdb 1px,transparent 1.8px),radial-gradient(circle,#c4d4ff 1px,transparent 1.5px);background-size:147px 151px,223px 197px,317px 263px;background-position:0 0,67px 30px,140px 95px;animation:star-drift 35s linear infinite}
+.intro-corners{position:absolute;inset:24px;border:1px solid #5b8ee540;clip-path:polygon(0 0,18% 0,18% 1px,1px 1px,1px 18%,0 18%,0 0,100% 0,100% 18%,calc(100% - 1px) 18%,calc(100% - 1px) 1px,82% 1px,82% 0,100% 0,100% 100%,82% 100%,82% calc(100% - 1px),calc(100% - 1px) calc(100% - 1px),calc(100% - 1px) 82%,100% 82%,100% 100%,0 100%,0 82%,1px 82%,1px calc(100% - 1px),18% calc(100% - 1px),18% 100%,0 100%);filter:drop-shadow(0 0 5px #6bcfff)}
+@keyframes star-drift{to{transform:translate3d(14px,18px,0)}}
+@media(max-width:900px){#videoFrame{width:31%;top:48%}#videoFrame .video-frame-label{font-size:9px!important;padding:4px 12px;letter-spacing:0}#roomArea.video-open>#firstDone,#roomArea.video-open>#bonusArea{width:42%!important}#introLabel{letter-spacing:.02em}}
+@media(max-height:560px){#introOverlay .intro-design{gap:8px}#introOverlay .intro-disc{width:65px;margin:8px}#introLabel{font-size:22px}.intro-count-wrap{width:150px}#introCount{font-size:88px}}
+@media(prefers-reduced-motion:reduce){#introOverlay .intro-disc,.intro-stars{animation:none}}
