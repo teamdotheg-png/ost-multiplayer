@@ -45,3 +45,13 @@
 @media(max-width:900px){#videoFrame{width:31%;top:48%}#videoFrame .video-frame-label{font-size:9px!important;padding:4px 12px;letter-spacing:0}#roomArea.video-open>#firstDone,#roomArea.video-open>#bonusArea{width:42%!important}#introLabel{letter-spacing:.02em}}
 @media(max-height:560px){#introOverlay .intro-design{gap:8px}#introOverlay .intro-disc{width:65px;margin:8px}#introLabel{font-size:22px}.intro-count-wrap{width:150px}#introCount{font-size:88px}}
 @media(prefers-reduced-motion:reduce){#introOverlay .intro-disc,.intro-stars{animation:none}}
+
+/* v5.23: larger video, with a separate inner viewport clipped inside the neon. */
+#videoFrame{left:56%;top:48%;width:38%;aspect-ratio:auto;padding:22px;background:transparent}
+#videoFrame::before{inset:0;z-index:2;pointer-events:none}
+#videoFrame .video-frame-label{z-index:3}
+#videoFrame>#youtubeHidden.video-visible{position:relative!important;left:auto!important;top:auto!important;width:100%!important;height:auto!important;aspect-ratio:16/9;min-width:0;overflow:hidden!important;contain:paint;background:#000;border-radius:0;clip-path:polygon(22px 0,calc(100% - 22px) 0,100% 22px,100% calc(100% - 22px),calc(100% - 22px) 100%,22px 100%,0 calc(100% - 22px),0 22px);isolation:isolate;z-index:1}
+#videoFrame>#youtubeHidden.video-visible iframe{position:absolute!important;inset:0!important;display:block!important;width:100%!important;height:100%!important;max-width:100%!important;max-height:100%!important;margin:0!important;border:0!important;box-sizing:border-box!important}
+#roomArea.video-open>#firstDone,#roomArea.video-open>#bonusArea{width:34.5%!important}
+#roomArea.video-open>#firstDone .answer-line,#roomArea.video-open>#bonusArea #bonusPrompt,#roomArea.video-open>#bonusArea #bonusAnswerInline{max-width:100%!important;white-space:normal!important;overflow-wrap:anywhere!important;word-break:keep-all;box-sizing:border-box!important}
+@media(max-width:900px){#videoFrame{width:38%;left:56%;padding:14px}#roomArea.video-open>#firstDone,#roomArea.video-open>#bonusArea{width:34.5%!important}#videoFrame>#youtubeHidden.video-visible{clip-path:polygon(14px 0,calc(100% - 14px) 0,100% 14px,100% calc(100% - 14px),calc(100% - 14px) 100%,14px 100%,0 calc(100% - 14px),0 14px)}}
