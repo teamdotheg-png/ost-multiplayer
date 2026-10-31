@@ -65,3 +65,4 @@ body[data-theme=retro] #roomArea>#firstDone>.panel-tab.answer-tab{background:lin
 body[data-theme=retro] #roomArea #hintCountdown,body[data-theme=retro] #roomArea .score-caption,body[data-theme=retro] #roomArea .online-indicator,body[data-theme=retro] #roomArea .online-indicator #onlineCount,body[data-theme=retro] #roomArea .timer-led,body[data-theme=rooftop] #roomArea .online-indicator,body[data-theme=rooftop] #roomArea .online-indicator #onlineCount{color:#534b80!important}
 body[data-theme] #roomArea .chat-head .chat-title-icon{width:20px!important;height:20px!important;flex:none!important}
 }
+

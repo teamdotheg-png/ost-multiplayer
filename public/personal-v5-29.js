@@ -23,3 +23,6 @@ let appearanceRoom='';socket.on('room',s=>{if(s.phase==='starting'||s.phase==='f
 const hintNode=document.getElementById('hintCountdown');document.getElementById('roundBadge').after(hintNode);
 
 const rankIcon=document.querySelector('.crown-mark');rankIcon.classList.add('avatar');paintAvatar(rankIcon,23);
+
+// Keep meaningful placeholders in the lobby and during the five-second ready phase.
+socket.on('room',s=>{if(['lobby','ready'].includes(s.phase)){document.getElementById('answerMain').textContent='게임제목 : ???';document.getElementById('songAnswerLine').textContent='노래제목 : ???';document.getElementById('answerHint').textContent='힌트 : ???';}});

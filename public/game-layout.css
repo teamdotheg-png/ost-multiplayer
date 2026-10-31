@@ -1,0 +1,73 @@
+/* v5.30: layout owner. Grid replaces accumulated absolute positions. */
+@layer rebuilt {
+body[data-theme] #roomArea{display:grid!important;grid-template-columns:minmax(180px,19fr) minmax(0,50fr) minmax(240px,23fr)!important;grid-template-rows:110px minmax(180px,1fr) minmax(140px,.65fr) 74px!important;gap:16px!important;padding:24px!important;width:100%!important;height:100dvh!important;min-height:680px!important;box-sizing:border-box!important;overflow:hidden!important;max-width:none!important}
+body[data-theme] #roomArea.hidden{display:none!important}
+body[data-theme] #roomArea>.left-now.pane,body[data-theme] #roomArea>#firstDone,body[data-theme] #roomArea>#bonusArea,body[data-theme] #roomArea>#videoFrame,body[data-theme] #roomArea>.right-score,body[data-theme] #roomArea>.right-chat,body[data-theme] #roomArea>.controls,body[data-theme] #roomArea>#roomFixedActions{position:relative!important;inset:auto!important;transform:none!important;width:auto!important;height:auto!important;min-height:0!important;min-width:0!important;margin:0!important;box-sizing:border-box!important}
+body[data-theme] #roomArea>.left-now.pane{grid-column:1/3!important;grid-row:1!important;padding:16px 22px!important}
+body[data-theme] #roomArea>#firstDone{grid-column:1!important;grid-row:2!important;display:flex!important;flex-direction:column!important;justify-content:center!important;padding:48px 12px 14px!important;gap:8px!important}
+body[data-theme] #roomArea>#bonusArea{grid-column:1!important;grid-row:3!important;padding:45px 14px 14px!important;display:flex!important;flex-direction:column!important;justify-content:center!important}
+body[data-theme] #roomArea>#videoFrame{grid-column:2!important;grid-row:2/4!important;align-self:stretch!important;aspect-ratio:auto!important;background:#ffffff0b!important}
+body[data-theme] #roomArea>.right-score{grid-column:3!important;grid-row:1/2!important;overflow:auto!important;padding:14px!important}
+body[data-theme] #roomArea{grid-template-rows:110px 160px minmax(150px,1fr) minmax(110px,.65fr) 74px!important}
+body[data-theme] #roomArea>#firstDone{grid-row:2/4!important}
+body[data-theme] #roomArea>#bonusArea{grid-row:4!important}
+body[data-theme] #roomArea>#videoFrame{grid-row:2/5!important}
+body[data-theme] #roomArea>.right-score{grid-row:1/3!important}
+body[data-theme] #roomArea>.right-chat{grid-column:3!important;grid-row:3/6!important;display:flex!important;flex-direction:column!important;padding:14px!important;overflow:hidden!important}
+body[data-theme] #roomArea>#roomFixedActions{grid-column:1!important;grid-row:5!important;display:flex!important;align-items:center!important;gap:5px!important}
+body[data-theme] #roomArea>.controls{grid-column:2!important;grid-row:5!important;display:flex!important;justify-content:center!important;align-items:center!important;gap:7px!important;padding-bottom:14px!important}
+body[data-theme] #roomArea>.center-scene,body[data-theme] #roomArea>.left-hint,body[data-theme] #roomArea>.left-next{display:none!important}
+body[data-theme] #roomArea>.left-now.pane>.player-merged-left{position:absolute!important;left:22px!important;top:12px!important}
+body[data-theme] #roomArea>.left-now.pane>#playing{position:absolute!important;left:22px!important;top:39px!important;width:55%!important}
+body[data-theme] #roomArea #playing .stage-question{font-size:clamp(18px,1.7vw,27px)!important;white-space:normal!important;line-height:1.2!important;margin:0 0 6px!important}
+body[data-theme] #roomArea #playing .stage-instruction{font-size:clamp(10px,.9vw,14px)!important;white-space:normal!important}
+body[data-theme] #roomArea>.left-now.pane>.left-question{position:absolute!important;left:auto!important;right:20px!important;top:12px!important;width:19%!important;height:80px!important}
+body[data-theme] #roomArea .left-question .big-timer{font-size:40px!important;line-height:1.1!important}
+body[data-theme] #roomArea .left-question .timer-heading{font-size:11px!important}
+body[data-theme] #roomArea>.left-now.pane>.left-question>.hud-round-row{position:absolute!important;left:-115%!important;top:8px!important;width:105%!important}
+body[data-theme] #roomArea .hud-round-row .stage-round{font-size:13px!important;padding:7px!important}
+body[data-theme] #roomArea #hintCountdown{font-size:11px!important;margin-top:6px!important}
+body[data-theme] #roomArea .left-question .timer{position:absolute!important;inset:auto 0 0 auto!important;width:215%!important;height:8px!important;padding:0!important;border-radius:2px!important}
+body[data-theme] #roomArea .player-merged-left .panel-title{font-size:13px!important}
+body[data-theme] #roomArea #firstDone .panel-tab,body[data-theme] #roomArea #bonusArea h3{position:absolute!important;left:10px!important;right:10px!important;top:8px!important;font-size:20px!important;padding:0 0 6px!important;line-height:1.3!important}
+body[data-theme] #roomArea>#firstDone .answer-line{min-height:40px!important;padding:7px 9px!important;font-size:clamp(12px,1vw,17px)!important}
+body[data-theme] #roomArea>#bonusArea #bonusPrompt:empty,body[data-theme] #roomArea>#bonusArea #bonusAnswerInline:empty{display:none!important}
+body[data-theme] #roomArea #chatLog{flex:1!important;height:auto!important;min-height:0!important;overflow-y:auto!important;padding:0!important}
+body[data-theme] #roomArea .chat-head,body[data-theme] #roomArea .ranking-head{font-size:15px!important;padding:0 0 8px!important;flex:none!important;white-space:normal!important}
+body[data-theme] #roomArea .chat-head .online-indicator{font-size:10px!important}
+body[data-theme] #roomArea .scoreline{min-height:42px!important;padding:5px!important;margin:4px 0!important}
+body[data-theme] #roomArea .scoreline .rank-medal{width:27px!important;height:27px!important;font-size:17px!important}
+body[data-theme] #roomArea .score-person{gap:6px!important}
+body[data-theme] #roomArea .score-name{font-size:14px!important}
+body[data-theme] #roomArea #chatLog>div{grid-template-columns:28px minmax(0,1fr) 30px!important;margin:3px 0!important;padding:4px!important;gap:5px!important;font-size:12px!important;min-height:35px!important}
+body[data-theme] #roomArea .chat-avatar,body[data-theme] #roomArea .scoreline .avatar{width:28px!important;height:28px!important;min-width:28px!important}
+body[data-theme] #roomArea .chat-send{position:static!important;display:flex!important;gap:6px!important;margin-top:8px!important;padding:0!important}
+body[data-theme] #roomArea .chat-send input{min-width:0!important;width:100%!important;height:38px!important;font-size:12px!important}
+body[data-theme] #roomArea .chat-send button{font-size:12px!important;padding:5px 9px!important}
+body[data-theme] #roomArea .controls button,body[data-theme] #roomArea #roomFixedActions button{font-size:11px!important;padding:6px 8px!important;height:36px!important;min-width:0!important;white-space:nowrap!important}
+body[data-theme] #roomArea .controls #playMusic{width:64px!important;height:64px!important;flex:none!important;font-size:28px!important}
+body[data-theme] #roomArea .controls .controller-orb{width:40px!important;height:40px!important;flex:none!important;font-size:20px!important}
+body[data-theme] #roomArea .controls .vote{position:absolute!important;top:auto!important;bottom:0!important;font-size:9px!important}
+body[data-theme=rooftop] #roomArea>.right-score,body[data-theme=rooftop] #roomArea>.right-chat,body[data-theme=rooftop] #roomArea>#firstDone,body[data-theme=rooftop] #roomArea>#bonusArea{border:1px solid #c1b5a6!important;border-radius:3px!important;background:repeating-linear-gradient(0deg,#f8f1e4 0 27px,#ddd3c4 28px,#f8f1e4 29px)!important;box-shadow:4px 5px 0 #cdb7af,0 0 0 3px #fff4df!important;padding-left:22px!important}
+body[data-theme=rooftop] #roomArea>.right-score::after,body[data-theme=rooftop] #roomArea>.right-chat::after,body[data-theme=rooftop] #roomArea>#firstDone::after,body[data-theme=rooftop] #roomArea>#bonusArea::after{content:''!important;display:block!important;position:absolute!important;left:5px!important;top:10px!important;bottom:10px!important;width:7px!important;background:radial-gradient(circle,#7c6473 0 3px,transparent 3.5px) 0 0/7px 25px repeat-y!important;pointer-events:none!important}
+body[data-theme=rooftop] #roomArea>#videoFrame{border:1px solid #dfbfd2!important;border-radius:2px!important}
+body[data-theme=cafe] #roomArea>.left-now.pane,body[data-theme=cafe] #roomArea>.right-score,body[data-theme=cafe] #roomArea>.right-chat{border:4px double #c8a775!important;outline:1px solid #65482e!important;outline-offset:3px!important;border-radius:18px 5px!important}
+body[data-theme=cafe] #roomArea>#firstDone,body[data-theme=cafe] #roomArea>#bonusArea{border:5px double #b59365!important;border-radius:8px!important;box-shadow:0 0 0 3px #eee1c9!important}
+body[data-theme=retro] #roomArea>.left-now.pane{border-top:22px solid #8c9be8!important;padding-top:8px!important}
+body[data-theme=retro] #roomArea>.left-now.pane::after{content:'−  □  ×'!important;position:absolute!important;right:5px!important;top:-22px!important;font:16px monospace!important;color:#252572!important}
+@media(max-width:900px){body[data-theme] #roomArea{display:flex!important;flex-direction:column!important;height:auto!important;overflow:visible!important;padding:14px!important}body[data-theme] #roomArea>.left-now.pane{min-height:135px!important}body[data-theme] #roomArea>#firstDone{min-height:210px!important}body[data-theme] #roomArea>#bonusArea{min-height:130px!important}body[data-theme] #roomArea>#videoFrame{min-height:0!important;aspect-ratio:16/9!important}body[data-theme] #roomArea>.right-score{min-height:180px!important}body[data-theme] #roomArea>.right-chat{height:400px!important;flex:none!important}body[data-theme] #roomArea>.controls{min-height:90px!important;flex-wrap:wrap!important}body[data-theme] #roomArea>#roomFixedActions{min-height:45px!important}body[data-theme] #roomArea #playing .stage-question{font-size:18px!important}}
+}
+@layer rebuilt {
+body[data-theme] #roomArea>#firstDone,body[data-theme] #roomArea>#bonusArea{justify-self:stretch!important;align-self:stretch!important;max-width:none!important;width:100%!important}
+body[data-theme] #roomArea #youtubeHidden.video-visible{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;max-width:none!important;max-height:none!important;clip-path:none!important;overflow:hidden!important}
+body[data-theme] #roomArea #youtubeHidden.video-visible iframe{position:absolute!important;inset:0!important;width:100%!important;height:100%!important;clip-path:none!important;border:0!important}
+body[data-theme] #roomArea>#videoFrame{overflow:hidden!important}
+body[data-theme] #roomArea .controls button:disabled{opacity:.45!important}
+body[data-theme] #roomArea>#firstDone{justify-content:flex-start!important;padding-top:48px!important}
+body[data-theme] #roomArea>#bonusArea{justify-content:center!important}
+body[data-theme] #roomArea #firstDone .answer-line{align-self:stretch!important;width:100%!important;max-width:none!important}
+body[data-theme] #roomArea .score-caption{color:inherit!important;opacity:.7!important}
+}
+@layer rebuilt {
+@media(min-width:901px){body[data-theme] #roomArea{height:min(100dvh,50vw)!important;min-height:650px!important;grid-template-rows:110px minmax(180px,1fr) minmax(140px,.75fr) 74px!important}body[data-theme] #roomArea>#firstDone{grid-row:2!important}body[data-theme] #roomArea>#bonusArea{grid-row:3!important}body[data-theme] #roomArea>#videoFrame{grid-row:2/4!important}body[data-theme] #roomArea>.right-score{grid-row:1/2!important;height:240px!important;z-index:2!important}body[data-theme] #roomArea>.right-chat{grid-row:2/5!important;margin-top:130px!important}body[data-theme] #roomArea>#roomFixedActions,body[data-theme] #roomArea>.controls{grid-row:4!important}}
+}
