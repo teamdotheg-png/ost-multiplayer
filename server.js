@@ -29,7 +29,7 @@ const matchTitle = (input, q) => {
 };
 const sanitize = (s,n=100) => String(s??'').trim().slice(0,n);
 const getRoom = socket => rooms.get(socket.data.room);
-const PLAYER_COLORS=['#80e8ff','#ffb4d9','#c8b5ff','#a6f2bc','#ffdc88','#ffa993','#9bbcff','#e0f28d','#7fdfc8','#edb0f3','#f5c5a0','#b3d89a','#d7c8ff','#a2d6e8','#ffd0df','#e6e0a4'];
+const PLAYER_COLORS=['#80e8ff','#ffb4d9','#c8b5ff','#a6f2bc','#ffdc88','#ffa993','#9bbcff','#e0f28d','#7fdfc8','#edb0f3','#163b66','#783552','#503281','#24523b','#714c16','#853c29','#293d85','#47551b','#145951','#66346d'];
 const AVATARS=[16,18,20,21,23,29,31,35,39,41,43,56,58,61,68,74,88,94,97];
 function pickUnused(r,key,values){const used=new Set([...r.players.values()].map(p=>p[key]));const primary=key==="color"?values.slice(0,10):values;let free=primary.filter(v=>!used.has(v));if(!free.length)free=values.filter(v=>!used.has(v));return free[Math.floor(Math.random()*free.length)]??values[0];}
 const memberList = r => [...r.players.values()].map(p=>({id:p.id,name:p.name,score:p.score,host:p.id===r.host,online:!!p.online,color:p.color,avatar:p.avatar}));
