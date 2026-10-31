@@ -1,0 +1,66 @@
+/* Rooftop reference: separate scenery, paper artwork and live content. */
+body[data-theme=rooftop]{--ink:#302b60;--paper:#faf2e5;--edge:#8f81b0;--accent:#995fa5;--hud:#ead9eb;--button:#faf7ee;--shadow:#281e4766;--skin:url('/roof-scene.png')}
+body[data-theme=rooftop] #roomArea{--sidebar-x:73.5%}
+body[data-theme=rooftop] #roomArea>.left-now{left:5.5%;top:3%;width:67%;height:20%;isolation:isolate}
+body[data-theme=rooftop] #roomArea>.left-now::before{content:'';position:absolute;inset:-8px -10px;z-index:-1;pointer-events:none;background:url('/roof-hud.svg') center/100% 100% no-repeat;filter:drop-shadow(0 3px 2px #20182d55)}
+body[data-theme=rooftop] #roomArea>.left-now::after{content:'';position:absolute;right:-24px;bottom:-24px;width:158px;height:174px;pointer-events:none;background:url('/roof-blossom.png') center/contain no-repeat}
+body[data-theme=rooftop] .player-merged-left{left:5%;top:12%}
+body[data-theme=rooftop] .player-merged-left>.panel-title{color:#e7bbda;font-size:22px;font-weight:500;letter-spacing:.02em}
+body[data-theme=rooftop] .equalizer{color:#ebc2de;height:18px;gap:4px;margin-left:10px}
+body[data-theme=rooftop] #playing{left:5%;top:34%;width:53%}
+body[data-theme=rooftop] .stage-question{font-size:32px;font-weight:500;color:#f3e7f3;letter-spacing:0}
+body[data-theme=rooftop] .stage-instruction{font-size:19px;color:#e0d0e5;margin-top:5px}
+body[data-theme=rooftop] #roomArea .left-question{right:10%;top:13%;width:41%;height:76%;grid-template-columns:51% 45%;grid-template-rows:24% 53% 10%}
+body[data-theme=rooftop] .timer-heading{color:#cf94bd;font-size:18px}
+body[data-theme=rooftop] .timer-led{color:#dfc7df;font-size:13px}
+body[data-theme=rooftop] .big-timer{color:#d99bc9;font-family:'OST Gowun',serif;font-weight:700;font-size:72px;letter-spacing:-.025em;line-height:1.05;text-shadow:0 1px 2px #21142f44}
+body[data-theme=rooftop] .stage-round{font-size:19px;line-height:1.3;padding:4px 8px;border-color:#ae86ac;box-shadow:inset 0 0 0 1px #d9bbd533;color:#e8d9eb;background:#4a365622}
+body[data-theme=rooftop] #hintCountdown{font-size:20px;color:#e9cde2;margin-top:7px}
+body[data-theme=rooftop] .timer{background:#e1b8d21c;height:2px;opacity:.75}
+body[data-theme=rooftop] #timerBar{background:#cb8cb9}
+/* Content coordinates measured within the reference's game area (without its label strip). */
+body[data-theme=rooftop] #firstDone{left:3.5%;top:25.4%;width:21%;height:34.5%;padding:10px 22px 15px 34px;grid-template-rows:39px repeat(3,minmax(0,1fr));gap:3px;isolation:isolate}
+body[data-theme=rooftop] #bonusArea{left:3.5%;top:61.2%;width:21%;height:22.5%;padding:9px 23px 14px 34px;grid-template-rows:33px minmax(0,1fr) 33px;gap:3px;isolation:isolate}
+body[data-theme=rooftop] #roomArea>.right-score{left:73.5%;top:3%;width:25%;height:36.5%;padding:22px 28px 20px 39px;overflow:visible;isolation:isolate}
+body[data-theme=rooftop] #roomArea>.right-chat{left:73.5%;top:42.5%;width:25%;height:53.5%;padding:19px 27px 23px 39px;overflow:visible;isolation:isolate}
+body[data-theme=rooftop] #firstDone::before,body[data-theme=rooftop] #bonusArea::before,body[data-theme=rooftop] #roomArea>.right-score::before,body[data-theme=rooftop] #roomArea>.right-chat::before{content:'';position:absolute;inset:-10px -8px;z-index:-1;background-position:center;background-size:100% 100%;background-repeat:no-repeat;pointer-events:none}
+body[data-theme=rooftop] #firstDone::before{background-image:url('/roof-paper.png')}
+body[data-theme=rooftop] #bonusArea::before{background-image:url('/roof-hidden.png')}
+body[data-theme=rooftop] #roomArea>.right-score::before{background-image:url('/roof-ranking.png')}
+body[data-theme=rooftop] #roomArea>.right-chat::before{background-image:url('/roof-chat.png')}
+body[data-theme=rooftop] .panel-tab,body[data-theme=rooftop] #bonusArea>h3{font-size:28px;color:#322b63;letter-spacing:.23em}
+body[data-theme=rooftop] #firstDone .answer-line{gap:12px;padding:4px 3px;font-size:23px;border-bottom:1px solid #9988a044}
+body[data-theme=rooftop] #firstDone .answer-line:last-child{border-bottom:0}
+body[data-theme=rooftop] .answer-line::before{width:33px;height:33px;flex:0 0 33px;mask:none;background:var(--art) center/contain no-repeat}
+body[data-theme=rooftop] #answerHint{--art:url('/roof-pin.svg')}
+body[data-theme=rooftop] #answerMain{--art:url('/roof-game.svg')}
+body[data-theme=rooftop] #songAnswerLine{--art:url('/roof-note.svg')}
+body[data-theme=rooftop] #bonusPrompt{font-size:23px;padding-left:46px}
+body[data-theme=rooftop] #bonusPrompt:not(:empty)::before{content:'';width:37px;height:37px;border:0;border-radius:0;background:url('/roof-question.svg') center/contain no-repeat}
+body[data-theme=rooftop] #bonusAnswerInline{font-size:22px;color:#46346c;border-color:#b3a2c2;background:#fff8f1cc}
+/* Notebook ranking label: flourishes in place of a duplicated character portrait. */
+body[data-theme=rooftop] .ranking-head{justify-content:center;gap:6px;min-height:34px;font-size:19px;font-weight:700;letter-spacing:-.02em;color:#302970;border:0;padding:0 0 5px}
+body[data-theme=rooftop] .ranking-head .crown-mark{display:none}
+body[data-theme=rooftop] .ranking-head .score-caption{font:inherit}
+body[data-theme=rooftop] .ranking-head::before,body[data-theme=rooftop] .ranking-head::after{content:'';display:block;width:39px;height:21px;flex:none;background:url('/roof-flourish.svg') center/contain no-repeat}
+body[data-theme=rooftop] .ranking-head::after{transform:rotate(180deg)}
+body[data-theme=rooftop] .scoreline{min-height:68px;border-color:#b8a6b666}
+body[data-theme=rooftop] .score-name{font-size:23px;color:#332c68!important}
+body[data-theme=rooftop] .scoreline>b{color:#61436b;font-size:25px;font-weight:500}
+body[data-theme=rooftop] .chat-head{min-height:34px;font-size:21px;font-weight:500;gap:7px;color:#322c70;padding-bottom:7px;border-color:#b8a4bb88}
+body[data-theme=rooftop] .online-indicator{font-size:11px;gap:3px}
+body[data-theme=rooftop] .chatlog>div{min-height:46px;font-size:20px;padding:3px 0;border-color:#b8a6b644}
+body[data-theme=rooftop] .chat-bubble{color:#383062!important}
+body[data-theme=rooftop] .chat-bubble b{font-weight:500}
+body[data-theme=rooftop] .chat-time{font-size:14px;color:#817192}
+body[data-theme=rooftop] .chat-send{height:50px;min-height:50px;gap:7px}
+body[data-theme=rooftop] .chat-send input{font-size:19px;border:2px solid #8278b4;background:#fffaf6}
+body[data-theme=rooftop] .chat-send button{border:2px solid #7565ad;background:linear-gradient(#f5eaff,#d3c3f5);font-size:21px;color:#3e2c72}
+/* The video occupies the gap between surrounding UI and never determines button spacing. */
+body[data-theme=rooftop] #roomArea #videoFrame{left:26%;top:25.4%;width:46%;height:auto;aspect-ratio:16/9;border-color:#d7c5df26;background:#3a244b08}
+body[data-theme=rooftop] #roomArea button,body[data-theme=rooftop] .controller-prev{border-color:#a49ac2;color:#332970;background:linear-gradient(#fffdf7,#f7f0ea);box-shadow:inset 0 0 0 2px #fff9,0 2px 3px #30204d55}
+body[data-theme=rooftop] #roomArea .controls #playMusic,body[data-theme=rooftop] #roomArea .controls .controller-orb{border:4px double #7b74b6;background:radial-gradient(ellipse at 40% 20%,#fffdf9,#eeeafb);box-shadow:0 0 0 2px #faf5f1,0 0 0 4px #67639a88,1px 3px 3px #251c4566}
+
+body[data-theme=rooftop] .chat-title-icon{border:0;border-radius:0;width:24px;height:24px;background:url(/roof-headphones.svg) center/contain no-repeat}
+/* Leave the painted lavender edge clear of timestamps and the scroll thumb. */
+body[data-theme=rooftop] .chatlog{margin-right:22px}

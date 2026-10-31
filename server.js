@@ -88,8 +88,10 @@ function reveal(r,reason){
 function beginRound(r){r.videoRevealed=false;r.completeAt=0;r.songWinner=null;cleanupTimer(r);r.phase='playing';r.paused=false;r.pauseRemaining=0;r.pauseHintRemaining=0;r.pauseRevealRemaining=0;r.revealUntil=0;r.firstWinner=null;r.bonusWinner=null;r.votes.clear();const q=r.questions[r.index];const duration=Math.round((q.end-q.start)*1000);const now=Date.now();r.deadline=now+duration;r.hintAt=now+HINT_AT;r.timer=setTimeout(()=>reveal(r,'time'),duration);if(duration>HINT_AT){r.hintTimer=setTimeout(()=>{if(r.phase==='playing'){io.to(r.code).emit('hint',r.questions[r.index].hint);io.to(r.code).emit('game-sfx',{type:'hint'});}},HINT_AT);}emitRoom(r);system(r,`${r.index+1}번 문제 시작!`);}
 function scheduleComplete(r){
  const q=r.questions[r.index];if(r.completeAt||!r.firstWinner||(q.bonus.type!=='none'&&!r.bonusWinner))return;
- cleanupTimer(r);r.completeAt=Date.now()+COMPLETE_SKIP_DELAY;r.deadline=r.completeAt;
- r.timer=setTimeout(()=>{if(r.phase==='playing'&&!r.paused&&r.completeAt)advanceRound(r);},COMPLETE_SKIP_DELAY);
+ // Completion may shorten the round, but must never extend the original clip.
+ const now=Date.now(),delay=Math.max(0,Math.min(COMPLETE_SKIP_DELAY,r.deadline-now));
+ cleanupTimer(r);r.completeAt=now+delay;r.deadline=r.completeAt;
+ r.timer=setTimeout(()=>{if(r.phase==='playing'&&!r.paused&&r.completeAt)advanceRound(r);},delay);
 }
 function saveSolved(r,q){
  if(r.testMode)return;
