@@ -1,0 +1,34 @@
+/* v5.45: skins provide the artwork, server phases provide timing. */
+#gameOpening{position:absolute;left:27.8%;top:32%;width:43.3%;height:483.4px;z-index:16;display:flex;align-items:center;justify-content:center;flex-direction:column;pointer-events:none;background:none!important}
+#gameOpening.hidden{display:none}
+.opening-notice{margin:0 0 8px;padding:9px 25px;border:1px solid #f9cbbba8;border-radius:24px;background:#412137cc;color:#fff2df;font:700 27px/1.3 'OST Gowun',serif;text-shadow:0 1px 3px #301126;box-shadow:0 4px 18px #37192e40}
+.opening-circle{position:relative;width:350px;height:350px;flex:none}
+.opening-circle[hidden]{display:none}
+.opening-ring{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 3px 7px #592b4b88)}
+.opening-digit{position:absolute;left:50%;top:50%;margin:-111px 0 0 -111px;width:222px;height:222px;background-image:url('/opening-digits.svg');background-size:300% 200%;background-repeat:no-repeat;filter:drop-shadow(0 4px 6px #41233b66)}
+.opening-orbit{position:absolute;inset:24px;transform-origin:center;will-change:transform}
+.opening-orbit img{position:absolute;left:calc(50% - 29px);top:-23px;width:58px;height:58px;object-fit:contain;filter:drop-shadow(0 2px 5px #592b4b88);transform:rotate(36deg)}
+#gameOpening[data-phase=ready] .opening-orbit{opacity:0;transition:opacity .5s}
+#gameOpening[data-phase=ready] .opening-circle{animation:opening-ready 2s ease-out both}
+.opening-active #centerHint,.opening-active #videoFrameTitle{visibility:hidden!important}
+@keyframes opening-ready{0%,55%{opacity:1}100%{opacity:0;transform:scale(1.06)}}
+body #videoFrameTitle .video-title-copy{margin:0 38px 0 0}
+body #videoFrameTitle .video-title-plane{position:absolute;right:48px;top:7px;width:36px;height:30px;margin:0;background:url('/paper-plane.png') center/contain no-repeat}
+body #videoFrameTitle .video-title-eq{position:absolute;left:50%;bottom:100%;height:25px;display:flex;gap:4px;align-items:flex-end;transform:translateX(-50%);margin:0;opacity:0;transition:opacity .3s,transform .3s}
+.video-title-eq i{width:5px;height:9px;background:#ec9fb9;border:1px solid #fce1c7;border-radius:2px;transform-origin:bottom;animation:title-equalize .65s ease-in-out infinite alternate;animation-play-state:paused}
+.video-title-eq i:nth-child(2){height:19px;animation-delay:-.21s}.video-title-eq i:nth-child(3){height:25px;animation-delay:-.44s}.video-title-eq i:nth-child(4){height:15px;animation-delay:-.16s}.video-title-eq i:nth-child(5){height:21px;animation-delay:-.33s}
+body #videoFrameTitle.title-arrived .video-title-eq{opacity:1;transform:translate(-50%,-3px)}
+#videoFrameTitle.title-playing.title-arrived .video-title-eq i{animation-play-state:running}
+@keyframes title-equalize{to{transform:scaleY(.3)}}
+body[data-theme=rooftop] .hud-round-row{transform:translateX(-20px)}
+body[data-theme=rooftop] .stage-round{font-size:26px;line-height:32px;white-space:nowrap}
+body[data-theme=rooftop] #hintCountdown{font-size:28px;color:#a82f66;text-shadow:0 1px #fff4df;margin-top:18px;white-space:nowrap}
+body[data-theme=rooftop] #bonusArea.bonus-locked #bonusPrompt::before{top:50%;transform:translateY(-50%)}
+body[data-theme=rooftop] #bonusArea.bonus-locked #hiddenLockMessage{left:142px;right:22px;top:calc(65px + (100% - 131px)/2);transform:translateY(-50%);text-align:left;font-size:21px;text-wrap:balance}
+body[data-theme=rooftop] .winner-bonus{width:69px;height:69px;right:20px}
+body[data-theme=rooftop] #bonusArea:has(.winner-bonus:not([hidden])) #bonusPrompt{padding-right:83px}
+#roomArea #chatLog .player-message .chat-bubble,#roomArea #chatLog .player-message .chat-bubble b{color:var(--player-color)!important;text-shadow:none!important}
+#roomArea #chatLog .player-message .chat-bubble{padding:5px 8px;border-radius:7px;line-height:1.5;box-decoration-break:clone;-webkit-box-decoration-break:clone}
+#roomArea #chatInput{color:var(--input-player-color,#4d1438)!important;background:var(--input-bubble,#fff4e8e6)!important;text-shadow:none}
+#roomArea #chatInput::placeholder{color:var(--input-player-color,#4d1438);opacity:.8}
+@media(prefers-reduced-motion:reduce){.opening-digit,.opening-circle,.video-title-eq i{animation:none!important}.video-title-eq{transition:none!important}}
