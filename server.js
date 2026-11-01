@@ -40,7 +40,7 @@ const safeQuestion = q => ({videoId:q.videoId,start:q.start,end:q.end,hasSong:!!
 const emitRoom = r => {
   const current = r.index>=0 && r.index<r.questions.length ? r.questions[r.index] : null;
   io.to(r.code).emit('room',{
-  serverNow:Date.now(),introUntil:r.introUntil||0,completeAt:r.completeAt||0,historyError:r.historyError||null,code:r.code,phase:r.phase,host:r.host,players:memberList(r),total:r.questions.length,testMode:!!r.testMode,
+  serverNow:Date.now(),introUntil:r.introUntil||0,completeAt:r.completeAt||0,historyError:r.historyError||null,historySaving:!!r.historySaving,hintSuppressed:!!r.hintSuppressed,code:r.code,phase:r.phase,host:r.host,players:memberList(r),total:r.questions.length,testMode:!!r.testMode,
   videoRevealed:r.phase==='playing'&&!!(r.videoRevealed||r.firstWinner),index:r.index,skipVotes:r.votes.size,skipNeeded:Math.floor(activeCount(r)/2)+1,
   firstWinner:r.firstWinner,bonusWinner:r.bonusWinner,songWinner:r.songWinner||null,songAnswer:r.songWinner?current?.song:null,
   firstAnswer:current&&r.firstWinner?current.title:null,
@@ -49,15 +49,15 @@ const emitRoom = r => {
   question:['playing','complete-wait'].includes(r.phase)&&current?safeQuestion(current):null,
   bonus:['playing','complete-wait'].includes(r.phase)&&current&&r.firstWinner&&current.bonus.type!=='none'?
     publicBonus(current.bonus):null,
-  hint:['playing','complete-wait'].includes(r.phase)&&current&&(r.paused?r.pauseHintRemaining<=0:Date.now()>=r.hintAt)?current.hint:null,
+  hint:['playing','complete-wait'].includes(r.phase)&&current&&!r.hintSuppressed&&(r.paused?r.pauseHintRemaining<=0:Date.now()>=r.hintAt)?current.hint:null,
   reveal:r.phase==='reveal'&&current?revealData(r):null
   });
 };
 function publicBonus(b){return {type:b.type,prompt:b.prompt,choices:b.type==='multiple'?b.choices:undefined};}
 function revealData(r){const q=r.questions[r.index];return {videoId:q.videoId,start:q.start,end:q.end,title:q.title,song:q.song,bonusPrompt:q.bonus.prompt,bonusAnswer:q.bonus.type==='multiple'?q.bonus.choices[q.bonus.correct]:q.bonus.answer,firstWinner:r.firstWinner,bonusWinner:r.bonusWinner,songWinner:r.songWinner||null,
   firstAnswer:r.firstWinner?r.questions[r.index].title:null,
-  reason:r.reason,hint:r.deadline>r.hintAt?q.hint:null};}
-function system(r,message){if(!/님 (?:히든 )?정답 \+1점$/.test(message))return;io.to(r.code).emit('chat',{system:true,text:message,at:Date.now()});}
+  reason:r.reason,hint:q.hint};}
+function system(r,message){if(!/님 (?:히든 )?정답 \+[12]점$/.test(message))return;io.to(r.code).emit('chat',{system:true,text:message,at:Date.now()});}
 function cleanupTimer(r){if(r.timer){clearTimeout(r.timer);r.timer=null;}if(r.hintTimer){clearTimeout(r.hintTimer);r.hintTimer=null;}if(r.advanceTimer){clearTimeout(r.advanceTimer);r.advanceTimer=null;}}
 // Move straight to the next question when BOTH the main and hidden answers are solved.
 // Otherwise keep the normal five-second answer reveal on timeout/skip.
@@ -65,8 +65,9 @@ function advanceRound(r){
   cleanupTimer(r);r.completeAt=0;
   r.index++;
   if(r.index>=r.questions.length){
-    if(r.trashPending?.size){const ids=[...r.trashPending];(async()=>{for(const id of ids){await db('ost_trash_songs','POST','?on_conflict=video_id',{video_id:id,trashed_at:new Date().toISOString()});await db('ost_played_songs','DELETE',`video_id=eq.${id}`);}})().catch(e=>console.error('Trash migration failed:',e));}
-    r.phase='finished';r.paused=false;r.revealUntil=0;r.firstWinner=null;r.bonusWinner=null;r.votes.clear();emitRoom(r);
+    r.phase='finished';r.paused=false;r.revealUntil=0;r.firstWinner=null;r.bonusWinner=null;r.votes.clear();
+    r.historySaving=!r.testMode;emitRoom(r);
+    if(!r.testMode)finishHistory(r);
     system(r,'모든 문제가 종료되었습니다!');
   }else beginRound(r);
 }
@@ -85,7 +86,7 @@ function reveal(r,reason){
     advanceRound(r);
   },REVEAL_DELAY);
 }
-function beginRound(r){r.videoRevealed=false;r.completeAt=0;r.songWinner=null;cleanupTimer(r);r.phase='playing';r.paused=false;r.pauseRemaining=0;r.pauseHintRemaining=0;r.pauseRevealRemaining=0;r.revealUntil=0;r.firstWinner=null;r.bonusWinner=null;r.votes.clear();const q=r.questions[r.index];const duration=Math.round((q.end-q.start)*1000);const now=Date.now();r.deadline=now+duration;r.hintAt=now+HINT_AT;r.timer=setTimeout(()=>reveal(r,'time'),duration);if(duration>HINT_AT){r.hintTimer=setTimeout(()=>{if(r.phase==='playing'){io.to(r.code).emit('hint',r.questions[r.index].hint);io.to(r.code).emit('game-sfx',{type:'hint'});}},HINT_AT);}emitRoom(r);system(r,`${r.index+1}번 문제 시작!`);}
+function beginRound(r){r.hintSuppressed=false;r.videoRevealed=false;r.completeAt=0;r.songWinner=null;cleanupTimer(r);r.phase='playing';r.paused=false;r.pauseRemaining=0;r.pauseHintRemaining=0;r.pauseRevealRemaining=0;r.revealUntil=0;r.firstWinner=null;r.bonusWinner=null;r.votes.clear();const q=r.questions[r.index];const duration=Math.round((q.end-q.start)*1000);const now=Date.now();r.deadline=now+duration;r.hintAt=now+HINT_AT;r.timer=setTimeout(()=>reveal(r,'time'),duration);if(duration>HINT_AT){r.hintTimer=setTimeout(()=>{if(r.phase==='playing'&&!r.hintSuppressed&&!r.firstWinner){io.to(r.code).emit('hint',r.questions[r.index].hint);io.to(r.code).emit('game-sfx',{type:'hint'});}},HINT_AT);}emitRoom(r);system(r,`${r.index+1}번 문제 시작!`);}
 function scheduleComplete(r){
  const q=r.questions[r.index];if(r.completeAt||!r.firstWinner||(q.bonus.type!=='none'&&!r.bonusWinner))return;
  // Completion may shorten the round, but must never extend the original clip.
@@ -95,8 +96,30 @@ function scheduleComplete(r){
 }
 function saveSolved(r,q){
  if(r.testMode)return;
- const pending=db('ost_played_songs','POST','?on_conflict=video_id',{video_id:q.videoId,played_at:new Date().toISOString()});
- r.historyWrites.push(pending.catch(err=>{r.historyError='정답곡 출제 이력 저장 실패. 다시 시작하기 전에 서버 연결을 확인하세요.';console.error(err);emitRoom(r);}));
+ r.solvedIds.add(q.videoId);
+ const pending=db('ost_played_songs','POST','on_conflict=video_id',{video_id:q.videoId,played_at:new Date().toISOString()});
+ r.historyWrites.push(pending.catch(err=>{r.historyError='완료곡 저장 실패. 게임 종료 시 다시 저장합니다.';console.error(err);emitRoom(r);}));
+}
+// Reconcile at clear, await all writes, and give trash priority over completion.
+// Repeating this operation is safe: both tables upsert by video_id.
+async function finishHistory(r){
+ if(r.historyTask)return r.historyTask;
+ r.historySaving=true;r.historyError=null;
+ r.historyTask=(async()=>{
+  try{
+   await Promise.all(r.historyWrites||[]);
+   for(const id of r.solvedIds||[]){
+    if(!r.trashPending.has(id))await db('ost_played_songs','POST','on_conflict=video_id',{video_id:id,played_at:new Date().toISOString()});
+   }
+   for(const id of r.trashPending||[]){
+    await db('ost_trash_songs','POST','on_conflict=video_id',{video_id:id,trashed_at:new Date().toISOString()});
+    await db('ost_played_songs','DELETE',`video_id=eq.${id}`);
+   }
+   r.historyError=null;
+  }catch(err){r.historyError='완료곡·휴지통 저장에 실패했습니다. 저장 재시도를 눌러 주세요.';console.error('History finalization failed:',err);}
+  finally{r.historySaving=false;r.historyTask=null;emitRoom(r);}
+ })();
+ return r.historyTask;
 }
 // All clients share server timestamps: count notice, 5-second opening, 2-second wait.
 function beginOpening(r){
@@ -140,15 +163,16 @@ io.on('connection',socket=>{
   if(r.phase!=='lobby')return respond(cb,{error:'진행 중인 게임에는 기존 참가자만 재입장할 수 있습니다.'});if(r.players.size>=16)return respond(cb,{error:'최대 16명까지 참가할 수 있습니다.'});if([...r.players.values()].some(p=>p.name===name))return respond(cb,{error:'이미 사용 중인 닉네임입니다.'});r.players.set(socket.id,{id:socket.id,name,score:0,token,online:true,color:pickUnused(r,"color",PLAYER_COLORS),avatar:pickUnused(r,"avatar",AVATARS)});if(r.emptyTimer){clearTimeout(r.emptyTimer);r.emptyTimer=null;}socket.data.room=code;socket.join(code);respond(cb,{ok:true,code});emitRoom(r);system(r,`${name}님이 참가했습니다.`);
  });
  socket.on('appearance',({avatar,color}={},cb)=>{const r=getRoom(socket),p=r?.players.get(socket.id);if(!p)return respond(cb,{error:'방에 입장하세요.'});if(avatar!==undefined&&!AVATARS.includes(avatar)||color!==undefined&&!PLAYER_COLORS.includes(color))return respond(cb,{error:'잘못된 설정입니다.'});if(avatar!==undefined)p.avatar=avatar;if(color!==undefined)p.color=color;emitRoom(r);respond(cb,{ok:true});});
- socket.on('start',async ({questions,shuffle=true,testMode=false,roundLimit=100}={},cb)=>{const r=getRoom(socket);if(!r||r.host!==socket.id)return respond(cb,{error:'방장만 시작할 수 있습니다.'});if(r.phase!=='lobby'&&r.phase!=='finished')return respond(cb,{error:'지금은 시작할 수 없습니다.'});if(![50,75,100].includes(roundLimit))return respond(cb,{error:'곡 수는 50·75·100곡 중 선택하세요.'});let qs;try{qs=parseQuestions(questions).slice(0,roundLimit);}catch(e){return respond(cb,{error:e.message});}if(r.starting)return respond(cb,{error:'게임 시작 처리 중입니다.'});r.starting=true;try{await Promise.all(r.historyWrites||[]);if(r.historyError)return respond(cb,{error:r.historyError});if(!testMode){try{const trashed=await db('ost_trash_songs','GET','select=video_id&limit=10000');const trashSet=new Set(trashed.map(x=>x.video_id));if(qs.some(q=>trashSet.has(q.videoId)))return respond(cb,{error:'휴지통에 있는 곡은 출제할 수 없습니다.'});const played=await loadPlayedIds();const dup=qs.find(q=>played.has(q.videoId));if(dup)return respond(cb,{error:'이미 출제된 곡이 포함되어 있습니다. 목록을 새로고침하세요.'});}catch(e){return respond(cb,{error:'출제 이력을 확인하지 못해 정식 게임을 시작할 수 없습니다: '+e.message});}}r.testMode=!!testMode;if(shuffle){for(let i=qs.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[qs[i],qs[j]]=[qs[j],qs[i]];}}r.questions=qs;r.historyWrites=[];r.historyError=null;r.completeAt=0;r.songWinner=null;r.firstWinner=null;r.bonusWinner=null;r.trashPending=new Set();r.index=0;for(const p of r.players.values())p.score=0;beginOpening(r);respond(cb,{ok:true});}finally{r.starting=false;}});
+ socket.on('start',async ({questions,shuffle=true,testMode=false,roundLimit=100}={},cb)=>{const r=getRoom(socket);if(!r||r.host!==socket.id)return respond(cb,{error:'방장만 시작할 수 있습니다.'});if(r.phase!=='lobby'&&r.phase!=='finished')return respond(cb,{error:'지금은 시작할 수 없습니다.'});if(![30,40,50,60,70,80,90,100].includes(roundLimit))return respond(cb,{error:'곡 수는 30·40·50·60·70·80·90·100곡 중 선택하세요.'});let qs;try{qs=parseQuestions(questions).slice(0,roundLimit);}catch(e){return respond(cb,{error:e.message});}if(r.historySaving||r.historyTask)return respond(cb,{error:'이전 게임 기록 저장 중입니다.'});if(r.starting)return respond(cb,{error:'게임 시작 처리 중입니다.'});r.starting=true;try{await Promise.all(r.historyWrites||[]);if(r.historyError)return respond(cb,{error:r.historyError});if(!testMode){try{const trashed=await db('ost_trash_songs','GET','select=video_id&limit=10000');const trashSet=new Set(trashed.map(x=>x.video_id));if(qs.some(q=>trashSet.has(q.videoId)))return respond(cb,{error:'휴지통에 있는 곡은 출제할 수 없습니다.'});const played=await loadPlayedIds();const dup=qs.find(q=>played.has(q.videoId));if(dup)return respond(cb,{error:'이미 출제된 곡이 포함되어 있습니다. 목록을 새로고침하세요.'});}catch(e){return respond(cb,{error:'출제 이력을 확인하지 못해 정식 게임을 시작할 수 없습니다: '+e.message});}}r.testMode=!!testMode;if(shuffle){for(let i=qs.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[qs[i],qs[j]]=[qs[j],qs[i]];}}r.questions=qs;r.historyWrites=[];r.historyError=null;r.historySaving=false;r.historyTask=null;r.solvedIds=new Set();r.completeAt=0;r.songWinner=null;r.firstWinner=null;r.bonusWinner=null;r.trashPending=new Set();r.index=0;for(const p of r.players.values())p.score=0;beginOpening(r);respond(cb,{ok:true});}finally{r.starting=false;}});
  socket.on('revealYoutube',(_,cb)=>{const r=getRoom(socket);if(!r||r.host!==socket.id)return respond(cb,{error:'방장만 영상을 공개할 수 있습니다.'});if(r.phase!=='playing')return respond(cb,{error:'진행 중인 문제에서만 공개할 수 있습니다.'});r.videoRevealed=true;emitRoom(r);respond(cb,{ok:true});});
  socket.on('addAnswerAlias',({alias}={},cb)=>{const r=getRoom(socket);if(!r||r.host!==socket.id||r.phase!=='playing')return respond(cb,{error:'진행 중 방장만 수정할 수 있습니다.'});const a=sanitize(alias,150);if(!a)return respond(cb,{error:'정답을 입력하세요.'});const q=r.questions[r.index];const values=q.aliases.split(',').map(x=>x.trim()).filter(Boolean);if(!values.some(x=>norm(x)===norm(a))&&norm(a)!==norm(q.title))values.push(a);q.aliases=values.join(',');respond(cb,{ok:true});});
  socket.on('markTrash',(_,cb)=>{const r=getRoom(socket);if(!r||r.host!==socket.id||r.phase!=='playing'||r.testMode)return respond(cb,{error:'정식 게임 중 방장만 휴지통 예약할 수 있습니다.'});r.trashPending.add(r.questions[r.index].videoId);respond(cb,{ok:true});});
- socket.on('answer',({stage,answer}={},cb)=>{const r=getRoom(socket);if(!r||r.phase!=='playing'||r.paused||Date.now()>=r.deadline)return respond(cb,{error:'답안 제출 시간이 아닙니다.'});const q=r.questions[r.index],p=r.players.get(socket.id);if(!p)return;const a=sanitize(answer,200);if(stage===1){if(r.firstWinner)return respond(cb,{error:'1단계 정답자가 이미 나왔습니다.'});if(matchTitle(a,q)){r.firstWinner=p.name;p.score++;saveSolved(r,q);scheduleComplete(r);respond(cb,{ok:true,correct:true});io.to(r.code).emit('game-sfx',{type:'correct'});system(r,`${p.name}님 정답 +1점`);io.to(r.code).emit('answer-revealed',{stage:1,answer:q.title,index:r.index});if(q.bonus.type!=='none')io.to(r.code).emit('game-sfx',{type:'hidden'});emitRoom(r);/* 게임제목 + 히든 완료 시 10초 자동 진행 */}else respond(cb,{ok:true,correct:false});}else if(stage===2){if(!r.firstWinner||q.bonus.type==='none')return respond(cb,{error:'보너스 문제가 아직 공개되지 않았습니다.'});if(r.bonusWinner)return respond(cb,{error:'보너스 정답자가 이미 나왔습니다.'});const correct=q.bonus.type==='multiple'?Number.isInteger(answer)&&answer===q.bonus.correct:match(a,q.bonus.answer,q.bonus.aliases);if(correct){r.bonusWinner=p.name;p.score++;scheduleComplete(r);respond(cb,{ok:true,correct:true});io.to(r.code).emit('game-sfx',{type:'correct'});system(r,`${p.name}님 히든 정답 +1점`);io.to(r.code).emit('answer-revealed',{stage:2,answer:q.bonus.type==='multiple'?q.bonus.choices[q.bonus.correct]:q.bonus.answer,index:r.index});emitRoom(r);/* 노래제목은 남은 10초 동안 추가 정답 가능 */}else respond(cb,{ok:true,correct:false});}else if(stage===3){if(!q.song||r.songWinner)return respond(cb,{error:'노래제목 정답 제출이 종료되었습니다.'});if(match(a,q.song,q.songAliases)){r.songWinner=p.name;p.score++;respond(cb,{ok:true,correct:true});io.to(r.code).emit('game-sfx',{type:'correct'});system(r,`${p.name}님 정답 +1점`);emitRoom(r);}else respond(cb,{ok:true,correct:false});}else respond(cb,{error:'잘못된 단계입니다.'});});
+ socket.on('answer',({stage,answer}={},cb)=>{const r=getRoom(socket);if(!r||r.phase!=='playing'||r.paused||Date.now()>=r.deadline)return respond(cb,{error:'답안 제출 시간이 아닙니다.'});const q=r.questions[r.index],p=r.players.get(socket.id);if(!p)return;const a=sanitize(answer,200);if(stage===1){if(r.firstWinner)return respond(cb,{error:'1단계 정답자가 이미 나왔습니다.'});if(matchTitle(a,q)){r.hintSuppressed=r.paused?r.pauseHintRemaining>0:Date.now()<r.hintAt;if(r.hintSuppressed&&r.hintTimer){clearTimeout(r.hintTimer);r.hintTimer=null;}r.firstWinner=p.name;p.score+=2;saveSolved(r,q);scheduleComplete(r);respond(cb,{ok:true,correct:true});io.to(r.code).emit('game-sfx',{type:'correct'});system(r,`${p.name}님 정답 +2점`);io.to(r.code).emit('answer-revealed',{stage:1,answer:q.title,index:r.index});if(q.bonus.type!=='none')io.to(r.code).emit('game-sfx',{type:'hidden'});emitRoom(r);/* 게임제목 + 히든 완료 시 10초 자동 진행 */}else respond(cb,{ok:true,correct:false});}else if(stage===2){if(!r.firstWinner||q.bonus.type==='none')return respond(cb,{error:'보너스 문제가 아직 공개되지 않았습니다.'});if(r.bonusWinner)return respond(cb,{error:'보너스 정답자가 이미 나왔습니다.'});const correct=q.bonus.type==='multiple'?Number.isInteger(answer)&&answer===q.bonus.correct:match(a,q.bonus.answer,q.bonus.aliases);if(correct){r.bonusWinner=p.name;p.score++;scheduleComplete(r);respond(cb,{ok:true,correct:true});io.to(r.code).emit('game-sfx',{type:'correct'});system(r,`${p.name}님 히든 정답 +1점`);io.to(r.code).emit('answer-revealed',{stage:2,answer:q.bonus.type==='multiple'?q.bonus.choices[q.bonus.correct]:q.bonus.answer,index:r.index});emitRoom(r);/* 노래제목은 남은 10초 동안 추가 정답 가능 */}else respond(cb,{ok:true,correct:false});}else if(stage===3){if(!q.song||r.songWinner)return respond(cb,{error:'노래제목 정답 제출이 종료되었습니다.'});if(match(a,q.song,q.songAliases)){r.songWinner=p.name;p.score++;respond(cb,{ok:true,correct:true});io.to(r.code).emit('game-sfx',{type:'correct'});system(r,`${p.name}님 정답 +1점`);emitRoom(r);}else respond(cb,{ok:true,correct:false});}else respond(cb,{error:'잘못된 단계입니다.'});});
  socket.on('skip',(_,cb)=>{const r=getRoom(socket);if(!r||r.phase!=='playing'||r.paused)return respond(cb,{error:'일시정지 중에는 스킵할 수 없습니다.'});if(r.votes.has(socket.id))return respond(cb,{error:'이미 투표했습니다.'});r.votes.add(socket.id);respond(cb,{ok:true});emitRoom(r);system(r,`${r.players.get(socket.id)?.name||'플레이어'}님 스킵 투표 (${r.votes.size}/${Math.floor(activeCount(r)/2)+1})`);if(r.votes.size>activeCount(r)/2)reveal(r,'skip');});
  socket.on('hostSkip',(_,cb)=>{const r=getRoom(socket);if(!r||r.host!==socket.id)return respond(cb,{error:'방장만 즉시 스킵할 수 있습니다.'});if(r.phase!=='playing'||r.paused)return respond(cb,{error:'진행 중인 문제에서만 스킵할 수 있습니다.'});respond(cb,{ok:true});reveal(r,'skip');});
- socket.on('togglePause',(_,cb)=>{const r=getRoom(socket);if(!r||!['playing','reveal'].includes(r.phase))return respond(cb,{error:'진행 중인 게임이 없습니다.'});if(r.host!==socket.id)return respond(cb,{error:'방장만 전체 게임을 일시정지할 수 있습니다.'});const now=Date.now();if(!r.paused){r.pauseRemaining=r.phase==='playing'?Math.max(0,r.deadline-now):0;r.pauseHintRemaining=r.phase==='playing'?Math.max(0,r.hintAt-now):0;r.pauseRevealRemaining=r.phase==='reveal'?Math.max(0,r.revealUntil-now):0;cleanupTimer(r);r.paused=true;}else{r.paused=false;if(r.phase==='playing'){r.deadline=now+r.pauseRemaining;r.hintAt=now+r.pauseHintRemaining;if(r.completeAt)r.completeAt=r.deadline;r.timer=setTimeout(()=>{if(r.completeAt)advanceRound(r);else reveal(r,'time');},r.pauseRemaining);if(!r.completeAt&&r.pauseHintRemaining>0&&r.pauseHintRemaining<r.pauseRemaining){r.hintTimer=setTimeout(()=>{if(r.phase==='playing'&&!r.paused){io.to(r.code).emit('hint',r.questions[r.index].hint);io.to(r.code).emit('game-sfx',{type:'hint'});}},r.pauseHintRemaining);}}else if(r.phase==='reveal'){r.revealUntil=now+r.pauseRevealRemaining;r.advanceTimer=setTimeout(()=>{if(r.phase!=='reveal'||r.paused)return;advanceRound(r);},r.pauseRevealRemaining);}}emitRoom(r);respond(cb,{ok:true,paused:r.paused});});
- socket.on('returnLobby',(_,cb)=>{const r=getRoom(socket);if(!r||r.host!==socket.id||r.phase!=='finished')return respond(cb,{error:'종료 후 방장만 대기실로 이동할 수 있습니다.'});cleanupTimer(r);r.phase='lobby';emitRoom(r);respond(cb,{ok:true});});
+ socket.on('togglePause',(_,cb)=>{const r=getRoom(socket);if(!r||!['playing','reveal'].includes(r.phase))return respond(cb,{error:'진행 중인 게임이 없습니다.'});if(r.host!==socket.id)return respond(cb,{error:'방장만 전체 게임을 일시정지할 수 있습니다.'});const now=Date.now();if(!r.paused){r.pauseRemaining=r.phase==='playing'?Math.max(0,r.deadline-now):0;r.pauseHintRemaining=r.phase==='playing'?Math.max(0,r.hintAt-now):0;r.pauseRevealRemaining=r.phase==='reveal'?Math.max(0,r.revealUntil-now):0;cleanupTimer(r);r.paused=true;}else{r.paused=false;if(r.phase==='playing'){r.deadline=now+r.pauseRemaining;r.hintAt=now+r.pauseHintRemaining;if(r.completeAt)r.completeAt=r.deadline;r.timer=setTimeout(()=>{if(r.completeAt)advanceRound(r);else reveal(r,'time');},r.pauseRemaining);if(!r.completeAt&&r.pauseHintRemaining>0&&r.pauseHintRemaining<r.pauseRemaining){r.hintTimer=setTimeout(()=>{if(r.phase==='playing'&&!r.paused&&!r.hintSuppressed&&!r.firstWinner){io.to(r.code).emit('hint',r.questions[r.index].hint);io.to(r.code).emit('game-sfx',{type:'hint'});}},r.pauseHintRemaining);}}else if(r.phase==='reveal'){r.revealUntil=now+r.pauseRevealRemaining;r.advanceTimer=setTimeout(()=>{if(r.phase!=='reveal'||r.paused)return;advanceRound(r);},r.pauseRevealRemaining);}}emitRoom(r);respond(cb,{ok:true,paused:r.paused});});
+ socket.on('retryHistory',async(_,cb)=>{const r=getRoom(socket);if(!r||r.host!==socket.id||r.phase!=='finished'||r.testMode)return respond(cb,{error:'종료 후 방장만 저장을 재시도할 수 있습니다.'});await finishHistory(r);respond(cb,r.historyError?{error:r.historyError}:{ok:true});});
+ socket.on('returnLobby',(_,cb)=>{const r=getRoom(socket);if(!r||r.host!==socket.id||r.phase!=='finished')return respond(cb,{error:'종료 후 방장만 대기실로 이동할 수 있습니다.'});if(r.historySaving||r.historyError)return respond(cb,{error:r.historySaving?'기록 저장 중입니다. 잠시 기다려 주세요.':r.historyError});cleanupTimer(r);r.phase='lobby';emitRoom(r);respond(cb,{ok:true});});
  socket.on('next',(_,cb)=>{const r=getRoom(socket);if(!r||r.host!==socket.id)return respond(cb,{error:'방장만 다음 문제로 진행할 수 있습니다.'});if(r.phase!=='reveal')return respond(cb,{error:'정답 공개 중에만 가능합니다.'});return respond(cb,{error:'5초 후 자동으로 다음 문제로 넘어갑니다.'});});
   socket.on('chat',(msg,cb)=>{const r=getRoom(socket);if(!r)return respond(cb,{error:'방을 찾을 수 없습니다.'});const p=r.players.get(socket.id);if(!p)return;const now=Date.now();if(now-(socket.data.lastChat||0)<550)return respond(cb,{error:'채팅은 잠시 기다렸다 보내세요.'});socket.data.lastChat=now;const text=sanitize(msg,200);if(!text)return respond(cb,{error:'메시지를 입력하세요.'});
     const hit=r.phase==='playing'&&!r.paused&&now<r.deadline?answerStage(r,r.questions[r.index],text):null;
@@ -170,8 +194,8 @@ function tokenHash(token){return crypto.createHash('sha256').update(token).diges
 function configured(){return !!INVITE_CODE&&!!ADMIN_PASSWORD&&!!SUPABASE_URL&&!!SUPABASE_SECRET_KEY;}
 async function db(table,method='GET',query='',body){
  if(!SUPABASE_URL||!SUPABASE_SECRET_KEY)throw Error('Supabase 환경변수를 확인해 주세요.');
- const response=await fetch(`${SUPABASE_URL}/rest/v1/${table}${query?('?'+query):''}`,{
-  method,headers:{'apikey':SUPABASE_SECRET_KEY,'Authorization':`Bearer ${SUPABASE_SECRET_KEY}`,'Content-Type':'application/json','Prefer':'return=representation'},
+ const response=await fetch(`${SUPABASE_URL}/rest/v1/${table}${query?('?'+query.replace(/^\?+/,'')):''}`,{
+  method,headers:{'apikey':SUPABASE_SECRET_KEY,'Authorization':`Bearer ${SUPABASE_SECRET_KEY}`,'Content-Type':'application/json','Prefer':method==='POST'&&/(?:^|[?&])on_conflict=/.test(query)?'resolution=merge-duplicates,return=representation':'return=representation'},
   body:body===undefined?undefined:JSON.stringify(body),signal:AbortSignal.timeout(12000)
  });
  if(!response.ok){const detail=await response.text();console.error('Supabase request failed',response.status,detail.slice(0,500));throw Error('데이터베이스 요청에 실패했습니다. 서버 로그와 SQL 설정을 확인해 주세요.');}
