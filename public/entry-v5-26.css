@@ -1,0 +1,56 @@
+@layer calm {
+/* Hidden screen state must outrank every desktop and mobile layout rule. */
+body #roomArea.hidden,body #entry.hidden{display:none!important}
+body{background:linear-gradient(#07142b22,#07142b22),url('/entry-lake-background.jpg') center/cover fixed no-repeat!important;min-height:100dvh!important}
+body #entry{position:relative!important;isolation:isolate!important;display:block!important;width:min(1100px,calc(100% - 48px))!important;max-width:none!important;height:768px!important;min-height:0!important;margin:max(24px,calc((100dvh - 768px)/2 - 6px)) auto 24px!important;padding:30px 66px 40px!important;border:0!important;border-radius:0!important;box-shadow:none!important;clip-path:none!important;background:linear-gradient(125deg,#091831aa,#061128dd 52%,#0d1930bb)!important;color:#e5eaf5!important;font-family:'OST Gowun','Gowun Batang',Batang,serif!important}
+body #entry *,body #entry *::before,body #entry *::after{box-sizing:border-box!important;font-family:'OST Gowun','Gowun Batang',Batang,serif!important;text-shadow:none!important;box-shadow:none!important}
+body #entry::before{content:'';position:absolute;inset:0;background:url('/entry-console-frame.svg') center/100% 100% no-repeat;z-index:-1;pointer-events:none}
+body #entry .entry-brand{height:246px;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;margin:0;padding:0}
+body #entry .entry-disc-row{display:flex;align-items:center;justify-content:center;gap:30px;width:min(720px,100%);height:108px;flex:none}
+body #entry .entry-disc{display:block;position:relative;width:106px;height:106px;flex:none;border:2px solid #b2b6ed;border-radius:50%;background:radial-gradient(circle,#08172b 0 7%,#28477c 8% 13%,#0d203d 14% 16%,transparent 17%),conic-gradient(from 30deg,#b6a2e9,#7ad2ec,#8fa7e4,#bfb1f2,#6d82d4,#a3d1f1,#b6a2e9);outline:1px solid #6f8dc1;outline-offset:5px}
+body #entry .entry-disc::after{content:'';position:absolute;inset:5px;border:1px solid #c4dbf355;border-radius:50%}
+body #entry .entry-wave{height:44px;position:relative;flex:1;max-width:266px;background:linear-gradient(90deg,transparent,#94a8db) left 50%/calc(100% - 60px) 1px no-repeat}
+body #entry .entry-wave::before{content:'◆';position:absolute;right:48px;top:12px;color:#9aade7;font:12px/20px Arial,sans-serif!important}
+body #entry .entry-wave::after{content:'';position:absolute;right:0;top:0;width:42px;height:44px;background:linear-gradient(#94a8db,#94a8db) 0 50%/1px 12px no-repeat,linear-gradient(#94a8db,#94a8db) 8px 50%/1px 24px no-repeat,linear-gradient(#94a8db,#94a8db) 16px 50%/1px 42px no-repeat,linear-gradient(#94a8db,#94a8db) 24px 50%/1px 24px no-repeat,linear-gradient(#94a8db,#94a8db) 32px 50%/1px 12px no-repeat}
+body #entry .entry-wave-right{transform:rotate(180deg)}
+body #entry h1{display:flex;align-items:center;justify-content:center;gap:24px;width:100%;margin:15px 0 0!important;padding:0!important;color:#e7edf6!important;font-size:60px!important;line-height:1.4!important;letter-spacing:.04em!important;font-weight:400!important;white-space:nowrap}
+body #entry h1::before,body #entry h1::after{content:'';display:block;width:132px;height:1px;flex:none;background:linear-gradient(90deg,transparent,#b8c3dc)}
+body #entry h1::after{transform:rotate(180deg)}
+body #entry .entry-form{margin-top:12px}
+body #entry label.nickname-label{display:block!important;margin:0 0 8px!important;padding:0!important;font-size:28px!important;line-height:39px!important;font-weight:700!important;color:#e4e9f4!important}
+body #entry input{display:block!important;width:100%!important;min-width:0!important;height:70px!important;padding:16px 24px!important;border:1px solid #7da8df!important;border-right-color:#a69ae3!important;border-bottom-color:#a69ae3!important;border-radius:8px!important;background:linear-gradient(110deg,#07162ac9,#07132bcc)!important;color:#e4e9f4!important;font-size:23px!important;line-height:1.4!important;outline:none!important;transition:border-color .15s!important}
+body #entry input:focus-visible{border-color:#c3d8f3!important;outline:2px solid #829ecb66!important;outline-offset:3px!important}
+body #entry input::placeholder{color:#8291ab!important;opacity:.85!important}
+body #entry .entry-columns{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:78px;position:relative;margin-top:28px}
+body #entry .entry-columns::before{content:'';position:absolute;left:50%;top:0;bottom:0;width:1px;background:linear-gradient(#43618555,#436185aa 40%,transparent 42%,transparent 51%,#436185aa 53%,#43618555)}
+body #entry .entry-columns::after{content:'';position:absolute;left:50%;top:47%;width:8px;height:8px;border:1px solid #79c3e3;background:#10223c;transform:translate(-50%,-50%) rotate(45deg)}
+body #entry .entry-option{display:grid;grid-template-rows:58px 66px 76px;gap:10px;min-width:0}
+body #entry .entry-option-title{display:flex;align-items:center;gap:32px;min-width:0}
+body #entry .entry-option-title svg{width:56px;height:56px;flex:none;fill:none;stroke:#9bacec;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+body #entry h2{margin:0!important;padding:0!important;color:#e7ebf4!important;font-size:28px!important;line-height:1.5!important;letter-spacing:.04em!important;font-weight:400!important}
+body #entry .entry-option-help{margin:0!important;padding:1px 0 0 88px!important;font-size:22px!important;line-height:1.5!important;white-space:nowrap;color:#a8bfdf!important}
+body #entry #roomCode{height:62px!important;font-size:23px!important;letter-spacing:.04em!important}
+body #entry button{display:block!important;position:relative!important;min-width:0!important;width:100%!important;height:76px!important;margin:0!important;padding:14px!important;border:2px solid #98b9ec!important;border-left-color:#76d5ec!important;border-bottom-color:#8d88df!important;border-radius:0!important;background:linear-gradient(#284a78,#102b57 35%,#0b1c43)!important;color:#e8edf7!important;clip-path:polygon(9px 0,calc(100% - 9px) 0,100% 9px,100% calc(100% - 9px),calc(100% - 9px) 100%,9px 100%,0 calc(100% - 9px),0 9px)!important;font-size:28px!important;line-height:1.4!important;font-weight:400!important;letter-spacing:.05em!important;cursor:pointer!important;transform:none!important}
+body #entry button::before{content:'';position:absolute;inset:4px;border:1px solid #4c6bac88;clip-path:polygon(7px 0,calc(100% - 7px) 0,100% 7px,100% calc(100% - 7px),calc(100% - 7px) 100%,7px 100%,0 calc(100% - 7px),0 7px);pointer-events:none}
+body #entry button:hover:not(:disabled){background:linear-gradient(#335983,#15375f 40%,#10274b)!important;filter:none!important}
+body #entry button:focus-visible{outline:2px solid #d9e6fb!important;outline-offset:-7px!important}
+body #entry .entry-guidance{display:flex;justify-content:center;align-items:center;gap:26px;margin:36px 0 0!important;padding:0!important;color:#afc4e5!important;font-size:22px!important;line-height:32px!important;white-space:nowrap}
+body #entry .entry-guidance::before,body #entry .entry-guidance::after{content:'';display:block;flex:1;height:1px;background:linear-gradient(90deg,transparent,#a9bfdf);max-width:170px}
+body #entry .entry-guidance::after{transform:rotate(180deg)}
+@media(max-height:850px) and (min-width:901px){body #entry{height:auto!important;min-height:660px!important;margin:24px auto!important;padding-top:26px!important;padding-bottom:36px!important}body #entry .entry-brand{height:198px}body #entry .entry-disc-row{height:88px}body #entry .entry-disc{width:86px;height:86px}body #entry h1{font-size:52px!important}body #entry .entry-guidance{margin-top:25px!important}}
+@media(max-width:1100px) and (min-width:901px){body #entry{padding-left:46px!important;padding-right:46px!important}body #entry .entry-columns{gap:58px}body #entry .entry-option-title{gap:17px}body #entry .entry-option-help{padding-left:73px!important;font-size:18px!important}body #entry h1{font-size:52px!important}}
+@media(max-width:900px){body #entry{height:auto!important;margin:24px auto!important;padding:32px!important;width:calc(100% - 32px)!important}body #entry .entry-brand{height:auto;margin-bottom:34px}body #entry .entry-disc-row{height:82px;gap:18px}body #entry .entry-disc{width:78px;height:78px}body #entry h1{font-size:clamp(26px,6.5vw,48px)!important;gap:14px;margin-top:22px!important}body #entry h1::before,body #entry h1::after{width:auto;min-width:12px;max-width:60px;flex:1}body #entry .entry-form{margin-top:0}body #entry label.nickname-label{font-size:22px!important;line-height:32px!important}body #entry input{font-size:18px!important;padding:13px 15px!important;height:58px!important}body #entry .entry-columns{gap:36px;margin-top:28px}body #entry .entry-option{grid-template-rows:50px 62px 62px;gap:8px}body #entry .entry-option-title{gap:10px}body #entry .entry-option-title svg{width:38px;height:38px}body #entry h2{font-size:22px!important;letter-spacing:0!important}body #entry .entry-option-help{font-size:16px!important;line-height:1.6!important;padding-left:0!important;white-space:normal}body #entry #roomCode{font-size:18px!important;height:58px!important;padding:12px!important}body #entry button{height:62px!important;font-size:22px!important}body #entry .entry-guidance{font-size:16px!important;white-space:normal;line-height:1.7!important;gap:12px;margin-top:28px!important;text-align:center}body #entry .entry-guidance::before,body #entry .entry-guidance::after{max-width:50px;min-width:12px}}
+@media(max-width:480px){body #entry{padding:28px 24px!important}body #entry .entry-columns{grid-template-columns:1fr;gap:26px}body #entry .entry-columns::before,body #entry .entry-columns::after{display:none}body #entry .entry-create{grid-template-rows:43px auto 58px}body #entry .entry-join{grid-template-rows:43px 58px 58px}body #entry .entry-option-help{padding:0 0 7px 48px!important}body #entry .entry-guidance::before,body #entry .entry-guidance::after{display:none}}
+}
+@layer calm {
+body{display:flow-root!important}
+body #entry{background:transparent!important}
+body #entry::after{content:'';position:absolute;inset:0;z-index:-2;pointer-events:none;background:linear-gradient(125deg,#091831aa,#061128dd 52%,#0d1930bb);clip-path:polygon(35px 5px,calc(100% - 35px) 5px,calc(100% - 5px) 35px,calc(100% - 5px) calc(100% - 35px),calc(100% - 35px) calc(100% - 5px),35px calc(100% - 5px),5px calc(100% - 35px),5px 35px)}
+body #entry h1{margin-top:5px!important}
+body #entry button{border:0!important}
+body #entry button::before{inset:0;border:0;background:url('/entry-button-frame.svg') center/100% 100% no-repeat;clip-path:none}
+@media(max-width:900px){body #entry h1{margin-top:22px!important}}
+}
+@layer calm {
+body #entry::after{display:none!important}
+}
