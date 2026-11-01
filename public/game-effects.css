@@ -32,3 +32,26 @@ body[data-theme=rooftop] #bonusArea:has(.winner-bonus:not([hidden])) #bonusPromp
 #roomArea #chatInput{color:var(--input-player-color,#4d1438)!important;background:var(--input-bubble,#fff4e8e6)!important;text-shadow:none}
 #roomArea #chatInput::placeholder{color:var(--input-player-color,#4d1438);opacity:.8}
 @media(prefers-reduced-motion:reduce){.opening-digit,.opening-circle,.video-title-eq i{animation:none!important}.video-title-eq{transition:none!important}}
+
+/* v5.46: separate the bars from bright and dark scenery. */
+body #videoFrameTitle{isolation:isolate;overflow:visible}
+body #videoFrameTitle .video-title-eq{z-index:5;padding:7px 12px 5px;height:40px;border-radius:10px;background:#301a39ed;border:1px solid #f7cfdfb3;box-shadow:0 2px 10px #180d2680;min-width:75px;justify-content:center;pointer-events:none}
+body #videoFrameTitle .video-title-eq i{background:#ffd2e5;border-color:#fff6e5;box-shadow:0 0 5px #ffb6d180}
+#selectedSongList>summary{cursor:pointer;padding:12px;font-weight:700}
+#bonusAnswerInline:empty{display:none!important}
+
+/* v5.47: the hidden answer frame is created visually only after a correct answer. */
+#roomArea #bonusAnswerInline:not(.has-answer){display:none!important;border:0!important;background:none!important;box-shadow:none!important}
+#roomArea #bonusAnswerInline.has-answer{display:inline-flex;justify-self:center;align-self:center;width:fit-content;max-width:100%;min-height:0!important;height:auto;padding:6px 12px!important;flex:none}
+#roomArea #bonusAnswerInline.has-answer .fit-copy{width:auto!important;max-width:100%}
+#roomArea #hostSkip .next-round-icon{font-size:14px;line-height:1;display:inline-flex;align-items:center;letter-spacing:-2px;flex:none}
+body[data-theme=rooftop] #roomArea .score-person{align-items:center;align-self:center}
+body[data-theme=rooftop] #roomArea .score-person>.rank-medal,body[data-theme=rooftop] #roomArea .score-person>.avatar{width:71px;height:71px;flex:0 0 71px;align-self:center;margin:0;vertical-align:middle}
+/* The central video tab holds the title, plane and bars in three separate slots. */
+body[data-theme=rooftop] #videoFrameTitle{width:460px;height:58px;top:-38px;padding:10px 35px;display:flex;align-items:center;justify-content:center;gap:12px;overflow:hidden}
+body #videoFrameTitle .video-title-copy{flex:none;margin:0;white-space:nowrap;font-size:20px;line-height:1}
+body #videoFrameTitle .video-title-plane{position:relative;inset:auto;flex:0 0 30px;width:30px;height:28px;margin:0}
+body #videoFrameTitle .video-title-eq{position:relative;inset:auto;flex:0 0 60px;min-width:60px;width:60px;height:30px;padding:3px 6px;margin:0;transform:none;border:0;border-radius:5px;background:#52253b;box-shadow:none;gap:3px;align-self:center;align-items:flex-end}
+body #videoFrameTitle.title-arrived .video-title-eq{transform:none;opacity:1}
+body #videoFrameTitle .video-title-eq i{flex:0 0 5px;width:5px;max-height:24px}
+#roomArea #videoFrameTitle>span{margin:0}
