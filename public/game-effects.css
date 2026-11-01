@@ -55,3 +55,16 @@ body #videoFrameTitle .video-title-eq{position:relative;inset:auto;flex:0 0 60px
 body #videoFrameTitle.title-arrived .video-title-eq{transform:none;opacity:1}
 body #videoFrameTitle .video-title-eq i{flex:0 0 5px;width:5px;max-height:24px}
 #roomArea #videoFrameTitle>span{margin:0}
+/* v5.48: use shared toolbar typography, no per-caption reduction. */
+body[data-theme=rooftop] #roomArea #bottomBar{--toolbar-type-size:21px;--toolbar-type-weight:700}
+body[data-theme=rooftop] #roomArea #bottomBar button{font-size:var(--toolbar-type-size);font-weight:var(--toolbar-type-weight)}
+body[data-theme=rooftop] #roomArea #bottomBar #hostSkip .control-caption{font:inherit;line-height:inherit}
+body[data-theme=rooftop] #roomArea #bottomBar #hostSkip .next-round-icon,body[data-theme=rooftop] #roomArea #bottomBar #editAnswer .yt-small-icon{font-size:var(--toolbar-type-size);font-weight:var(--toolbar-type-weight);line-height:1;letter-spacing:0;display:inline-flex;align-items:center}
+body[data-theme=rooftop] #roomArea #bonusArea{grid-template-rows:65px minmax(0,1fr) auto}
+body[data-theme=rooftop] #roomArea #bonusAnswerInline.has-answer{font-size:28px;font-weight:700;line-height:1.34;max-height:90px}
+body[data-theme=rooftop] #roomArea #videoFrameTitle .video-title-copy{font-family:'OST Gowun',serif;font-size:23px;font-weight:700;color:#6c1642;text-shadow:none}
+body #roomArea #videoFrameTitle .video-title-eq{background:transparent;border:0;box-shadow:none}
+body #roomArea #videoFrameTitle .video-title-eq i{background:#6c1642;border:0;box-shadow:none}
+body[data-theme=rooftop] #roomArea #bottomBar button{font-size:var(--toolbar-type-size)!important;font-weight:var(--toolbar-type-weight)!important}
+body[data-theme=rooftop] #roomArea #bottomBar #hostSkip .control-caption{font-size:inherit!important;font-weight:inherit!important}
+body[data-theme=rooftop] #roomArea #bottomBar #hostSkip .next-round-icon,body[data-theme=rooftop] #roomArea #bottomBar #editAnswer .yt-small-icon{font-size:var(--toolbar-type-size)!important}
