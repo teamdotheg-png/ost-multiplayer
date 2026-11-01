@@ -1,0 +1,218 @@
+/* H10 + A03 production artboard. All artwork is a blank backplate; content is live. */
+body[data-theme=rooftop]{--ink:#4d1438;--paper:#fff1e6;--edge:#d494a6;--accent:#c34b7b;--hud:#5e173b;--button:#fff4eb;--shadow:#48133255;--skin:url('/rooftop-h10-skin.png')}
+body[data-theme=rooftop] #roomArea{font-family:'OST Gowun',serif;--sidebar-x:72.2%}
+body[data-theme=rooftop] #roomArea>.left-now{left:2.2%;top:4.5%;width:68.1%;height:21.3%;isolation:isolate}
+body[data-theme=rooftop] #roomArea>.left-now::before,body[data-theme=rooftop] #roomArea>.left-now::after{display:none}
+body[data-theme=rooftop] .player-merged-left{left:25.8%;top:15%;width:48%}
+body[data-theme=rooftop] .player-merged-left>.panel-title{color:#dc1b6b;font:700 30px 'OST Gowun',serif;letter-spacing:0;white-space:nowrap}
+body[data-theme=rooftop] .equalizer{height:34px;gap:4px;margin-left:13px;color:#e74587}
+body[data-theme=rooftop] .equalizer i{width:7px}
+body[data-theme=rooftop] #playing{left:25.8%;top:43%;width:48%}
+body[data-theme=rooftop] .stage-question{font:700 34px/1.35 'OST Gowun',serif;color:#4d1438;letter-spacing:-.02em}
+body[data-theme=rooftop] .stage-instruction{font:700 19px/1.5 'OST Gowun',serif;color:#522d42;white-space:normal;margin-top:10px}
+body[data-theme=rooftop] #roomArea .left-question{right:1.5%;top:18%;width:34%;height:70%;grid-template-columns:51% 47%;column-gap:2%;grid-template-rows:30px 84px 4px}
+body[data-theme=rooftop] .hud-round-row{grid-row:1/3;align-self:start;padding-top:0}
+body[data-theme=rooftop] .stage-round{border:0;background:none;box-shadow:none;font:700 23px/30px 'OST Gowun',serif;padding:0;letter-spacing:-.04em}
+body[data-theme=rooftop] #hintCountdown{margin-top:22px;font:700 24px/1.3 'OST Gowun',serif;color:#5e173b}
+body[data-theme=rooftop] .timer-heading{display:flex;align-items:center;justify-content:center;gap:4px;font:700 21px/30px 'OST Gowun',serif;color:#6a1c42;letter-spacing:-.03em}
+body[data-theme=rooftop] .timer-led{font:700 17px 'OST Gowun',serif;display:inline-flex;align-items:center;gap:5px;margin-left:3px}
+body[data-theme=rooftop] .big-timer{color:#e11869;font:700 79px/1 'OST Gowun',serif;letter-spacing:-.06em;margin-top:9px;text-shadow:none}
+body[data-theme=rooftop] .timer{opacity:0}
+body[data-theme=rooftop] #firstDone{left:2.2%;top:28%;width:24.6%;height:30.7%;padding:0 18px 16px 39px;grid-template-rows:65px repeat(2,minmax(0,1fr));gap:0;isolation:isolate}
+body[data-theme=rooftop] #firstDone.hint-fallback{grid-template-rows:65px repeat(3,minmax(0,1fr))}
+body[data-theme=rooftop] #firstDone::before,body[data-theme=rooftop] #bonusArea::before,body[data-theme=rooftop] #roomArea>.right-score::before,body[data-theme=rooftop] #roomArea>.right-chat::before{display:none}
+body[data-theme=rooftop] .panel-tab,body[data-theme=rooftop] #bonusArea>h3{font:700 32px/1.2 'OST Gowun',serif;text-align:left;padding-left:40px;letter-spacing:.03em;color:#4d1438}
+body[data-theme=rooftop] #firstDone .answer-line{font:700 25px/1.4 'OST Gowun',serif;padding:4px 0;gap:17px;border:0;overflow:hidden}
+body[data-theme=rooftop] #firstDone.hint-fallback .answer-line{background:#fff2e8f2;border-bottom:1px solid #e8c1ca;border-radius:5px}
+body[data-theme=rooftop] #firstDone .answer-line.has-winner{padding-right:70px}
+body[data-theme=rooftop] .answer-line::before{width:74px;height:74px;flex:0 0 74px;mask:none;background:var(--s07-icon) no-repeat;background-size:300% 200%}
+body[data-theme=rooftop] #answerMain{--s07-icon:url('/sakura-icons.png')}
+body[data-theme=rooftop] #answerMain::before{background-position:0 100%}
+body[data-theme=rooftop] #songAnswerLine{--s07-icon:url('/sakura-icons.png')}
+body[data-theme=rooftop] #songAnswerLine::before{background-position:50% 100%}
+body[data-theme=rooftop] #answerHint::before{background:var(--accent);mask:url('/icon-pin.svg') center/contain no-repeat;width:40px;height:40px;flex-basis:40px;margin:0 17px}
+body[data-theme=rooftop] #bonusArea{left:2.2%;top:60.4%;width:24.6%;height:24.2%;padding:0 20px 20px 38px;grid-template-rows:65px minmax(0,1fr) 40px;gap:0;color:#4d1438}
+body[data-theme=rooftop] #bonusPrompt{font:700 25px/1.5 'OST Gowun',serif;padding-left:92px}
+body[data-theme=rooftop] #bonusPrompt:not(:empty)::before{content:'';width:76px;height:76px;border:0;border-radius:0;background:url('/sakura-icons.png') 100% 100%/300% 200% no-repeat}
+body[data-theme=rooftop] #bonusAnswerInline{font:700 23px 'OST Gowun',serif;background:#fff3e8;border-color:#e6b9c4;color:#68274b}
+body[data-theme=rooftop] #bonusAnswerInline.has-winner{padding-right:64px}
+body[data-theme=rooftop] #roomArea>.right-score{left:72.2%;top:6.2%;width:26.1%;height:35.7%;padding:0 24px 17px 35px;overflow:hidden}
+body[data-theme=rooftop] .ranking-head{font:700 29px/1.3 'OST Gowun',serif;height:61px;min-height:61px;justify-content:flex-start;padding:0 0 5px 30px;border:0;color:#6c1642;gap:8px}
+body[data-theme=rooftop] .ranking-head::before,body[data-theme=rooftop] .ranking-head::after,body[data-theme=rooftop] .crown-mark{display:none}
+body[data-theme=rooftop] .score-caption{font:inherit}
+body[data-theme=rooftop] .scoreline{height:102px;min-height:102px;padding:5px 0;border:0}
+body[data-theme=rooftop] .score-person{gap:13px}
+body[data-theme=rooftop] .score-name{font:700 27px 'OST Gowun',serif;color:#4d1438!important}
+body[data-theme=rooftop] .scoreline>b{font:700 31px 'OST Gowun',serif;color:#4d1438}
+body[data-theme=rooftop] .avatar{width:71px;height:71px;border:0;background-color:transparent}
+body[data-theme=rooftop] .rank-medal:not(.other){width:87px;height:87px;border:0;border-radius:0;background:url('/sakura-icons.png') 0 0/300% 200% no-repeat;box-shadow:none;font-size:0;color:transparent}
+body[data-theme=rooftop] .rank-medal.silver{background-position:50% 0}
+body[data-theme=rooftop] .rank-medal.bronze{background-position:100% 0}
+body[data-theme=rooftop] #roomArea>.right-chat{left:72.2%;top:43.5%;width:26.1%;height:44.5%;padding:0 20px 10px 32px;overflow:hidden}
+body[data-theme=rooftop] .chat-head{font:700 27px 'OST Gowun',serif;min-height:64px;border:0;padding-left:24px;color:#751e4c;gap:8px}
+body[data-theme=rooftop] .chat-title-icon{display:none}
+body[data-theme=rooftop] .online-indicator{font:700 14px 'OST Sans',sans-serif;gap:5px}
+body[data-theme=rooftop] .chatlog{margin:0 0 8px}
+body[data-theme=rooftop] .chatlog>div{font:400 21px 'OST Gowun',serif;min-height:57px;border:0;padding:4px 0;gap:9px}
+body[data-theme=rooftop] .chat-avatar{width:46px;height:46px}
+body[data-theme=rooftop] .chat-bubble{color:#4d1438!important}
+body[data-theme=rooftop] .chat-time{font-size:13px;color:#a87b8c}
+body[data-theme=rooftop] .chat-send{height:54px;min-height:54px;gap:6px}
+body[data-theme=rooftop] .chat-send input{background:transparent;border:0;color:#4d1438;font:21px 'OST Gowun',serif;padding-left:16px}
+body[data-theme=rooftop] .chat-send button{background:transparent!important;box-shadow:none!important;border:0!important;color:white!important;width:100px;font:700 25px 'OST Gowun',serif}
+body[data-theme=rooftop] #bottomBar,body[data-theme=rooftop] #roomArea.is-host #bottomBar{left:1.9%;right:1.7%;top:89.3%;bottom:auto;height:7.7%;display:grid;grid-template-columns:repeat(9,minmax(0,1fr));gap:8px}
+body[data-theme=rooftop] #roomArea button,body[data-theme=rooftop] #roomFixedActions button,body[data-theme=rooftop] #roomArea .controls button,body[data-theme=rooftop] .controller-prev{font:700 23px 'OST Gowun',serif;border:0;border-radius:7px;box-shadow:none;background:transparent;color:#59133d;min-width:0;width:100%;height:100%;padding:0 9px;display:flex;justify-content:center;align-items:center;gap:12px;white-space:nowrap}
+body[data-theme=rooftop] #roomArea .controls #playMusic,body[data-theme=rooftop] #roomArea .controls .controller-orb{width:100%;height:100%;border:0;border-radius:7px;box-shadow:none;background:transparent;margin:0;font-size:36px;display:flex;gap:9px}
+body[data-theme=rooftop] #playMusic::after{content:attr(data-label);font-size:23px}
+body[data-theme=rooftop] .control-caption{font-size:23px}
+body[data-theme=rooftop] .controller-prev::after{content:'이전';font-size:23px}
+body[data-theme=rooftop] #bottomBar .button-svg{width:35px;height:35px}
+body[data-theme=rooftop] #roomArea button:disabled{opacity:.48;cursor:default}
+body[data-theme=rooftop] #votes{bottom:-25px;color:white}
+body[data-theme=rooftop] #roomArea #videoFrame{left:28%;top:34.5%;width:42.3%;height:auto;aspect-ratio:16/9;border:0;border-radius:8px;background:transparent;box-shadow:none;overflow:hidden}
+body[data-theme=rooftop] #videoFrame:has(.video-visible){border:2px solid #d89bac;background:#000;box-shadow:0 5px 20px #34102855}
+body[data-theme=rooftop] #youtubeHidden.video-visible{inset:0!important;width:100%!important;height:100%!important;border-radius:5px}
+/* A matching compact hint card lives in the reserved video region. */
+#roomArea #centerHint{position:absolute;left:40%;top:48%;width:20%;min-height:150px;padding:18px 22px;box-sizing:border-box;border:3px double var(--edge);border-radius:12px;background:var(--paper);color:var(--ink);box-shadow:0 4px 16px var(--shadow);text-align:center;z-index:2}
+#roomArea #centerHint:not(.hidden){display:flex!important;flex-direction:column;justify-content:center;gap:18px}
+#roomArea #centerHint.hidden{display:none!important}
+#centerHint .center-hint-label{font-size:23px;font-weight:700;border-bottom:1px solid var(--edge);padding-bottom:8px}
+#centerHint strong{font-size:34px;line-height:1.6;word-break:keep-all;overflow-wrap:normal;text-wrap:balance}
+#firstDone{grid-template-rows:42px repeat(2,minmax(0,1fr))}
+#firstDone.hint-fallback{grid-template-rows:42px repeat(3,minmax(0,1fr))}
+#firstDone .answer-line.hidden{display:none!important}
+.winner-avatar{position:absolute;right:18px;z-index:2;pointer-events:none}
+.winner-avatar[hidden]{display:none!important}
+.winner-game{top:calc(42px + (100% - 52px)/4);transform:translateY(-50%)}
+.winner-song{top:calc(42px + (100% - 52px)*.75);transform:translateY(-50%)}
+.hint-fallback .winner-game{top:calc(42px + (100% - 52px)*.5)}
+.hint-fallback .winner-song{top:calc(42px + (100% - 52px)*.8333)}
+.winner-bonus{bottom:8px}
+.answer-line.has-winner{padding-right:55px!important}
+body[data-theme=rooftop] .winner-avatar{width:69px;height:69px;right:22px}
+body[data-theme=rooftop] .winner-game{top:calc(65px + (100% - 81px)*.25)}
+body[data-theme=rooftop] .winner-song{top:calc(65px + (100% - 81px)*.75)}
+body[data-theme=rooftop] .hint-fallback .winner-game{top:calc(65px + (100% - 81px)*.5)}
+body[data-theme=rooftop] .hint-fallback .winner-song{top:calc(65px + (100% - 81px)*.8333)}
+body[data-theme=rooftop] .winner-bonus{width:40px;height:40px;bottom:20px}
+@keyframes ost-equalizer{0%,100%{transform:scaleY(.35)}50%{transform:scaleY(1)}}
+.equalizer i{transform-origin:bottom;animation:ost-equalizer .85s ease-in-out infinite;animation-play-state:paused}
+.equalizer.is-playing i{animation-play-state:running}
+.equalizer i:nth-child(2n){animation-delay:-.25s}.equalizer i:nth-child(3n){animation-delay:-.5s}
+@media(prefers-reduced-motion:reduce){.equalizer i{animation:none}}
+/* Settings retain the current theme and keep all nineteen portraits visible. */
+#personalDialog{width:min(1050px,96vw)}
+body[data-theme=rooftop] #personalDialog,body[data-theme=rooftop] #avatarPreview{background:repeating-linear-gradient(transparent 0 34px,#ddb2bf30 34px 35px),linear-gradient(120deg,#fff6ec,#fce3e8);border:4px double #c37d98;box-shadow:0 0 0 5px #fff0e8,0 25px 70px #37112d99;color:#5e173b}
+body[data-theme=rooftop] #personalDialog header{background:#fff1e9;border-color:#d9a7b8}
+body[data-theme=cafe] #personalDialog{background:linear-gradient(120deg,#37251e,#211911);border:5px double #c7a174}
+body[data-theme=retro] #personalDialog{background:linear-gradient(#eef0ff,#e0d6fa);border:6px ridge #a5a5e3;border-radius:0}
+body[data-theme=retro] #personalDialog header{background:linear-gradient(90deg,#8078cc,#d2b9ee);padding:12px}
+#avatarChoices{grid-template-columns:repeat(10,minmax(0,1fr));gap:10px 13px}
+#avatarChoices button{position:relative;margin-bottom:20px}
+#avatarChoices button::after{content:attr(data-name);position:absolute;top:calc(100% + 3px);left:0;right:0;font-size:12px;text-align:center;color:var(--ink)}
+.control-caption{display:none}body[data-theme=rooftop] .control-caption{display:inline}
+@media(max-width:700px){#avatarChoices{grid-template-columns:repeat(5,minmax(0,1fr))}}
+/* Match the artwork's input/send split; toolbar styles never resize chat controls. */
+body[data-theme=rooftop] #roomArea .chat-send button{width:100px;flex:0 0 100px;height:54px;padding:0;font:700 24px 'OST Gowun',serif;color:white;background:transparent;display:flex}
+body[data-theme=rooftop] #roomArea .chat-send input{flex:1;width:0;min-width:0;height:54px;box-sizing:border-box}
+body[data-theme=rooftop] #roomArea .controls button:not(.controller-orb):not(#playMusic){font:700 22px 'OST Gowun',serif;height:100%;padding:0 6px}
+body[data-theme=rooftop] #roomArea .controls #hostSkip .control-caption{font-size:21px}
+#bonusPrompt .fit-copy{flex:none}
+
+#roomArea:not(.is-host) #bottomBar{grid-template-columns:1.2fr 1.2fr 1.2fr 86px 112px 86px 1.15fr 1.15fr .75fr}
+body[data-theme=rooftop] #roomArea:not(.is-host) #bottomBar{grid-template-columns:repeat(9,minmax(0,1fr))}
+#roomArea #centerHint{left:49.15%;transform:translateX(-50%);max-width:42.3%}
+/* P-S06: watercolor rooftop paper, all live controls remain inside the blank center. */
+.personal-group{display:contents}
+#personalSelectedPreview{display:none}
+body[data-theme=rooftop] #personalDialog{box-sizing:border-box;width:min(1320px,96vw);max-height:94dvh;padding:55px 60px 72px;background:transparent url('/rooftop-settings-ps06.png') center/100% 100% no-repeat;border:0;border-radius:0;box-shadow:0 22px 65px #201d4c66;color:#343052;overflow:auto;font:16px/1.45 'OST Sans',sans-serif}
+body[data-theme=rooftop] #personalDialog header{position:relative;top:auto;display:flex;align-items:center;gap:8px;flex-wrap:wrap;background:transparent;border:0;margin:0 0 20px;padding:0}
+body[data-theme=rooftop] #personalDialog header button{min-height:43px;padding:7px 18px;border-radius:6px;border:1px solid #a59dc9;background:linear-gradient(#fff5ee,#ece4ef);font:500 17px 'OST Sans',sans-serif;color:#3f3a68;box-shadow:inset 0 0 0 1px #fff8}
+body[data-theme=rooftop] #personalDialog header #personalTab,body[data-theme=rooftop] #personalDialog header #roomTab{min-width:136px}
+body[data-theme=rooftop] #personalDialog header [aria-pressed=true]{background:linear-gradient(#ddd3f5,#c6bce8);border-color:#9f8ccb;outline:0;box-shadow:0 0 0 2px #f5e9fa}
+body[data-theme=rooftop] #personalDialog header #personalClose{font-size:25px;line-height:1;padding:2px 13px;background:#f9e8f155;min-width:40px}
+body[data-theme=rooftop] #personalDialog header #optimizeScreen{margin-left:auto;font-size:14px;min-width:0;padding:7px 10px}
+body[data-theme=rooftop] #personalPane:not([hidden]){display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.45fr) minmax(0,.85fr);grid-template-rows:auto auto auto;gap:23px 25px;align-items:start}
+body[data-theme=rooftop] .personal-group{display:block;min-width:0}
+body[data-theme=rooftop] #personalDialog h3{font:600 17px/1.3 'OST Sans',sans-serif;margin:0 0 13px;color:#3d345e}
+body[data-theme=rooftop] #personalThemeGroup{grid-column:1;grid-row:1}
+body[data-theme=rooftop] #personalCharacterGroup{grid-column:2;grid-row:1}
+body[data-theme=rooftop] #personalSelectedPreview{display:flex;flex-direction:column;gap:9px;align-items:center;grid-column:3;grid-row:1;min-width:0;padding-top:35px}
+body[data-theme=rooftop] #selectedAvatar{width:100%;aspect-ratio:1;background-repeat:no-repeat;background-color:#f2dce7;border:4px solid #fbf3e8;border-radius:5px;box-shadow:0 0 0 1px #b7a2ca,0 4px 8px #51426333;cursor:zoom-in;padding:0}
+body[data-theme=rooftop] #selectedAvatarName{font:600 18px 'OST Gowun',serif;color:#514166}
+body[data-theme=rooftop] #personalSelectedPreview>span{font-size:11px;color:#726683}
+body[data-theme=rooftop] #themeChoices{grid-template-columns:1fr;gap:9px}
+body[data-theme=rooftop] #themeChoices button{min-height:79px;border-radius:4px;border:2px solid #aa9dc2;font:500 13px 'OST Sans',sans-serif;padding:6px 9px;box-sizing:border-box}
+body[data-theme=rooftop] #avatarChoices{grid-template-columns:repeat(5,minmax(0,1fr));gap:10px 10px}
+body[data-theme=rooftop] #avatarChoices button{margin:0 0 15px;border:2px solid #ab9cc3;border-radius:5px;box-shadow:0 1px 3px #5d426322}
+body[data-theme=rooftop] #avatarChoices button::after{font:11px/1.2 'OST Sans',sans-serif;top:calc(100% + 4px);color:#51435e}
+body[data-theme=rooftop] #personalDialog [aria-pressed=true]{outline:2px solid #b270aa;outline-offset:2px}
+body[data-theme=rooftop] #personalColorGroup{grid-column:1/3;grid-row:2}
+body[data-theme=rooftop] #colorChoices{display:grid;grid-template-columns:repeat(10,minmax(0,1fr));gap:8px 12px}
+body[data-theme=rooftop] #colorChoices button{width:24px;height:24px;border-radius:50%;border:1px solid #b197a9;box-shadow:inset 0 0 0 1px #fff4;justify-self:center}
+body[data-theme=rooftop] .palette-label{font-size:12px;color:#64566f}
+body[data-theme=rooftop] #personalVolumeGroup{grid-column:3;grid-row:2;padding-top:4px}
+body[data-theme=rooftop] #personalVolume{width:100%;accent-color:#b87a9b;margin:22px 0 8px}
+body[data-theme=rooftop] .personal-note{grid-column:1/-1;grid-row:3;margin:0!important;font-size:12px!important;color:#76647e}
+body[data-theme=rooftop] #personalDialog #lobby{background:#fff4e9d9;border-radius:6px;padding:15px!important}
+@media(max-width:1050px){body[data-theme=rooftop] #personalDialog{padding:40px 40px 60px}body[data-theme=rooftop] #personalPane:not([hidden]){gap:18px 16px}body[data-theme=rooftop] #avatarChoices{gap:10px 6px}body[data-theme=rooftop] #personalDialog header #optimizeScreen{font-size:12px}}
+@media(max-width:700px){body[data-theme=rooftop] #personalDialog{padding:30px 25px 45px}body[data-theme=rooftop] #personalPane:not([hidden]){grid-template-columns:minmax(0,1fr) minmax(0,1fr)}body[data-theme=rooftop] #personalCharacterGroup{grid-column:1/-1;grid-row:2}body[data-theme=rooftop] #personalSelectedPreview{grid-column:2;grid-row:1;padding-top:0}body[data-theme=rooftop] #personalColorGroup{grid-column:1/-1;grid-row:3}body[data-theme=rooftop] #personalVolumeGroup{grid-column:1/-1;grid-row:4}body[data-theme=rooftop] .personal-note{grid-row:5}body[data-theme=rooftop] #avatarChoices{grid-template-columns:repeat(5,1fr)}body[data-theme=rooftop] #personalDialog header #personalTab,body[data-theme=rooftop] #personalDialog header #roomTab{min-width:90px}}
+body[data-theme=rooftop] #avatarChoices{grid-template-columns:repeat(5,64px);justify-content:space-between;gap:10px 8px}
+body[data-theme=rooftop] #personalSelectedPreview{max-width:240px;justify-self:center;width:100%}
+body[data-theme=rooftop] #personalColorGroup,body[data-theme=rooftop] #personalVolumeGroup{background:#fff5e7e8;border:1px solid #d2bad755;border-radius:7px;padding:12px 15px}
+body[data-theme=rooftop] .personal-note{background:#fff5e7dd;border-radius:4px;padding:5px 10px}
+body[data-theme=rooftop] #personalThemeGroup>h3{display:inline-block;background:#fff3e6c9;padding:2px 7px;border-radius:3px}
+@media(max-width:1050px){body[data-theme=rooftop] #avatarChoices{grid-template-columns:repeat(5,minmax(0,1fr))}}
+/* v5.41: seven controls, taller chat/hidden panels and a dedicated video skin. */
+#roomArea #copyCode{display:none!important}
+#roomArea #bottomBar,#roomArea.is-host #bottomBar,#roomArea:not(.is-host) #bottomBar{grid-template-columns:1.25fr 1.1fr 112px 100px 1.2fr 1.2fr .8fr}
+body[data-theme=rooftop] #roomArea #bottomBar{left:1.9%;right:28.5%;grid-template-columns:repeat(7,minmax(0,1fr));gap:8px}
+body[data-theme=rooftop] #roomArea #bottomBar button{background:linear-gradient(#fff5eb,#ffede4);border:3px double #d092a5;border-radius:9px;box-shadow:inset 0 0 0 2px #fff9,0 2px 3px #5c1b3d55;font-size:21px}
+body[data-theme=rooftop] #roomArea>.right-chat{height:54.1%}
+body[data-theme=rooftop] #roomArea #bonusArea{height:27.9%;grid-template-rows:65px minmax(0,1fr) 48px;padding-bottom:18px}
+body[data-theme=rooftop] #roomArea #bonusAnswerInline{visibility:visible;min-height:48px;border:2px solid #d7a0b4;border-radius:6px;background:#fff5eafa;color:#5b2246;padding:3px 12px;box-sizing:border-box;overflow:hidden}
+body[data-theme=rooftop] #roomArea #bonusPrompt::before{content:'';display:block;position:absolute;left:0;top:50%;transform:translateY(-50%);width:76px;height:76px;border:0;border-radius:0;background:url('/sakura-icons.png') 100% 100%/300% 200% no-repeat}
+body[data-theme=rooftop] #bonusArea.bonus-locked #bonusPrompt::before{top:32%}
+#bonusArea.bonus-locked #bonusPrompt:empty::after{display:none}
+#hiddenLockMessage{display:none}
+#bonusArea.bonus-locked #hiddenLockMessage{display:block;position:absolute;top:57%;left:22px;right:22px;margin:0;text-align:center;font-size:18px;line-height:1.5;opacity:.75;pointer-events:none}
+body[data-theme=rooftop] #bonusArea.bonus-locked #hiddenLockMessage{font:700 20px/1.5 'OST Gowun',serif;color:#785169;opacity:1;top:58%}
+body[data-theme=rooftop] .winner-bonus{bottom:22px;right:27px}
+body[data-theme=rooftop] #roomArea #answerHint::before{background:url('/sakura-hint.svg') center/contain no-repeat;mask:none;width:74px;height:74px;flex-basis:74px;margin:0}
+#roomArea #centerHint strong{white-space:nowrap;word-break:normal;overflow-wrap:normal;text-wrap:nowrap;overflow-x:auto;overflow-y:hidden;max-width:100%;min-width:0;scrollbar-width:thin}
+body[data-theme=rooftop] #roomArea #videoFrame{left:27.8%;top:32%;width:43.3%;padding:18px;aspect-ratio:auto;border:0;border-radius:0;box-shadow:none;background:none;overflow:visible;isolation:isolate;box-sizing:border-box}
+body[data-theme=rooftop] #roomArea #videoFrame::before{content:'';position:absolute;inset:0;z-index:-1;pointer-events:none;background:url('/rooftop-video-frame.png') center/100% 100% no-repeat;opacity:0}
+body[data-theme=rooftop] #roomArea.video-open #videoFrame::before{opacity:1}
+body[data-theme=rooftop] #roomArea #youtubeHidden.video-visible{position:relative!important;inset:auto!important;display:block!important;width:100%!important;height:auto!important;aspect-ratio:16/9;overflow:hidden;border-radius:3px;background:#000}
+body[data-theme=rooftop] #roomArea #youtubeHidden.video-visible iframe{position:absolute;inset:0;width:100%!important;height:100%!important;border:0}
+body[data-theme=rooftop] #roomArea #bottomBar{top:92%;height:6.5%}
+body[data-theme=rooftop] #roomArea #bonusArea{height:30.5%}
+body[data-theme=rooftop] #roomArea>.right-chat{height:53.1%;padding-bottom:22px}
+body[data-theme=rooftop] #roomArea .controls #hostSkip{gap:6px;font-size:30px;padding:0 5px}
+body[data-theme=rooftop] #roomArea .controls #hostSkip .control-caption{font-size:18px}
+body[data-theme=rooftop] #roomArea.is-host #bottomBar,body[data-theme=rooftop] #roomArea:not(.is-host) #bottomBar{left:1.9%;right:28.5%;top:92%;height:6.5%;grid-template-columns:repeat(7,minmax(0,1fr));gap:8px}
+body[data-theme=rooftop] #roomArea #bottomBar #playMusic{background:linear-gradient(#fff5eb,#ffede4);border:3px double #d092a5;border-radius:9px;box-shadow:inset 0 0 0 2px #fff9,0 2px 3px #5c1b3d55;height:100%;width:100%}
+body[data-theme=rooftop] #votes{bottom:calc(100% + 4px);right:0;font-size:12px}
+
+/* v5.42: align the chat bottom, invite within settings, portrait beside question. */
+body[data-theme=rooftop] #roomArea>.right-chat{height:55%}
+body[data-theme=rooftop] .winner-bonus{bottom:auto;top:calc(65px + (100% - 131px)/2);transform:translateY(-50%);right:24px}
+body[data-theme=rooftop] #bonusArea:has(.winner-bonus:not([hidden])) #bonusPrompt{padding-right:58px}
+body[data-theme=rooftop] #roomArea #bonusAnswerInline.has-winner{padding-right:12px}
+body[data-theme=rooftop] #roomArea #videoFrame{height:483.4px;background:transparent!important}
+body[data-theme=rooftop] #roomArea #videoFrame::before{opacity:1}
+#personalDialog header #copyCode{display:inline-flex!important;align-items:center;justify-content:center;gap:5px}
+@media(max-width:700px){body[data-theme=rooftop] #personalDialog header #copyCode{font-size:12px;min-height:35px;padding:5px 7px}}
+body[data-theme=rooftop] #roomArea.is-host #bottomBar,body[data-theme=rooftop] #roomArea:not(.is-host) #bottomBar{top:auto;bottom:2.55%;height:64px}
+body[data-theme=rooftop] #roomArea>.right-chat{height:53.95%}
+/* L08: cream bookmark plaque with a paper airplane; title stays live text. */
+#videoFrameTitle{display:none}
+body[data-theme=rooftop] #videoFrameTitle{display:flex;position:absolute;left:50%;top:-27px;transform:translateX(-50%);width:360px;height:50px;align-items:center;justify-content:center;z-index:3;pointer-events:none;background:url('/roof-loading-tab.svg') center/100% 100% no-repeat;color:#8b2e4d;font:700 20px/1 'OST Gowun',serif;letter-spacing:.03em;text-shadow:0 1px #fff8}
+body[data-theme=rooftop] #videoFrameTitle span{margin-right:37px}
+body[data-theme=rooftop] #videoFrameTitle{height:44px}
+/* CH03: one shared asset for the sidebar hint and the central hint line. */
+body[data-theme=rooftop] #roomArea #answerHint::before{background-image:url('/hint-ch03.png')}
+.center-hint-line{display:flex;align-items:center;justify-content:center;gap:14px;min-width:0;max-width:100%}
+.center-hint-icon{display:none}
+body[data-theme=rooftop] .center-hint-icon{display:block;width:64px;height:64px;flex:0 0 64px;background:url('/hint-ch03.png') center/contain no-repeat}
+#roomArea #centerHint .center-hint-line strong{flex:0 1 auto;min-width:0;white-space:nowrap}
