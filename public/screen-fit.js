@@ -54,7 +54,7 @@
   if(!text){el.replaceChildren();el.classList.remove('has-copy');return;}
   el.classList.add('has-copy');
   const isPrompt=el.id==='bonusPrompt',maxLines=isPrompt?4:2;
-  const base=parseFloat(style.fontSize)||22,min=isPrompt?18:20,lineHeight=1.34;
+  const base=parseFloat(style.fontSize)||22,min=isPrompt?18:(el.id==='bonusAnswerInline'?23:20),lineHeight=1.34;
   const words=text.split(' ');
   function measure(s,size){
    measureProbe.style.font=`${style.fontWeight} ${size}px ${style.fontFamily}`;

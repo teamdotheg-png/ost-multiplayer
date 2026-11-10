@@ -1,10 +1,10 @@
 {
   "name": "ost-machugi-multiplayer",
-  "version": "1.0.0",
+  "version": "5.50.0",
   "private": true,
   "scripts": {
     "start": "node server.js",
-    "test": "node tests/game-flow.test.js && node tests/ui-state.test.js"
+    "test": "node tests/game-flow.test.js && node tests/ui-state.test.js && node tests/reveal-hidden.test.js && node tests/v550-import-match.test.js"
   },
   "dependencies": {
     "express": "^4.21.2",

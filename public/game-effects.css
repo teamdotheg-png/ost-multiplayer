@@ -68,3 +68,56 @@ body #roomArea #videoFrameTitle .video-title-eq i{background:#6c1642;border:0;bo
 body[data-theme=rooftop] #roomArea #bottomBar button{font-size:var(--toolbar-type-size)!important;font-weight:var(--toolbar-type-weight)!important}
 body[data-theme=rooftop] #roomArea #bottomBar #hostSkip .control-caption{font-size:inherit!important;font-weight:inherit!important}
 body[data-theme=rooftop] #roomArea #bottomBar #hostSkip .next-round-icon,body[data-theme=rooftop] #roomArea #bottomBar #editAnswer .yt-small-icon{font-size:var(--toolbar-type-size)!important}
+
+/* v5.49: align the hidden question mark with the lock text, and make reveal legible. */
+body[data-theme=rooftop] #roomArea #bonusArea.bonus-locked #bonusPrompt::before{
+  top:calc(50% - 19px);transform:translateY(-50%);
+}
+body[data-theme=rooftop] #roomArea #bonusAnswerInline.has-answer{
+  font:700 34px/1.25 'OST Gowun',serif;
+  min-height:56px!important;max-height:100px;
+  padding:8px 14px!important;
+  max-width:calc(100% - 12px);
+  white-space:normal;overflow-wrap:anywhere;
+}
+body[data-theme=rooftop] #roomArea #bonusAnswerInline.has-answer .fit-copy{
+  white-space:pre-line;overflow-wrap:anywhere;word-break:keep-all;
+}
+
+
+/* v5.50: unified locked icon and text (all themes), no separate vertical offsets. */
+#roomArea #bonusArea.bonus-locked #bonusPrompt::before{display:none!important}
+#roomArea #bonusArea.bonus-locked #hiddenLockMessage,
+body[data-theme=rooftop] #roomArea #bonusArea.bonus-locked #hiddenLockMessage{
+  display:flex!important;position:absolute;inset:34px 12px 38px!important;
+  width:auto;height:auto;margin:0!important;padding:0!important;
+  transform:none!important;align-items:center;justify-content:center;gap:10px;
+  text-align:left!important;font-size:clamp(15px,1.35vw,21px);line-height:1.35;
+  white-space:normal;opacity:1;pointer-events:none;
+}
+body[data-theme=rooftop] #roomArea #bonusArea.bonus-locked #hiddenLockMessage{inset:65px 14px 52px!important;color:#785169;font:700 clamp(18px,1.45vw,23px)/1.35 'OST Gowun',serif}
+#roomArea #hiddenLockMessage .hidden-lock-icon{
+  display:grid;place-items:center;flex:0 0 42px;width:42px;height:42px;
+  border-radius:50%;background:var(--accent,#c06487);color:#fff7ed;
+  border:1px solid var(--edge,#a36e82);font:800 26px/1 Arial,sans-serif;
+}
+body[data-theme=rooftop] #roomArea #hiddenLockMessage .hidden-lock-icon{
+  flex:0 0 clamp(52px,5vw,76px);width:clamp(52px,5vw,76px);height:clamp(52px,5vw,76px);
+  border:0;border-radius:0;color:transparent;font-size:0;background:url('/sakura-icons.png') 100% 100%/300% 200% no-repeat;
+}
+#roomArea #hiddenLockMessage .hidden-lock-text{display:block;flex:0 1 auto;min-width:0;overflow-wrap:break-word;word-break:keep-all}
+#roomArea #bonusAnswerInline.has-answer{font-size:clamp(26px,2vw,34px);line-height:1.35;min-height:48px!important;padding:8px 12px!important;white-space:normal;overflow-wrap:anywhere;}
+body[data-theme=rooftop] #roomArea #bonusAnswerInline.has-answer{font-size:clamp(29px,2.3vw,38px)!important;line-height:1.3;min-height:58px!important;max-height:110px}
+#roomArea #bonusArea.bonus-revealed #bonusAnswerInline.has-answer{display:flex!important;visibility:visible!important;opacity:1!important}
+
+#roomArea #bonusArea.bonus-locked #bonusPrompt:empty::after{display:none!important}
+
+/* v5.50: ensure readable hidden answers and a clearly visible ? icon. */
+body[data-theme=rooftop] #roomArea #hiddenLockMessage .hidden-lock-icon{
+  flex:0 0 clamp(50px,4.3vw,68px);width:clamp(50px,4.3vw,68px);height:clamp(50px,4.3vw,68px);
+  background:#ffedf4;border:2px solid #c88ba7;border-radius:50%;color:#67274d;
+  font:800 clamp(26px,2.3vw,37px)/1 Arial,sans-serif;box-shadow:0 2px 8px #4f204333;
+}
+body[data-theme=rooftop] #roomArea #bonusAnswerInline.has-answer{
+  width:calc(100% - 12px)!important;max-width:calc(100% - 12px)!important;
+}

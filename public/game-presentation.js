@@ -7,7 +7,7 @@
  for(const [key,parent] of [['game',answer],['song',answer],['bonus',document.getElementById('bonusArea')]]){
   const el=document.createElement('span');el.className='avatar winner-avatar winner-'+key;el.hidden=true;parent.append(el);badges[key]=el;
  }
- const lockMessage=document.createElement('p');lockMessage.id='hiddenLockMessage';lockMessage.textContent='게임제목을 맞히면 공개됩니다';document.getElementById('bonusArea').append(lockMessage);
+ const lockMessage=document.createElement('p');lockMessage.id='hiddenLockMessage';lockMessage.innerHTML='<span class="hidden-lock-icon" aria-hidden="true">?</span><span class="hidden-lock-text">게임제목을 맞히면 공개됩니다</span>';document.getElementById('bonusArea').append(lockMessage);
  let round='',revealedHint='',answerKey='',answerTimer=null;
  const initial=c=>{const n=c.charCodeAt(0)-0xAC00;return n>=0&&n<11172?'ㄱㄲㄴㄷㄸㄹㅁㅂㅃㅅㅆㅇㅈㅉㅊㅋㅌㅍㅎ'[Math.floor(n/588)]:c;};
  function fitCentralHint(){
@@ -43,8 +43,10 @@
    else document.getElementById('bonusAnswerInline').classList.remove('has-winner');
   }
   for(const id of ['editAnswer','trashCurrent']){const el=document.getElementById(id);el.classList.remove('hidden');el.disabled=s.host!==socket.id||!active;el.title=s.host!==socket.id?'방장 전용':!active?'다음 문제 시작 후 사용 가능':'';}
-  if(!s.bonusWinner)document.getElementById('bonusAnswerInline').textContent='';
-  document.getElementById('bonusAnswerInline').classList.toggle('has-answer',!!s.bonusWinner&&!!document.getElementById('bonusAnswerInline').textContent.trim());
+  // On skip/timeout, reveal the hidden answer even if nobody unlocked or solved it.
+  const showBonusAnswer=!!s.bonusWinner||(s.phase==='reveal'&&!!s.reveal?.bonusPrompt);
+  if(!showBonusAnswer)document.getElementById('bonusAnswerInline').textContent='';
+  document.getElementById('bonusAnswerInline').classList.toggle('has-answer',showBonusAnswer&&!!document.getElementById('bonusAnswerInline').textContent.trim());
   const play=document.getElementById('playMusic');play.dataset.label=s.paused?'재생':'일시정지';
  }
  const original=setVideoVisible;setVideoVisible=function(show){original(show);sync(state);};

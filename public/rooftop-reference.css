@@ -1,5 +1,5 @@
 /* H10 + A03 production artboard. All artwork is a blank backplate; content is live. */
-body[data-theme=rooftop]{--ink:#4d1438;--paper:#fff1e6;--edge:#d494a6;--accent:#c34b7b;--hud:#5e173b;--button:#fff4eb;--shadow:#48133255;--skin:url('/rooftop-h10-skin.png')}
+body[data-theme=rooftop]{--ink:#4d1438;--paper:#fff1e6;--edge:#d494a6;--accent:#c34b7b;--hud:#5e173b;--button:#fff4eb;--shadow:#48133255;--skin:url('/rooftop-h10-skin-v549.png')}
 body[data-theme=rooftop] #roomArea{font-family:'OST Gowun',serif;--sidebar-x:72.2%}
 body[data-theme=rooftop] #roomArea>.left-now{left:2.2%;top:4.5%;width:68.1%;height:21.3%;isolation:isolate}
 body[data-theme=rooftop] #roomArea>.left-now::before,body[data-theme=rooftop] #roomArea>.left-now::after{display:none}
