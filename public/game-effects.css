@@ -112,12 +112,48 @@ body[data-theme=rooftop] #roomArea #bonusAnswerInline.has-answer{font-size:clamp
 
 #roomArea #bonusArea.bonus-locked #bonusPrompt:empty::after{display:none!important}
 
-/* v5.50: ensure readable hidden answers and a clearly visible ? icon. */
-body[data-theme=rooftop] #roomArea #hiddenLockMessage .hidden-lock-icon{
-  flex:0 0 clamp(50px,4.3vw,68px);width:clamp(50px,4.3vw,68px);height:clamp(50px,4.3vw,68px);
-  background:#ffedf4;border:2px solid #c88ba7;border-radius:50%;color:#67274d;
-  font:800 clamp(26px,2.3vw,37px)/1 Arial,sans-serif;box-shadow:0 2px 8px #4f204333;
+/* v5.50.1: restore the original cherry-blossom question icon.
+   Keep the v5.50 flex layout so the lock text remains aligned beside the icon. */
+body[data-theme=rooftop] #roomArea #bonusArea.bonus-locked #hiddenLockMessage .hidden-lock-icon{
+  flex:0 0 76px;
+  width:76px;
+  height:76px;
+  border:0;border-radius:0;box-shadow:none;
+  background:url('/sakura-icons.png') 100% 100%/300% 200% no-repeat;
+  color:transparent;font-size:0;
+}
+/* v5.50.2: keep the revealed hidden-answer badge proportional to its text.
+   The previous full-width override made the box too large and pushed it into the
+   bottom decoration on the compact rooftop panel. */
+body[data-theme=rooftop] #roomArea #bonusArea{
+  grid-template-columns:minmax(0,1fr);
+  grid-template-rows:65px minmax(0,1fr) auto;
+  padding-bottom:20px;
 }
 body[data-theme=rooftop] #roomArea #bonusAnswerInline.has-answer{
-  width:calc(100% - 12px)!important;max-width:calc(100% - 12px)!important;
+  display:inline-flex!important;
+  box-sizing:border-box;
+  justify-self:center!important;
+  align-self:end!important;
+  flex:none;
+  width:max-content!important;
+  max-width:calc(100% - 18px)!important;
+  min-width:0;
+  height:auto!important;
+  min-height:0!important;
+  max-height:88px!important;
+  margin:0 auto!important;
+  padding:5px 16px!important;
+  font:700 25px/1.4 'OST Gowun',serif!important;
+  white-space:normal;
+  overflow-wrap:anywhere;
+  word-break:keep-all;
+  text-align:center;
+}
+body[data-theme=rooftop] #roomArea #bonusAnswerInline.has-answer .fit-copy{
+  max-width:100%;
+  white-space:normal;
+  overflow-wrap:anywhere;
+  word-break:keep-all;
+  text-align:center;
 }
