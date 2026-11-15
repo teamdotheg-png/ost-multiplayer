@@ -24,7 +24,7 @@
   const key=s.code+':'+s.index;
   if(key!==round||['lobby','preparing','ready','starting','finished'].includes(s.phase)){round=key;revealedHint='';}
   if(s.hintSuppressed)revealedHint='';
-  if(s.hint&&!s.hintSuppressed&&!revealedHint)revealedHint=s.hint;
+  if(s.hint&&!s.hintSuppressed)revealedHint=s.hint;
   const active=s.phase==='playing',fallback=active&&!s.firstWinner&&stage.classList.contains('video-open');
   const revealAnswer=s.phase==='reveal'&&!s.reveal?.firstWinner;
   const central=revealAnswer||(active&&!s.firstWinner&&!s.hintSuppressed&&!fallback&&!!revealedHint);

@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "start": "node server.js",
-    "test": "node tests/game-flow.test.js && node tests/ui-state.test.js && node tests/reveal-hidden.test.js && node tests/v550-import-match.test.js"
+    "test": "node tests/game-flow.test.js && node tests/ui-state.test.js && node tests/reveal-hidden.test.js && node tests/v550-import-match.test.js && node tests/hint-partial.test.js && node tests/hint-presentation.test.js"
   },
   "dependencies": {
     "express": "^4.21.2",
