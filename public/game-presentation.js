@@ -51,7 +51,7 @@
  }
  const original=setVideoVisible;setVideoVisible=function(show){original(show);sync(state);};
  socket.on('room',sync);
- socket.on('hint',text=>{if(state?.firstWinner||state?.hintSuppressed)return;revealedHint=text||'';sync(state);});
+ socket.on('hint',text=>{if(!state||state.phase!=='playing'||state.firstWinner||state.hintSuppressed)return;state.hint=text||'';revealedHint=state.hint;sync(state);});
  // Preserve the original socket actions while exposing readable rectangular controls.
  document.getElementById('hostSkip').innerHTML='<span class="next-round-icon" aria-hidden="true">▶▶</span><span class="control-caption">다음 라운드</span>';
  // Keep the invite code handler available to old integrations, but remove its toolbar slot.
