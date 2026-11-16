@@ -250,6 +250,20 @@ async function db(table,method='GET',query='',body){
  return response.status===204?[]:await response.json();
 }
 function asyncRoute(fn){return (req,res)=>Promise.resolve(fn(req,res)).catch(e=>{console.error('Submission API:',e);if(!res.headersSent)res.status(503).json({error:e.message||'저장소 연결 오류'});});}
+// Optional administrator batch tool: an incomplete file upload must not stop the game.
+try{
+ require(path.join(__dirname,'server','trash-batch.js')).registerTrashBatch({
+  app,express,isAdmin,asyncRoute,config:{url:SUPABASE_URL,secret:SUPABASE_SECRET_KEY},
+  roomsSnapshot:()=>[...rooms.values()].map(r=>JSON.parse(JSON.stringify({
+   code:r.code,phase:r.phase,index:r.index,host:r.host,players:memberList(r),questions:r.questions,
+   deadline:r.deadline,hintAt:r.hintAt,paused:r.paused,firstWinner:r.firstWinner,bonusWinner:r.bonusWinner,songWinner:r.songWinner,
+   solvedIds:[...(r.solvedIds||[])],trashPending:[...(r.trashPending||[])]
+  })))
+ });
+}catch(error){
+ console.warn('재생 차단 일괄 관리 기능을 불러오지 못했습니다:',error.message);
+ app.use('/api/trash/admin/batch150',(req,res)=>{if(!isAdmin(req))return res.status(403).json({error:'관리자 인증 실패'});res.status(503).json({error:'일괄 관리 기능의 배포 파일을 확인해 주세요. 기존 게임은 계속 이용할 수 있습니다.'});});
+}
 async function submitter(req){const token=owner(req);if(!/^[a-f0-9]{64}$/.test(token))return null;const rows=await db('ost_submitters','GET',`token_hash=eq.${tokenHash(token)}&select=id,nickname&limit=1`);return rows[0]||null;}
 function asItem(x){return {id:x.id,nickname:x.author_nickname,status:x.status,question:x.question,createdAt:x.created_at,aiRequested:!!x.ai_requested,aiStatus:x.ai_status||null,aiResult:x.ai_result||null};}
 function validQuestion(q){parseQuestions([q]);return q;}
