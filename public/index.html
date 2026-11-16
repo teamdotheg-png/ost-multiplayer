@@ -53,7 +53,7 @@
  if(actions){actions.id='roomFixedActions';room.appendChild(actions);}
 })();
 </script>
-<script src="/hint-reading.js?v=5.50.2-hint-compat-1"></script><script src="/socket.io/socket.io.js"></script><script>
+<script src="/hint-reading.js?v=5.50.2-hint-privacy6-6"></script><script src="/socket.io/socket.io.js"></script><script>
 'use strict';const $=id=>document.getElementById(id);const socket=io();let playedIds=new Set(),playedPassword='',state=null,questions=[],yt=null,ytReady=false,ytGeneration=0,videoEnded=false,ytApi=false,clock=null,localFeedbackTimeout=null;const KEY='ost-multi-questions-v1';let selectedQuestions=null,trashIds=new Set();
 const sfxFiles={chat:'/sfx/transmission.wav',skip:'/sfx/bnetclick.wav',correct:'/sfx/01_crystal_double_chime.wav',hint:'/sfx/mousedown2.wav',hidden:'/sfx/mousedown2.wav',countdown:'/sfx/countdown.wav'};
 const sfxCache=Object.fromEntries(Object.entries(sfxFiles).map(([key,url])=>[key,new Audio(url)]));
