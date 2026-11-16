@@ -334,6 +334,19 @@ function createSupabaseAdapters({url, secret, fetchFn = globalThis.fetch}) {
     if (!text) return null;
     try { return JSON.parse(text); } catch { throw failure('저장소 응답을 읽을 수 없습니다.', 503, 'repository_response'); }
   }
+  function tableError(name, response, data, reason) {
+    const pgCode = /^[A-Z0-9_]{1,24}$/.test(String(data?.code || '')) ? data.code : 'unknown';
+    const category = response.status === 401 || response.status === 403 || pgCode === '42501'
+      ? '서버 키·테이블 SELECT 권한 확인 필요'
+      : response.status === 404 || ['42P01','PGRST205'].includes(pgCode)
+        ? '테이블 존재·Data API 스키마 캐시 확인 필요' : reason;
+    return failure(`전체 테이블 백업 검증 실패: ${name} (HTTP ${response.status}, DB ${pgCode}; ${category}). 검증을 생략하지 않고 중단했습니다.`, 503, 'backup_incomplete');
+  }
+  function exactTotal(response) {
+    const match = response.headers.get('content-range')?.trim().match(/\/(\d+)$/);
+    const value = match ? Number(match[1]) : NaN;
+    return Number.isSafeInteger(value) && value >= 0 ? value : null;
+  }
   function missing(response, data) {
     return response.status === 404 || String(data?.statusCode) === '404'
       || ['not_found', 'NoSuchKey', 'NoSuchBucket'].includes(data?.error || data?.code)
@@ -398,9 +411,19 @@ function createSupabaseAdapters({url, secret, fetchFn = globalThis.fetch}) {
         const query = new URLSearchParams({select:'*',order:order + '.asc',limit:'1000',offset:String(offset)});
         const response = await request('/rest/v1/' + name + '?' + query, {headers:{Prefer:'count=exact'}});
         const page = await body(response);
-        const match = response.headers.get('content-range')?.match(/\/(\d+)$/);
-        if (!response.ok || !Array.isArray(page) || !match) throw failure('전체 테이블 백업 수량을 확인할 수 없습니다. ' + name, 503, 'backup_incomplete');
-        const count = Number(match[1]);
+        if (!response.ok || !Array.isArray(page)) throw tableError(name, response, page, '행 조회 응답 오류');
+        let count = exactTotal(response);
+        // Never infer the total from page.length (including an empty table).
+        // Some gateways omit GET count headers; an authenticated HEAD performs
+        // the same exact count without loading potentially large JSON columns.
+        if (count === null) {
+          const counted = await request('/rest/v1/' + name + '?' + new URLSearchParams({select:order,limit:'1'}), {
+            method:'HEAD', headers:{Prefer:'count=exact','Range-Unit':'items',Range:'0-0'}
+          });
+          count = exactTotal(counted);
+          if (!counted.ok || count === null) throw tableError(name, counted, null,
+            'GET 및 HEAD의 정확한 Content-Range 수량을 확인할 수 없음');
+        }
         if (total !== null && count !== total) throw failure('백업 도중 데이터 수량이 바뀌었습니다. 다시 시도해 주세요.', 409, 'backup_changed');
         total = count;
         bytes += Buffer.byteLength(JSON.stringify(page));
